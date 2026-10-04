@@ -46,7 +46,7 @@
 }
 
 *,*::before,*::after{box-sizing:border-box}
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;overflow-x:clip}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:17px;line-height:1.65;overflow-x:hidden}
 img{max-width:100%;display:block}
 a{color:inherit}
@@ -192,6 +192,37 @@ section{scroll-margin-top:84px}
 .add:hover{background:var(--accent);color:var(--on-accent)}
 .add svg{width:15px;height:15px}
 @media (max-width:420px){.add span{display:none}.add{padding:.55em}.card-body{padding:12px}}
+
+/* catalog extras */
+.thumb canvas{animation:float 5s ease-in-out infinite;animation-delay:var(--d,0s)}
+@keyframes float{50%{transform:translateY(-6px)}}
+.credit{display:inline-flex;align-items:center;gap:4px;font-size:.74rem;color:var(--muted);text-decoration:none;width:fit-content;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.credit:hover{color:var(--accent-ink);text-decoration:underline}
+.credit svg{width:12px;height:12px;flex:none}
+@media (max-width:520px){.credit .by{display:none}}
+.badge{background:var(--accent);color:var(--on-accent);border-color:transparent}
+.more-wrap{display:flex;justify-content:center;margin-top:32px}
+.more-wrap .btn svg{transition:transform .3s}
+.more-wrap .btn:hover svg{transform:translateY(3px)}
+.card{transform-style:preserve-3d;will-change:transform}
+.ticker{overflow:hidden;background:var(--accent);color:var(--on-accent);transform:rotate(-1.2deg);margin-block:8px;border-block:2px solid var(--ink)}
+.ticker-track{display:flex;align-items:center;gap:28px;width:max-content;padding-block:14px;animation:tick 38s linear infinite;
+  font-family:var(--font-display);font-weight:700;font-size:clamp(1.8rem,3.4vw,2.6rem);line-height:1;white-space:nowrap}
+.ticker-track i{width:14px;height:14px;background:var(--ink);transform:rotate(45deg);flex:none}
+@keyframes tick{to{transform:translateX(50%)}}
+.sec-head h2 + .squig{display:block;width:clamp(120px,16vw,180px);height:16px;margin-top:10px;color:var(--accent)}
+.squig path{stroke-dasharray:240;stroke-dashoffset:0;transition:stroke-dashoffset 1.4s cubic-bezier(.6,.1,.2,1) .2s}
+.pre .squig path,.squig.pre path{stroke-dashoffset:240}
+.reveal{transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1);transition-delay:calc(var(--i,0)*70ms)}
+.reveal.pre{opacity:0;transform:translateY(28px)}
+.fly{position:fixed;z-index:120;width:14px;height:14px;border-radius:50%;background:var(--accent);pointer-events:none;box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 30%,transparent)}
+.hero .printer{animation:rise 1s cubic-bezier(.2,.7,.2,1) .3s both}
+.hero .lede,.hero .ctas{animation:rise .9s cubic-bezier(.2,.7,.2,1) both}
+.hero .lede{animation-delay:.7s}.hero .ctas{animation-delay:.85s}
+@keyframes rise{from{opacity:0;transform:translateY(24px)}}
+.btn-primary{position:relative;overflow:hidden}
+.btn-primary::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.45) 50%,transparent 70%);transform:translateX(120%);animation:shine 4.5s ease-in-out 2s infinite}
+@keyframes shine{0%,70%{transform:translateX(120%)}100%{transform:translateX(-120%)}}
 
 /* process */
 .process{background:var(--surface);border-block:1px solid var(--line)}
@@ -381,7 +412,7 @@ footer.site .big span{color:var(--accent)}
     <div>
       <div class="eyebrow">סטודיו להדפסת תלת־ממד</div>
       <h1><span>מדמיינים.</span><span>מעצבים.</span><span>מדפיסים.</span></h1>
-      <p class="lede">ספינרים, פידג'טים, חיות מפרקיות וסלילים, ומוצרים שאנחנו מתכננים במיוחד בשבילכם. כל פריט יוצא מהמדפסת שלנו, שכבה אחרי שכבה.</p>
+      <p class="lede">ספינרים, דרקונים ותמנונים מפרקיים, פסלים קינטיים, אביזרים לבית ולשולחן, ומוצרים שאנחנו מתכננים במיוחד בשבילכם. כל פריט יוצא מהמדפסת שלנו, שכבה אחרי שכבה.</p>
       <div class="ctas">
         <a class="btn btn-primary" href="#shop">לחנות עכשיו
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></a>
@@ -406,12 +437,17 @@ footer.site .big span{color:var(--accent)}
       <div><b>PLA · PETG · TPU</b><span>חומרים קשיחים וגמישים</span></div>
       <div><b><span class="num">0.12–0.28</span> מ״מ</b><span>גובה שכבה לפי הפריט</span></div>
       <div><b>STL · OBJ · 3MF</b><span>או סתם תמונה וסקיצה</span></div>
-      <div><b>בדיקה ידנית</b><span>לכל פריט לפני שהוא יוצא</span></div>
+      <div><b><span class="num" data-count="60">60</span>+ מוצרים</b><span>ועוד אינסוף בהזמנה אישית</span></div>
     </div>
   </div>
 </section>
 
-<section class="section" id="categories" style="padding-top:clamp(24px,4vw,48px)">
+<div class="ticker" aria-hidden="true"><div class="ticker-track">
+  <span>דרקונים מפרקיים</span><i></i><span>ספינרים פלנטריים</span><i></i><span>תמנונים גמישים</span><i></i><span>פסלים קינטיים</span><i></i><span>קוביות אינסוף</span><i></i><span>מגדלי קוביות</span><i></i><span>עציצים ואהילים</span><i></i><span>קופסאות פאזל</span><i></i>
+  <span>דרקונים מפרקיים</span><i></i><span>ספינרים פלנטריים</span><i></i><span>תמנונים גמישים</span><i></i><span>פסלים קינטיים</span><i></i><span>קוביות אינסוף</span><i></i><span>מגדלי קוביות</span><i></i><span>עציצים ואהילים</span><i></i><span>קופסאות פאזל</span><i></i>
+</div></div>
+
+<section class="section" id="categories" style="padding-top:clamp(40px,6vw,72px)">
   <div class="wrap">
     <div class="sec-head">
       <div>
@@ -435,10 +471,10 @@ footer.site .big span{color:var(--accent)}
           <span class="go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></span>
         </div>
       </a>
-      <a class="cat" href="#shop" data-filter="flex">
+      <a class="cat" href="#shop" data-filter="animals">
         <img src="assets/mesh.jpg" alt="רשת צהובה גמישה מודפסת בתלת־ממד, מתקפלת ביד">
         <div class="cat-body">
-          <div><h3>גמישים ומפרקיים</h3><p>נחשים, כוכבים וסלילים שמתכופפים לכל כיוון.</p></div>
+          <div><h3>חיות מפרקיות</h3><p>דרקונים, תמנונים, חתולים ונחשים שמתכופפים לכל כיוון.</p></div>
           <span class="go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></span>
         </div>
       </a>
@@ -450,17 +486,23 @@ footer.site .big span{color:var(--accent)}
   <div class="wrap">
     <div class="sec-head">
       <div>
-        <div class="eyebrow">החנות</div>
+        <div class="eyebrow">החנות · <span class="num" id="shop-count">60</span> מוצרים</div>
         <h2>כל המוצרים</h2>
       </div>
       <div class="filters" role="group" aria-label="סינון לפי קטגוריה" id="filters">
         <button class="chip" type="button" data-f="all" aria-pressed="true">הכל</button>
         <button class="chip" type="button" data-f="fidget" aria-pressed="false">פידג'טים</button>
+        <button class="chip" type="button" data-f="animals" aria-pressed="false">חיות מפרקיות</button>
         <button class="chip" type="button" data-f="flex" aria-pressed="false">גמישים ומפרקיים</button>
+        <button class="chip" type="button" data-f="kinetic" aria-pressed="false">אמנות קינטית</button>
+        <button class="chip" type="button" data-f="home" aria-pressed="false">לבית ולשולחן</button>
+        <button class="chip" type="button" data-f="games" aria-pressed="false">משחקים ופאזלים</button>
         <button class="chip" type="button" data-f="spiral" aria-pressed="false">סלילים</button>
       </div>
     </div>
     <div class="grid" id="grid"></div>
+    <div class="more-wrap"><button class="btn btn-ghost" type="button" id="more"><span>הצגת עוד מוצרים</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg></button></div>
   </div>
 </section>
 
@@ -895,9 +937,280 @@ document.addEventListener('visibilitychange', () => document.hidden ? stopHero()
 if (reduce){ $('.hud .live').textContent = 'הושלם'; }
 startHero();
 
-/* ================= products ================= */
-const CATS = { fidget:"פידג'טים", flex:'גמישים ומפרקיים', spiral:'סלילים' };
-const PRODUCTS = [
+/* ================= motion helpers ================= */
+const revealIO = (!reduce && 'IntersectionObserver' in window) ? new IntersectionObserver(es => es.forEach(e => {
+  if (e.isIntersecting){ const t = e.target; t.classList.remove('pre'); revealIO.unobserve(t); setTimeout(() => t.classList.remove('reveal'), 1300); }
+}), { rootMargin:'0px 0px -8% 0px' }) : null;
+function observeReveal(el){
+  if (!revealIO) return;
+  el.classList.add('reveal');
+  if (el.getBoundingClientRect().top > innerHeight*0.92){ el.classList.add('pre'); revealIO.observe(el); }
+}
+$$('.sec-head h2').forEach(h => {
+  h.insertAdjacentHTML('afterend', '<svg class="squig" viewBox="0 0 180 16" fill="none" aria-hidden="true"><path d="M2 8c15-7 30 7 44 0s30-7 44 0 30 7 44 0 29-7 44 0" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/></svg>');
+});
+['.sec-head','.cat','.step','.mat','details','form.order','.custom .intro','.specs > div','footer.site .big'].forEach(sel => $$(sel).forEach((el, i) => { el.style.setProperty('--i', i % 5); observeReveal(el); }));
+$$('[data-count]').forEach(el => {
+  if (reduce || !('IntersectionObserver' in window)) return;
+  const to = +el.dataset.count; el.textContent = '0';
+  const io = new IntersectionObserver(es => { if (!es[0].isIntersecting) return; io.disconnect();
+    const t0 = performance.now(); const step = t => { const k = Math.min(1, (t - t0)/1400); el.textContent = Math.round(to*(1 - Math.pow(1 - k, 3))); if (k < 1) requestAnimationFrame(step); }; requestAnimationFrame(step); });
+  io.observe(el);
+});
+// card tilt (mouse only)
+if (!reduce && matchMedia('(hover: hover) and (pointer: fine)').matches){
+  document.addEventListener('pointermove', e => {
+    const c = e.target.closest && e.target.closest('.card'); if (!c) return;
+    const r = c.getBoundingClientRect(), x = (e.clientX - r.left)/r.width - 0.5, y = (e.clientY - r.top)/r.height - 0.5;
+    c.style.transform = `perspective(800px) rotateX(${(-y*7).toFixed(2)}deg) rotateY(${(x*7).toFixed(2)}deg) translateY(-4px)`;
+  });
+  document.addEventListener('pointerout', e => { const c = e.target.closest && e.target.closest('.card'); if (c && !c.contains(e.relatedTarget)) c.style.transform = ''; });
+}
+
+/*CATALOG-START*/
+/* ================= catalog model previews ================= */
+const sEll = (rx, ry, p = 4, rot = 0) => a => { const c = Math.abs(Math.cos(a - rot))/rx, s = Math.abs(Math.sin(a - rot))/ry; return Math.pow(Math.pow(c, p) + Math.pow(s, p), -1/p); };
+const polyR = (n, R, rot = 0) => a => { const w = TAU/n, k = (((a - rot) % w) + w) % w - w/2; return R*Math.cos(Math.PI/n)/Math.cos(k); };
+const gearR = (R, n, d, rot = 0) => a => R + d*Math.max(-1, Math.min(1, Math.cos(n*(a - rot))*2.2));
+function polyPts(pts){
+  return a => {
+    const dx = Math.cos(a), dy = Math.sin(a); let best = Infinity;
+    for (let i = 0; i < pts.length; i++){
+      const [x1, y1] = pts[i], [x2, y2] = pts[(i + 1) % pts.length], ex = x2 - x1, ey = y2 - y1, D = ex*dy - dx*ey;
+      if (Math.abs(D) < 1e-9) continue;
+      const t = (ex*y1 - x1*ey)/D, u = (dx*y1 - dy*x1)/D;
+      if (t > 0 && u >= -1e-6 && u <= 1 + 1e-6) best = Math.min(best, t);
+    }
+    return best === Infinity ? 0.01 : best;
+  };
+}
+const rotPts = (pts, ang) => pts.map(([x, y]) => [x*Math.cos(ang) - y*Math.sin(ang), x*Math.sin(ang) + y*Math.cos(ang)]);
+const shade = (hex, dl) => { const c = hexToHsl(hex); return hsl(c.h, c.s, c.l + dl); };
+const P_ = (r, H, o = {}) => Object.assign({ r, H, ox:0, oy:0, oz:0 }, o);
+
+function chainModel(color, o = {}){
+  const n = o.n || 10, L = o.L || 2.3, amp = o.amp ?? 0.32, r0 = o.r0 || 0.27, H = o.H || 0.24, parts = [];
+  const pt = u => [(0.5 - u)*L, amp*Math.sin(u*Math.PI*(o.waves || 1.3) + 0.4)];
+  const alt = o.alt ? shade(color, o.alt) : color;
+  for (let i = 0; i < n; i++){
+    const u = i/(n - 1), [x, y] = pt(u), [x2, y2] = pt(Math.min(1, u + 0.01)), [x0, y0] = pt(Math.max(0, u - 0.01));
+    const ang = Math.atan2(y2 - y0, x2 - x0) + Math.PI;
+    const size = r0*(1 - (o.taper ?? 0.55)*u)*(i === 0 ? (o.head || 1.35) : 1);
+    const seg = P_(sEll(size*1.1, size*0.85, 3, ang), H*(i === 0 ? 1.2 : 1 - 0.3*u), { ox:x, oy:y, color: i % 2 ? alt : color });
+    if (i === 0){
+      const fx = Math.cos(ang), fy = Math.sin(ang), sx = -fy, sy = fx;
+      seg.decor = api => { [-1, 1].forEach(k => api.disc((fx*0.35 + sx*k*0.42)*size, (fy*0.35 + sy*k*0.42)*size, size*0.15, 'eye')); };
+      if (o.ears) [-1, 1].forEach(k => parts.push(P_(polyPts(rotPts([[0.1, 0], [-0.1, 0.07*k], [-0.1, -0.07*k]].map(([a, b]) => [a, b]), ang)), H*1.5,
+        { ox:x - fx*size*0.25 + sx*k*size*0.55, oy:y - fy*size*0.25 + sy*k*size*0.55, color })));
+      if (o.gills) [-1, 1].forEach(k => parts.push(P_(sEll(0.16, 0.05, 2, ang + k*1.1), H*0.9,
+        { ox:x + sx*k*size*0.95, oy:y + sy*k*size*0.95, color: shade(color, -12) })));
+    }
+    if (o.legs && (i === 2 || i === Math.round(n*0.6))){
+      const sx = -Math.sin(ang), sy = Math.cos(ang);
+      [-1, 1].forEach(k => parts.push(P_(sEll(0.08, 0.08, 2), H*0.5, { ox:x + sx*k*(size + 0.1), oy:y + sy*k*(size + 0.1), color: shade(color, -10) })));
+    }
+    if (o.wings && i === 3){
+      const sxv = -Math.sin(ang), syv = Math.cos(ang);
+      [-1, 1].forEach(k => parts.push(P_(polyPts(rotPts([[0.32, -0.38*k], [-0.32, -0.38*k], [-0.05, 0.62*k]], ang)), 0.05,
+        { ox:x + sxv*0.5*k, oy:y + syv*0.5*k, oz:H*0.9, color: shade(color, 12) })));
+    }
+    if (o.fin && i === 3){
+      parts.push(P_((a, t) => sEll(0.24*(1 - 0.85*t) + 0.01, 0.05*(1 - 0.6*t) + 0.01, 2, ang)(a), 0.55, { ox:x, oy:y, oz:H*0.95, color }));
+    }
+    parts.push(seg);
+  }
+  return parts;
+}
+function octopusModel(color){
+  const R = 0.42, parts = [];
+  for (let k = 0; k < 8; k++){
+    const th = k/8*TAU;
+    for (let j = 0; j < 5; j++){
+      const rr = R*0.75 + j*0.2, a = th + j*0.16;
+      parts.push(P_(sEll(0.13*(1 - 0.13*j), 0.13*(1 - 0.13*j), 2), 0.15, { ox:Math.cos(a)*rr, oy:Math.sin(a)*rr, color: j % 2 ? shade(color, -8) : color }));
+    }
+  }
+  const dome = P_((a, t) => R*(1 - 0.72*t*t), 0.8, { color });
+  dome.decor = api => { api.disc(-0.05, -0.06, 0.035, 'eye'); api.disc(-0.05, 0.06, 0.035, 'eye'); };
+  parts.push(dome);
+  return parts;
+}
+function gearModel(color, o = {}){
+  const main = P_(o.sq ? sEll(0.92, 0.92, 7) : gearR(0.9, o.teeth || 22, 0.05), 0.24, { color });
+  const k = o.planets ?? 6;
+  main.decor = api => {
+    api.disc(0, 0, 0.2, 'hole');
+    for (let i = 0; i < k; i++){ const a = i/k*TAU; api.disc(Math.cos(a)*0.56, Math.sin(a)*0.56, k > 6 ? 0.13 : 0.17, 'button'); }
+  };
+  const parts = [main];
+  if (o.two) parts.push(P_(gearR(0.55, 14, 0.04), 0.16, { oz:0.24, color: shade(color, 14) }));
+  return parts;
+}
+function wheelModel(color){
+  const tire = P_(sEll(0.95, 0.95, 2), 0.3, { color:'#2A2C31' });
+  const hub = P_(sEll(0.62, 0.62, 2), 0.34, { color });
+  hub.decor = api => { api.disc(0, 0, 0.16, 'hole'); for (let i = 0; i < 5; i++){ const a = i/5*TAU; api.disc(Math.cos(a)*0.4, Math.sin(a)*0.4, 0.1, 'hole'); } };
+  return [tire, hub];
+}
+function cubeModel(color, o = {}){
+  const c = P_(sEll(0.62, 0.62, 12), 1.15, { color });
+  c.decor = o.gears
+    ? api => { api.disc(0, 0, 0.42, 'button'); api.disc(0, 0, 0.12, 'hole'); }
+    : api => { api.rect(-0.62, -0.02, 1.24, 0.04, 'line'); api.rect(-0.02, -0.62, 0.04, 1.24, 'line'); };
+  return [c];
+}
+function sphereModel(color){
+  return [P_((a, t) => sEll(1, 1, 5)(a)*0.75*Math.sqrt(Math.max(0.04, 1 - (2*t - 1)**2)), 1.4, { color, colorAt: t => (Math.floor(t*6) % 2 ? shade(color, -14) : color) })];
+}
+function dropletModel(color){
+  const parts = [P_(sEll(0.07, 0.07, 2), 1.3, { color:'#8A8F98' })];
+  for (let i = 0; i < 6; i++) parts.push(P_(sEll(0.95 - i*0.13, 0.95 - i*0.13, 2), 0.07, { oz:0.15 + i*0.14 + 0.08*Math.sin(i*1.3), hollow:true, color: i % 2 ? shade(color, 12) : color }));
+  return parts;
+}
+function kimeModel(color){
+  const parts = [P_(sEll(0.08, 0.08, 2), 1.5, { color:'#8A8F98' })];
+  for (let i = 0; i < 7; i++) parts.push(P_(sEll(0.85, 0.5, 2, i*0.45), 0.06, { oz:0.15 + i*0.18, hollow:true, color: i % 2 ? shade(color, 14) : color }));
+  return parts;
+}
+function waveModel(color){
+  const parts = [P_(sEll(1.2, 0.32, 8), 0.12, { color:'#2A2C31' })];
+  for (let i = 0; i < 13; i++) parts.push(P_(sEll(0.055, 0.22, 8), 0.3 + 0.32*(1 + Math.sin(i*0.75))/2, { ox:-1.05 + i*0.175, oz:0.12, color: i % 2 ? shade(color, 10) : color }));
+  return parts;
+}
+function heliconeModel(color){
+  const parts = [P_(sEll(0.07, 0.07, 2), 1.35, { color:'#8A8F98' })];
+  for (let i = 0; i < 16; i++) parts.push(P_(sEll(0.95, 0.09, 8, i*0.17), 0.05, { oz:0.1 + i*0.075, color: i % 2 ? shade(color, 12) : color }));
+  return parts;
+}
+function organizerModel(color){
+  return [
+    P_(sEll(1.05, 0.55, 8), 0.12, { color }),
+    P_(sEll(0.28, 0.28, 2), 0.6, { ox:-0.6, oy:0.05, oz:0.12, hollow:true, color: shade(color, -8) }),
+    P_(sEll(0.22, 0.22, 6), 0.42, { ox:-0.05, oy:0.15, oz:0.12, hollow:true, color }),
+    P_(sEll(0.36, 0.06, 8), 0.8, { ox:0.6, oy:-0.15, oz:0.12, color: shade(color, -5) })
+  ];
+}
+function standModel(color, anchor){
+  const parts = [P_(sEll(0.6, 0.45, 4), 0.1, { color }), P_(sEll(0.09, 0.09, 6), 1.6, { oz:0.1, color })];
+  parts.push(P_(anchor ? polyPts([[0.45, -0.1], [0.45, 0.1], [-0.45, 0.1], [-0.45, -0.1]]) : sEll(0.25, 0.25, 2), 0.1, { oz:1.7, color: shade(color, 10) }));
+  return parts;
+}
+const planterModel = color => [P_(sEll(0.75, 0.75, 2), 0.06, { color: shade(color, -10) }), P_((a, t) => (0.52 + 0.18*t)*(1 + 0.025*Math.cos(14*a)), 0.95, { oz:0.06, hollow:true, color })];
+const lampModel = color => [P_(sEll(0.55, 0.55, 2), 0.12, { color:'#2A2C31' }), P_((a, t) => (0.5 + 0.14*Math.sin(Math.PI*t))*(1 + 0.06*Math.cos(20*a + t*3)), 1.3, { oz:0.12, hollow:true, color })];
+const vasesModel = color => [
+  P_((a, t) => (0.3 + 0.1*Math.sin(Math.PI*t)), 1.25, { ox:-0.45, oy:0.15, hollow:true, color }),
+  P_((a, t) => (0.32 - 0.12*t)*(1 + 0.05*Math.cos(10*a)), 0.85, { ox:0.3, oy:-0.2, hollow:true, color: shade(color, -14) }),
+  P_((a, t) => 0.22 + 0.12*Math.sin(Math.PI*t*0.9), 0.6, { ox:0.45, oy:0.45, hollow:true, color: shade(color, 8) })
+];
+function towerModel(color){
+  const t = P_(polyR(6, 0.5), 1.4, { color });
+  t.decor = api => api.disc(0, 0, 0.26, 'hole');
+  return [P_(sEll(0.5, 0.32, 6), 0.12, { oy:0.65, color: shade(color, -12) }), t];
+}
+function castleModel(color){
+  const c = P_(sEll(0.55, 0.55, 12), 1.15, { color });
+  c.decor = api => { for (let i = -2; i <= 2; i++){ api.rect(i*0.22 - 0.06, -0.55, 0.12, 0.1, 'dark'); api.rect(i*0.22 - 0.06, 0.45, 0.12, 0.1, 'dark'); api.rect(-0.55, i*0.22 - 0.06, 0.1, 0.12, 'dark'); api.rect(0.45, i*0.22 - 0.06, 0.1, 0.12, 'dark'); } api.disc(0, 0, 0.2, 'hole'); };
+  return [P_(sEll(0.55, 0.3, 6), 0.12, { oy:0.7, color: shade(color, -12) }), c];
+}
+function rookModel(color){
+  const r = P_((a, t) => t < 0.12 ? 0.62 : t < 0.25 ? 0.62 - (t - 0.12)*1.8 : t < 0.78 ? 0.39 - (t - 0.25)*0.12 : 0.5, 1.45, { color });
+  r.decor = api => { for (let i = 0; i < 4; i++){ const a = i/4*TAU + TAU/8; api.disc(Math.cos(a)*0.42, Math.sin(a)*0.42, 0.11, 'dark'); } api.disc(0, 0, 0.26, 'hole'); };
+  return [r];
+}
+function boxModel(color, kind){
+  const b = P_(sEll(0.95, 0.62, 10), kind === 'chess' ? 0.18 : 0.55, { color });
+  if (kind === 'chess') b.decor = api => { for (let i = 0; i < 6; i++) for (let j = 0; j < 4; j++) if ((i + j) % 2) api.rect(-0.9 + i*0.3, -0.58 + j*0.29, 0.3, 0.29, 'light'); };
+  else if (kind === 'maze') b.decor = api => { [[-0.8, -0.45, 1.3, 0.06], [-0.5, -0.2, 1.3, 0.06], [-0.8, 0.05, 1.1, 0.06], [-0.4, 0.3, 1.2, 0.06], [-0.8, -0.45, 0.06, 0.5], [0.74, -0.2, 0.06, 0.56]].forEach(r => api.rect(...r, 'dark')); api.disc(-0.62, 0.42, 0.06, 'light'); };
+  else b.decor = api => { api.rect(-0.95, -0.02, 1.9, 0.04, 'line'); api.disc(0.55, 0.3, 0.16, 'button'); api.disc(0.55, 0.3, 0.05, 'hole'); };
+  return [b];
+}
+const BUILD = {
+  dragon: c => chainModel(c, { n:13, L:2.5, alt:-14, waves:1.6, r0:0.24, legs:true }),
+  dragonw: c => chainModel(c, { n:12, L:2.3, alt:-14, waves:1.4, r0:0.24, wings:true }),
+  critter: c => chainModel(c, { n:8, L:1.9, amp:0.18, r0:0.3, legs:true, taper:0.6 }),
+  cat: c => chainModel(c, { n:9, L:2.1, amp:0.12, waves:0.8, r0:0.27, legs:true, ears:true, taper:0.35 }),
+  shark: c => chainModel(c, { n:8, L:2, amp:0.22, r0:0.3, taper:0.65, fin:true, head:1.15 }),
+  axolotl: c => chainModel(c, { n:8, L:1.9, amp:0.2, r0:0.27, legs:true, gills:true, taper:0.6 }),
+  octopus: octopusModel,
+  gear: c => gearModel(c), gear8: c => gearModel(c, { planets:8 }), gear2: c => gearModel(c, { two:true }), gearsq: c => gearModel(c, { sq:true, planets:4 }),
+  wheel: wheelModel, foldcube: c => cubeModel(c), gearcube: c => cubeModel(c, { gears:true }), sphere: sphereModel,
+  droplet: dropletModel, kime: kimeModel, wave: waveModel, helicone: heliconeModel,
+  organizer: organizerModel, stand: c => standModel(c, false), planter: planterModel, lamp: lampModel, vases: vasesModel,
+  tower: towerModel, castle: castleModel, rook: rookModel, chess: c => boxModel(c, 'chess'), box: c => boxModel(c, 'box'), maze: c => boxModel(c, 'maze')
+};
+
+function prepPart(p){
+  if (p._g) return p;
+  p.layers = Math.max(3, Math.min(34, Math.round(p.H/0.035)));
+  p.segs = p.segs || 72;
+  const r = p.r; p.r = (a, t) => r(a, t);
+  geometry(p);
+  if (p.colorAt){ p._cols = []; for (let i = 0; i < p.layers; i++) p._cols.push(hexToHsl(p.colorAt(p.layers > 1 ? i/(p.layers - 1) : 0))); }
+  p._base = hexToHsl(p.color);
+  return p;
+}
+function drawModel(ctx, W, Hc, parts, angle){
+  parts.forEach(prepPart);
+  let Rext = 0.3, Zmax = 0.2;
+  parts.forEach(p => { Rext = Math.max(Rext, Math.hypot(p.ox, p.oy) + p._maxR); Zmax = Math.max(Zmax, p.oz + p.H); });
+  const pad = Math.max(14, W*0.1);
+  const s = Math.min((W - pad*2)/(2*Rext), (Hc - pad*2)/(Zmax*CE + 2*Rext*SE));
+  const cx = W/2, cy = Hc/2 + (Zmax*CE*s)/2, ca = Math.cos(angle), sa = Math.sin(angle);
+  const P = (x, y, z) => { const xr = x*ca - y*sa, yr = x*sa + y*ca; return [cx + xr*s, cy + yr*s*SE - z*s*CE]; };
+  ctx.clearRect(0, 0, W, Hc);
+  const grd = ctx.createRadialGradient(cx, cy, 0, cx, cy, Rext*s*1.1);
+  grd.addColorStop(0, 'rgba(0,0,0,.2)'); grd.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.save(); ctx.translate(cx, cy); ctx.scale(1, SE); ctx.translate(-cx, -cy); ctx.fillStyle = grd;
+  ctx.beginPath(); ctx.arc(cx, cy, Rext*s*1.1, 0, TAU); ctx.fill(); ctx.restore();
+  const order = parts.map(p => ({ p, d: p.ox*sa + p.oy*ca })).sort((a, b) => (a.d - b.d) || (a.p.oz - b.p.oz));
+  ctx.lineCap = 'round';
+  for (const { p } of order){
+    const g = p._g, n = p.layers, lh = p.H/n, sp = lh*s*CE, lw = Math.max(1, sp*1.3);
+    for (const wantFront of [false, true]){
+      for (let i = 0; i < n; i++){
+        const base = p._cols ? p._cols[i] : p._base, pts = g[i], z = p.oz + (i + 0.5)*lh, buckets = new Map();
+        for (let j = 0; j < p.segs; j++){
+          const x0 = pts[j*2] + p.ox, y0 = pts[j*2+1] + p.oy, x1 = pts[j*2+2] + p.ox, y1 = pts[j*2+3] + p.oy;
+          const xr0 = x0*ca - y0*sa, yr0 = x0*sa + y0*ca, xr1 = x1*ca - y1*sa, yr1 = x1*sa + y1*ca;
+          let nx = yr1 - yr0, ny = -(xr1 - xr0); const nl = Math.hypot(nx, ny) || 1; nx /= nl; ny /= nl;
+          if ((ny > 0) !== wantFront) continue;
+          const k = wantFront ? 0.25 + 0.75*Math.max(0, nx*LX + ny*LY) : 0.1;
+          const si = Math.round(k*(SHADES - 1));
+          let path = buckets.get(si); if (!path){ path = new Path2D(); buckets.set(si, path); }
+          path.moveTo(cx + xr0*s, cy + yr0*s*SE - z*s*CE); path.lineTo(cx + xr1*s, cy + yr1*s*SE - z*s*CE);
+        }
+        buckets.forEach((path, si) => {
+          const dl = base.l < 25 ? (si/(SHADES - 1) - 0.3)*28 : (si/(SHADES - 1) - 0.6)*32;
+          ctx.lineWidth = lw; ctx.strokeStyle = hsl(base.h, base.s, base.l + dl); ctx.stroke(path);
+          if (sp > 2.2){ ctx.save(); ctx.translate(0, -sp*0.28); ctx.lineWidth = sp*0.4; ctx.strokeStyle = hsl(base.h, base.s, base.l + dl + 8); ctx.stroke(path); ctx.restore(); }
+        });
+      }
+    }
+    if (!p.hollow){
+      const pts = g[n - 1], z = p.oz + p.H, base = p._cols ? p._cols[n - 1] : p._base, cap = new Path2D();
+      for (let j = 0; j <= p.segs; j++){ const q = P(pts[j*2] + p.ox, pts[j*2+1] + p.oy, z); j ? cap.lineTo(q[0], q[1]) : cap.moveTo(q[0], q[1]); }
+      cap.closePath();
+      ctx.fillStyle = hsl(base.h, base.s, base.l + (base.l > 80 ? 3 : base.l < 25 ? 8 : 10)); ctx.fill(cap);
+      if (p.decor){
+        ctx.save(); ctx.clip(cap);
+        const fill = (path, kind) => {
+          ctx.fillStyle = kind === 'hole' || kind === 'eye' || kind === 'dark' ? (kind === 'eye' ? '#121316' : 'rgba(10,10,12,.5)')
+            : kind === 'light' ? 'rgba(255,255,255,.55)' : kind === 'line' ? 'rgba(0,0,0,.28)' : hsl(base.h, base.s, base.l < 30 ? base.l + 22 : base.l - 14);
+          ctx.fill(path);
+        };
+        p.decor({
+          disc(x, y, r, kind){ const d = new Path2D(); for (let j = 0; j <= 28; j++){ const a = j/28*TAU, q = P(p.ox + x + Math.cos(a)*r, p.oy + y + Math.sin(a)*r, z); j ? d.lineTo(q[0], q[1]) : d.moveTo(q[0], q[1]); } fill(d, kind); },
+          rect(x, y, w, h, kind){ const d = new Path2D(); [[x, y], [x + w, y], [x + w, y + h], [x, y + h]].forEach(([u, v], j) => { const q = P(p.ox + u, p.oy + v, z); j ? d.lineTo(q[0], q[1]) : d.moveTo(q[0], q[1]); }); d.closePath(); fill(d, kind); }
+        });
+        ctx.restore();
+      }
+    }
+  }
+}
+
+/* ================= catalog ================= */
+const CATS = { fidget:"פידג'טים", animals:'חיות מפרקיות', flex:'גמישים ומפרקיים', spiral:'סלילים', kinetic:'אמנות קינטית', home:'לבית ולשולחן', games:'משחקים ופאזלים' };
+const OWN = [
   { id:'gyro', name:'ספינר Gyro4 Twist', cat:'fidget', price:7, img:'assets/gyro.jpg' },
   { id:'rail', name:"מסילה פידג'ט", cat:'fidget', price:10, img:'assets/rail.jpg' },
   { id:'infinity', name:'קוביית אינסוף', cat:'fidget', price:10, img:'assets/infinity.jpg' },
@@ -909,33 +1222,147 @@ const PRODUCTS = [
   { id:'spiral', name:'סליל רגיל', cat:'spiral', price:9, img:'assets/spiral.jpg' },
   { id:'coil', name:'סליל גמיש', cat:'flex', price:8, img:'assets/coil.jpg' }
 ];
+const SOURCED = [
+  { id:"immortal-dragon", name:"דרקון האלמוות", cat:'animals', price:59, model:'dragon', color:'#C9A227', url:'https://makerworld.com/en/models/1999003-immortal-dragon-articulated-print-in-place', site:'MakerWorld' },
+  { id:"draconic", name:"דרקון מכונף", cat:'animals', price:69, model:'dragonw', color:'#2E8FD8', url:'https://makerworld.com/en/models/1015187-draconic-winged-articulated-dragon', site:'MakerWorld' },
+  { id:"floppy-dragon", name:"דרקון פלופי", cat:'animals', price:39, model:'dragon', color:'#3DDC84', url:'https://makerworld.com/en/models/769341-floppy-dragon-flexi-articulated-monster-pip', site:'MakerWorld' },
+  { id:"dragon-classic", name:"דרקון מפרקי קלאסי", cat:'animals', price:49, model:'dragon', color:'#8E5CF7', url:'https://makerworld.com/en/models/116169', site:'MakerWorld', by:"Printesion" },
+  { id:"dragon-scales", name:"דרקון קשקשים", cat:'animals', price:55, model:'dragon', color:'#E5484D', url:'https://makerworld.com/en/models/2153954-articulated-dragon', site:'MakerWorld', by:"D3Craft" },
+  { id:"tiny-alligator", name:"תנין קטנטן", cat:'animals', price:12, model:'critter', color:'#2FA36B', url:'https://www.printables.com/model/1062735-tiny-alligator-articulated-flexi-print-in-place-fi', site:'Printables', by:"tinymakery" },
+  { id:"holding-cat", name:"חתול נמתח", cat:'animals', price:19, model:'cat', color:'#F2A65A', url:'https://www.printables.com/model/972232-flexi-holding-cat-print-in-place', site:'Printables', by:"3D_Flexseeds" },
+  { id:"big-cat", name:"חתול נמתח XL", cat:'animals', price:35, model:'cat', color:'#6B6F76', url:'https://www.printables.com/model/1146999-official-remix-flexi-extra-size-cat-print-in-place', site:'Printables', by:"3D_Flexseeds" },
+  { id:"raccoon", name:"דביבון גמיש", cat:'animals', price:22, model:'critter', color:'#8A8F98', url:'https://www.printables.com/model/1541977-flexi-raccoon-print-in-place-edition', site:'Printables' },
+  { id:"fox", name:"שועל גמיש", cat:'animals', price:22, model:'cat', color:'#FF6B1A', url:'https://www.printables.com/model/1508783-flexi-fox-fully-articulated-printable-animal-toy', site:'Printables', by:"FlexiMania" },
+  { id:"shark", name:"כריש גמיש", cat:'animals', price:22, model:'shark', color:'#5B8DB8', url:'https://www.printables.com/model/1376992-flexi-print-in-place-shark', site:'Printables', by:"SoggyJoe" },
+  { id:"ankylosaurus", name:"אנקילוזאורוס גמיש", cat:'animals', price:25, model:'critter', color:'#7FB24A', url:'https://www.printables.com/model/507383-flexi-ankylosaurus-print-in-place', site:'Printables' },
+  { id:"happy-octopus", name:"תמנון שמח", cat:'animals', price:25, model:'octopus', color:'#FF7EB6', url:'https://www.printables.com/model/979864-happy-articulated-octopus-print-in-place', site:'Printables', by:"TomczukCustoms" },
+  { id:"flexi-octopus", name:"תמנון גמיש", cat:'animals', price:22, model:'octopus', color:'#8E5CF7', url:'https://www.printables.com/model/1525899-flexi-octopus-print-in-place-articulated-octopus-n', site:'Printables' },
+  { id:"suction-octopus", name:"תמנון עם פטמות יניקה", cat:'animals', price:35, model:'octopus', color:'#E5484D', url:'https://www.printables.com/model/381482-detailed-octopus-with-suction-cups-articulated-pri', site:'Printables', by:"Dilem" },
+  { id:"axolotl", name:"אקסולוטל מפרקי", cat:'animals', price:22, model:'axolotl', color:'#FF9EC4', url:'https://www.printables.com/model/1281943-articulated-axolotl', site:'Printables', by:"Plastic 3D" },
+  { id:"axolotl-skeleton", name:"שלד אקסולוטל", cat:'animals', price:25, model:'axolotl', color:'#E9E9E4', url:'https://www.printables.com/model/1786803-axolotl-skeleton-articulated-print-in-place-flexi', site:'Printables' },
+  { id:"t-rex", name:"טי־רקס גמיש", cat:'animals', price:29, model:'critter', color:'#3BA7E5', url:'https://www.printables.com/model/566894-tessa-the-flexi-t-rex-print-in-place-articulated-d', site:'Printables', by:"AndreasJoskaSutanto" },
+  { id:"planetary-finger", name:"ספינר אצבע פלנטרי", cat:'fidget', price:18, model:'gear', color:'#3BA7E5', url:'https://makerworld.com/en/models/1932158-planetary-gears-finger-fidget-spinner', site:'MakerWorld', by:"Peter Noorlander" },
+  { id:"two-layer", name:"ספינר גלגלי שיניים כפול", cat:'fidget', price:22, model:'gear2', color:'#FF6B1A', url:'https://makerworld.com/en/models/1655976-two-layer-gear-fidget-spinner-print-in-place', site:'MakerWorld' },
+  { id:"eight-planets", name:"ספינר 8 גלגלים פלנטריים", cat:'fidget', price:25, model:'gear8', color:'#8E5CF7', url:'https://makerworld.com/en/models/919905-fidget-spinner-8-planetary-gears', site:'MakerWorld' },
+  { id:"pip-planetary", name:"ספינר פלנטרי קלאסי", cat:'fidget', price:18, model:'gear', color:'#2FA36B', url:'https://makerworld.com/en/models/58892-print-in-place-planetary-gear-spinner', site:'MakerWorld' },
+  { id:"f1-wheel", name:"ספינר גלגל F1", cat:'fidget', price:25, model:'wheel', color:'#E5484D', url:'https://makerworld.com/en/models/1290588-planetary-gear-f1-wheel-fidget-spinner', site:'MakerWorld' },
+  { id:"fragment", name:"ספינר Fragment מרובע", cat:'fidget', price:22, model:'gearsq', color:'#FFD21F', url:'https://makerworld.com/en/models/980989-fragment-square-planetary-gears-fidget-spinner', site:'MakerWorld' },
+  { id:"vortex", name:"ספינר מערבולת", cat:'fidget', price:25, model:'gear', color:'#E5484D', url:'https://makerworld.com/en/models/2134377-planetary-vortex-fidget-spinner', site:'MakerWorld' },
+  { id:"fold-cube", name:"קוביה מתקפלת", cat:'fidget', price:15, model:'foldcube', color:'#FF6B1A', url:'https://www.thingiverse.com/thing:230139', site:'Thingiverse', by:"mathgrrl" },
+  { id:"gyro-cube-gears", name:"קוביית גלגלי שיניים גירוסקופית", cat:'fidget', price:45, model:'gearcube', color:'#3BA7E5', url:'https://www.thingiverse.com/thing:338808', site:'Thingiverse', by:"joefe" },
+  { id:"cube-gears", name:"קוביית גלגלי שיניים", cat:'fidget', price:39, model:'gearcube', color:'#FFD21F', url:'https://www.thingiverse.com/thing:10483', site:'Thingiverse', by:"emmett" },
+  { id:"cubed-sphere", name:"כדור מקוביות", cat:'fidget', price:25, model:'sphere', color:'#2FA36B', url:'https://www.printables.com/model/537147-cubed-sphere-print-in-place', site:'Printables' },
+  { id:"water-droplet", name:"טיפת מים קינטית", cat:'kinetic', price:49, model:'droplet', color:'#2E8FD8', url:'https://www.printables.com/model/124962-new-water-droplet-kinetic-desk-toy', site:'Printables', by:"EG3Dprinting" },
+  { id:"wave-machine", name:"מכונת גלים", cat:'kinetic', price:89, model:'wave', color:'#FF6B1A', url:'https://www.printables.com/model/734776-kinetic-art-wave-machine', site:'Printables', by:"Mark Rhodes" },
+  { id:"helicone", name:"הליקון", cat:'kinetic', price:59, model:'helicone', color:'#8E5CF7', url:'https://www.printables.com/model/962317-helicone-kinetic-sculpture', site:'Printables', by:"EBD Design Studio" },
+  { id:"xylo", name:"קסילו, פסל קינטי", cat:'kinetic', price:45, model:'helicone', color:'#2FA36B', url:'https://www.printables.com/model/428795-xylo-kinetic-sculpture', site:'Printables', by:"yahbluez" },
+  { id:"kime", name:"KiMe, פסל קינטי", cat:'kinetic', price:69, model:'kime', color:'#E5484D', url:'https://www.printables.com/model/284127-kime-fully-3d-printable-kinetic-sculpture', site:'Printables', by:"Noci" },
+  { id:"organizer-stand", name:"מארגן שולחן עם מעמד לטלפון", cat:'home', price:45, model:'organizer', color:'#E9E9E4', url:'https://www.printables.com/model/978903-desk-organizer-with-phone-stand', site:'Printables', by:"Jose L. González" },
+  { id:"all-in-one", name:"מארגן הכל־באחד", cat:'home', price:49, model:'organizer', color:'#2A2C31', url:'https://www.printables.com/model/1574755-all-in-one-desk-organizer-pen-notes-phone-stand', site:'Printables', by:"Alpgiray Mollaogullari" },
+  { id:"magsafe-stand", name:"מעמד MagSafe מודולרי", cat:'home', price:39, model:'organizer', color:'#E6D3AE', url:'https://www.printables.com/model/1544199-modular-desk-organizer-systemmagsafe-phone-stand', site:'Printables', by:"Meyui" },
+  { id:"headphone-stand", name:"מעמד לאוזניות", cat:'home', price:39, model:'stand', color:'#2A2C31', url:'https://www.printables.com/model/8814-headphone-stand', site:'Printables', by:"JMcK" },
+  { id:"anchor-stand", name:"מעמד עוגן לאוזניות", cat:'home', price:45, model:'stand', color:'#3BA7E5', url:'https://www.printables.com/model/803471-anchor-headphones-stand', site:'Printables' },
+  { id:"modern-planter", name:"עציץ מודרני", cat:'home', price:29, model:'planter', color:'#E9E9E4', url:'https://makerworld.com/en/models/1402873-modern-planter-pot-vase-mode-lightweight', site:'MakerWorld', by:"Kaflex Studio" },
+  { id:"lamp-shade", name:"אהיל למנורה", cat:'home', price:39, model:'lamp', color:'#FFD21F', url:'https://makerworld.com/en/models/755176-lamp-shade-vase-mode', site:'MakerWorld', by:"RolltreppenMax" },
+  { id:"hydro-planter", name:"עציץ־מנורה הידרופוני", cat:'home', price:59, model:'lamp', color:'#2FA36B', url:'https://makerworld.com/en/models/1697556-hydroponic-planter-lamp', site:'MakerWorld', by:"Peter Hall" },
+  { id:"japandi", name:"אגרטלי ג׳פנדי", cat:'home', price:35, model:'vases', color:'#E6D3AE', url:'https://makerworld.com/en/models/964016-japandi-vases', site:'MakerWorld', by:"SabreDesign" },
+  { id:"dice-tower", name:"מגדל קוביות", cat:'games', price:39, model:'tower', color:'#8E5CF7', url:'https://www.printables.com/model/291921-print-in-place-dice-tower', site:'Printables', by:"rcmz" },
+  { id:"castle-stairs", name:"מגדל קוביות טירה", cat:'games', price:59, model:'castle', color:'#8A8F98', url:'https://www.printables.com/model/851935-dice-tower-castle-stairs', site:'Printables', by:"squinn" },
+  { id:"foldable-chess", name:"שחמט מתקפל", cat:'games', price:69, model:'chess', color:'#2A2C31', url:'https://www.printables.com/model/1042773-chess-set-foldable', site:'Printables', by:"blake3dcake" },
+  { id:"rook-chess", name:"צריח שחמט מגנטי", cat:'games', price:79, model:'rook', color:'#E9E9E4', url:'https://www.printables.com/model/720603-magnowrap-rook-chess-tower', site:'Printables' },
+  { id:"locking-box", name:"קופסת פאזל ננעלת", cat:'games', price:45, model:'box', color:'#FF6B1A', url:'https://makerworld.com/en/models/609479-locking-puzzle-box', site:'MakerWorld' },
+  { id:"maze-giftcard", name:"קופסת מבוך לכרטיס מתנה", cat:'games', price:29, model:'maze', color:'#3BA7E5', url:'https://makerworld.com/en/models/1956482-maze-gift-card-puzzle-box-dual-sided-challenge', site:'MakerWorld' },
+  { id:"giftcard-lock", name:"מנעול לכרטיס מתנה", cat:'games', price:19, model:'box', color:'#E5484D', url:'https://makerworld.com/en/models/890368-gift-card-lock-puzzle-box', site:'MakerWorld' }
+];
+// interleave: own photos first, then sourced models
+const PRODUCTS = OWN.concat(SOURCED.map(p => Object.assign(p, { isNew:true })));
 const byId = Object.fromEntries(PRODUCTS.map(p => [p.id, p]));
 const ICON_PLUS = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>';
+const ICON_EXT = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>';
 const money = n => '₪' + n.toLocaleString('he-IL');
-const grid = $('#grid');
+const grid = $('#grid'), moreBtn = $('#more'), PAGE = 15;
+let filter = 'all', shown = PAGE;
+const live = new Map(); // canvas -> {p, angle}
 
-PRODUCTS.forEach(p => {
+function modelOf(p){ return p._parts || (p._parts = BUILD[p.model](p.color)); }
+function paint(cv, p, angle){
+  const { ctx, W, H } = sizeCanvas(cv);
+  if (W < 4) return;
+  drawModel(ctx, W, H, modelOf(p), angle);
+}
+function card(p, idx){
   const el = document.createElement('article');
-  el.className = 'card'; el.dataset.cat = p.cat;
+  el.className = 'card'; el.dataset.cat = p.cat; el.style.setProperty('--i', idx % 5);
   el.innerHTML = `
-    <div class="thumb"><img src="${p.img}" alt="${p.name}"></div>
+    <div class="thumb">${p.img ? `<img src="${p.img}" alt="${p.name}">`
+      : `<canvas role="img" aria-label="${p.name}, הדמיית הדפסה" style="--d:${(idx % 7)*-0.6}s"></canvas><span class="src">הדמיה</span>`}
+      ${p.isNew ? '<span class="badge">חדש</span>' : ''}</div>
     <div class="card-body">
       <div class="meta">${CATS[p.cat]}</div>
       <h3>${p.name}</h3>
+      ${p.url ? `<a class="credit" href="${p.url}" target="_blank" rel="noopener">${p.by ? `<span class="by">עיצוב: <bdi>${p.by}</bdi> · </span>` : ''}${p.site} ${ICON_EXT}</a>` : ''}
       <div class="buy">
         <span class="price">${money(p.price)}</span>
         <button class="add" type="button" data-add="${p.id}" aria-label="הוספת ${p.name} לסל">${ICON_PLUS}<span>לסל</span></button>
       </div>
     </div>`;
-  grid.appendChild(el);
-});
+  return el;
+}
+const thumbIO = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(e => {
+  const st = live.get(e.target); if (!st) return;
+  st.vis = e.isIntersecting; if (st.vis && !st.drawn){ paint(e.target, st.p, st.angle); st.drawn = true; }
+}), { rootMargin:'200px' }) : null;
 
+function renderGrid(){
+  const list = PRODUCTS.filter(p => filter === 'all' || p.cat === filter);
+  grid.innerHTML = ''; live.forEach((_, cv) => thumbIO && thumbIO.unobserve(cv)); live.clear();
+  list.slice(0, shown).forEach((p, i) => {
+    const el = card(p, i); grid.appendChild(el);
+    const cv = $('canvas', el);
+    if (cv){
+      const st = { p, angle: 0.7 + (i % 5)*0.5, vis:false, drawn:false, el };
+      live.set(cv, st);
+      thumbIO ? thumbIO.observe(cv) : requestAnimationFrame(() => paint(cv, p, st.angle));
+      el.addEventListener('pointerenter', () => { focusCard = st; });
+      el.addEventListener('pointerleave', () => { if (focusCard === st) focusCard = null; });
+    }
+    if (!reduce) observeReveal(el);
+  });
+  const rest = list.length - shown;
+  moreBtn.hidden = rest <= 0;
+  moreBtn.querySelector('span').textContent = `הצגת עוד ${Math.min(PAGE, rest)} מוצרים`;
+  $('#shop-count').textContent = list.length;
+}
 function setFilter(f){
+  filter = f; shown = PAGE;
   $$('#filters .chip').forEach(c => c.setAttribute('aria-pressed', String(c.dataset.f === f)));
-  $$('.card', grid).forEach(c => { c.hidden = !(f === 'all' || c.dataset.cat === f); });
+  renderGrid();
 }
 $('#filters').addEventListener('click', e => { const b = e.target.closest('.chip'); if (b) setFilter(b.dataset.f); });
 $$('.cat[data-filter]').forEach(a => a.addEventListener('click', () => setFilter(a.dataset.filter)));
+moreBtn.addEventListener('click', () => { shown += PAGE; renderGrid(); });
+
+// turntable: the hovered card (desktop) or the card nearest the screen centre (touch) spins
+let focusCard = null, turnLast = 0;
+const touch = matchMedia('(hover: none)').matches;
+function turntable(ts){
+  requestAnimationFrame(turntable);
+  if (reduce || document.hidden || ts - turnLast < 33) return;
+  const dt = Math.min(0.1, (ts - turnLast)/1000); turnLast = ts;
+  let st = focusCard;
+  if (touch){
+    let best = Infinity; st = null;
+    live.forEach((s, cv) => { if (!s.vis) return; const r = cv.getBoundingClientRect(), d = Math.abs(r.top + r.height/2 - innerHeight/2); if (d < best && d < innerHeight*0.3){ best = d; st = s; } });
+  }
+  if (!st) return;
+  const cv = [...live.keys()].find(c => live.get(c) === st);
+  if (!cv) return;
+  st.angle += dt*0.9; paint(cv, st.p, st.angle);
+}
+requestAnimationFrame(turntable);
+
+renderGrid();
+/*CATALOG-END*/
 
 /* ================= cart ================= */
 let cart = {};
@@ -955,11 +1382,12 @@ function renderCart(){
   ids.forEach(id => {
     const p = byId[id], q = cart[id]; total += p.price*q;
     const row = document.createElement('div'); row.className = 'line';
-    row.innerHTML = `<div class="mini"><img src="${p.img}" alt=""></div>
+    row.innerHTML = `<div class="mini">${p.img ? `<img src="${p.img}" alt="">` : '<canvas></canvas>'}</div>
       <div><h4>${p.name}</h4><div class="q"><button type="button" data-inc="${id}" aria-label="הוספת יחידה">+</button><span>${q}</span><button type="button" data-dec="${id}" aria-label="הורדת יחידה">−</button></div>
       <button class="rm" type="button" data-rm="${id}">הסרה</button></div>
       <div class="lp">${money(p.price*q)}</div>`;
     box.appendChild(row);
+    if (!p.img){ const cv = $('canvas', row); requestAnimationFrame(() => paint(cv, p, 0.8)); }
   });
   $('#cart-total').textContent = money(total);
   $('#checkout').disabled = !ids.length;
@@ -982,7 +1410,16 @@ $('#cart-items').addEventListener('click', e => {
 grid.addEventListener('click', e => {
   const b = e.target.closest('[data-add]'); if (!b) return;
   const id = b.dataset.add; cart[id] = (cart[id] || 0) + 1; saveCart(); renderCart();
-  const c = $('#cart-count'); c.classList.remove('bump'); void c.offsetWidth; c.classList.add('bump');
+  const c = $('#cart-count');
+  const bump = () => { c.classList.remove('bump'); void c.offsetWidth; c.classList.add('bump'); };
+  if (!reduce && document.body.animate){
+    const a = b.getBoundingClientRect(), z = $('#cart-open').getBoundingClientRect(), dot = document.createElement('div');
+    dot.className = 'fly'; dot.style.left = (a.left + a.width/2 - 7) + 'px'; dot.style.top = (a.top + a.height/2 - 7) + 'px';
+    document.body.appendChild(dot);
+    const dx = z.left + z.width/2 - (a.left + a.width/2), dy = z.top + z.height/2 - (a.top + a.height/2);
+    dot.animate([{ transform:'translate(0,0) scale(1)' }, { transform:`translate(${dx*0.5}px,${dy - 120}px) scale(1.3)`, offset:0.5 }, { transform:`translate(${dx}px,${dy}px) scale(.4)` }],
+      { duration:700, easing:'cubic-bezier(.5,0,.5,1)' }).onfinish = () => { dot.remove(); bump(); };
+  } else bump();
   toast(`${byId[id].name} נוסף לסל`);
 });
 $('#checkout').addEventListener('click', () => toast('התשלום המאובטח יחובר בקרוב. בינתיים אפשר להזמין דרך הטופס.'));
@@ -1023,7 +1460,7 @@ $('#again').addEventListener('click', () => {
 
 /* ================= resize + theme ================= */
 let rz;
-addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(() => { drawHero(); }, 120); });
+addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(() => { drawHero(); live.forEach((st, cv) => { if (st.drawn) paint(cv, st.p, st.angle); }); }, 120); });
 function themeChanged(){ readTokens(); drawHero(); }
 matchMedia('(prefers-color-scheme: dark)').addEventListener('change', themeChanged);
 new MutationObserver(themeChanged).observe(document.documentElement, { attributes:true, attributeFilter:['data-theme'] });
