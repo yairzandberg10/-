@@ -1,0 +1,8 @@
+# Godot
+.godot/
+*.tmp
+# city_tool backups (git history already keeps every version)
+data/backups/
+__pycache__/
+build/
+.claude/worktrees/

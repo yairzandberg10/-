@@ -1,0 +1,45 @@
+; Engine configuration file.
+; Tel Batata - miniature 3D city, tuned for low-end PCs (Compatibility renderer).
+
+config_version=5
+
+[application]
+
+config/name="Tel Batata"
+config/description="עיר מיניאטורית תלת־ממדית בהשראת תל בטטה"
+run/main_scene="res://scenes/main.tscn"
+config/features=PackedStringArray("4.3", "GL Compatibility")
+config/icon="res://icon.svg"
+config/use_custom_user_dir=true
+config/custom_user_dir_name="TelBatata"
+
+[autoload]
+
+Settings="*res://scripts/autoload/settings.gd"
+CityData="*res://scripts/autoload/city_data.gd"
+GameState="*res://scripts/autoload/game_state.gd"
+GameUI="*res://scripts/autoload/game_ui.gd"
+Interact="*res://scripts/autoload/interact.gd"
+Audio="*res://scripts/autoload/audio.gd"
+Effects="*res://scripts/autoload/effects.gd"
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/vsync/vsync_mode=1
+
+[physics]
+
+common/physics_ticks_per_second=60
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+anti_aliasing/quality/msaa_3d=0
+lights_and_shadows/directional_shadow/size=2048
+lights_and_shadows/directional_shadow/soft_shadow_filter_quality=0
+lights_and_shadows/positional_shadow/atlas_size=0
+environment/defaults/default_clear_color=Color(0.8, 0.9, 0.95, 1)
+textures/canvas_textures/default_texture_filter=1

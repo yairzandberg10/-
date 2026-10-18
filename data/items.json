@@ -1,0 +1,53 @@
+{
+	"version": 1,
+	"kinds": {
+		"food": "אוכל",
+		"hat": "כובעים",
+		"fun": "כיף",
+		"story": "חפצי סיפור"
+	},
+	"items": {
+		"burekas_potato": {"name": "בורקס תפוחי אדמה", "kind": "food", "price": 5, "heal": 2, "color": "#e3b45c", "desc": "חם, פריך, מחזיר 2 לבבות."},
+		"sweet_potato_pie": {"name": "פאי בטטה", "kind": "food", "price": 9, "heal": 5, "color": "#e08a3c", "desc": "מחזיר את כל הלבבות. וגם את מצב הרוח."},
+		"croissant": {"name": "קרואסון חמאה", "kind": "food", "price": 4, "heal": 1, "color": "#e8c27a", "desc": "מתפורר לכל עבר. לב אחד."},
+		"chips_bag": {"name": "שקית צ'יפס", "kind": "food", "price": 3, "heal": 1, "color": "#f2cf4a", "desc": "קראנץ'! לב אחד."},
+		"ice_pop": {"name": "ארטיק לימון", "kind": "food", "price": 4, "heal": 1, "color": "#f7e36b", "desc": "מקרר את הראש אחרי קרב. לב אחד."},
+		"coffee": {"name": "קפה הפוך", "kind": "food", "price": 6, "heal": 2, "color": "#a0714a", "desc": "מעיר אפילו בטטה ישנונית. 2 לבבות."},
+		"falafel": {"name": "פלאפל בפיתה", "kind": "food", "price": 7, "heal": 3, "color": "#9a7a3a", "desc": "כדורים ירוקים של אושר. 3 לבבות."},
+
+		"hat_party": {"name": "כובע מסיבה", "kind": "hat", "price": 12, "hat": "cone", "color": "#e8579a", "desc": "כל יום הוא מסיבה!"},
+		"hat_cowboy": {"name": "כובע בוקרים", "kind": "hat", "price": 20, "hat": "cowboy", "color": "#9a6234", "desc": "יי-הא! השריף של רמת פריקסה."},
+		"hat_propeller": {"name": "כובע פרופלור", "kind": "hat", "price": 25, "hat": "propeller", "color": "#3f8fe0", "desc": "לא באמת עף. אבל נראה כאילו."},
+		"hat_flower": {"name": "זר פרחים", "kind": "hat", "price": 15, "hat": "flower", "color": "#ff8fb8", "desc": "ריח של אביב."},
+		"hat_tophat": {"name": "מגבעת", "kind": "hat", "price": 30, "hat": "tophat", "color": "#2d2d38", "desc": "לבטטות מכובדות במיוחד."},
+		"hat_chef": {"name": "כובע שף", "kind": "hat", "price": 0, "hat": "chef", "color": "#ffffff", "desc": "פרס ממרוץ המשלוחים של בורקס."},
+		"hat_melon": {"name": "קסדת אבטיח", "kind": "hat", "price": 0, "hat": "melon", "color": "#4caf50", "desc": "פרס מזירת העגבניות. מגן מפני קטשופ."},
+		"hat_cap_mint": {"name": "מצחייה מנטה", "kind": "hat", "price": 0, "hat": "cap", "color": "#5fd3b0", "desc": "צבע חדש מהצ'יפס הזהוב (4)."},
+		"hat_cap_rose": {"name": "מצחייה ורודה", "kind": "hat", "price": 0, "hat": "cap", "color": "#ff7aa8", "desc": "צבע חדש מהצ'יפס הזהוב (8)."},
+		"hat_cap_rainbow": {"name": "מצחייה סגולה-נוצצת", "kind": "hat", "price": 0, "hat": "cap", "color": "#9b6bff", "desc": "כל 12 הצ'יפסים! צבע נדיר."},
+		"hat_golden_cap": {"name": "מצחייה זהובה", "kind": "hat", "price": 0, "hat": "cap", "color": "#f2c230", "desc": "לגיבור רמת פריקסה בלבד."},
+
+		"confetti_popper": {"name": "מפוצץ קונפטי", "kind": "fun", "price": 3, "use": "confetti", "color": "#ff6fb0", "desc": "פוף! קונפטי לכל עבר."},
+		"whistle": {"name": "משרוקית", "kind": "fun", "price": 8, "use": "whistle", "keep": true, "color": "#c0c8d0", "desc": "פיייי! עגבניות קרובות בורחות בבהלה."},
+		"balloon": {"name": "בלון אדום", "kind": "fun", "price": 6, "use": "balloon", "keep": true, "color": "#e8473f", "desc": "בלון שמרחף מעליך. לחיצה נוספת משחררת."},
+		"bubbles": {"name": "בועות סבון", "kind": "fun", "price": 4, "use": "bubbles", "color": "#9ad8f0", "desc": "בועות מרחפות. סתם כי זה יפה."},
+
+		"foam_baguette": {"name": "בגט ספוגי", "kind": "story", "price": 0, "color": "#e0b060", "desc": "הנשק הכי רך בעולם. F או קליק שמאלי."},
+		"burekas": {"name": "בורקס חם למשלוח", "kind": "story", "price": 0, "color": "#e3b45c", "desc": "למסור לסבתא פירה, לקטשופי ולמציל גלי. מהר, לפני שמתקרר!"},
+		"box": {"name": "קרטון הובלה", "kind": "story", "price": 0, "color": "#c49a5a", "desc": "כתוב עליו: 'נעליים (?)'."},
+		"flag": {"name": "דגל חג", "kind": "story", "price": 0, "color": "#f2c230", "desc": "לקישוט השכונה לחג."},
+		"map_scrap": {"name": "פיסת מפה", "kind": "story", "price": 0, "color": "#e8dcb0", "desc": "ציור של הסדנה של פריקסה."},
+		"diary_page": {"name": "דף מהיומן של פריקסה", "kind": "story", "price": 0, "color": "#f4ecd2", "desc": "כתב יד מסולסל וכתמי שמן מכונות."},
+		"last_page": {"name": "הדף האחרון", "kind": "story", "price": 0, "color": "#fff1c0", "desc": "מכתב של פריקסה לריקי."},
+		"golden_crown": {"name": "הכתר הזהוב", "kind": "story", "price": 0, "color": "#f2c230", "desc": "צריך להחזיר אותו לפסל בכיכר!"},
+		"golden_chip": {"name": "צ'יפס זהוב", "kind": "story", "price": 0, "color": "#f2c230", "desc": "נוצץ, פריך ולא אכיל."}
+	},
+	"shops": {
+		"bakery": ["burekas_potato", "sweet_potato_pie", "croissant", "coffee"],
+		"cafe": ["coffee", "croissant", "sweet_potato_pie", "ice_pop"],
+		"kiosk": ["chips_bag", "ice_pop", "confetti_popper", "bubbles", "balloon"],
+		"shop_small": ["chips_bag", "falafel", "confetti_popper", "whistle", "hat_party"],
+		"toy_shop": ["hat_party", "hat_flower", "hat_cowboy", "hat_propeller", "hat_tophat", "balloon", "whistle", "bubbles", "confetti_popper"],
+		"default": ["chips_bag", "falafel", "confetti_popper", "balloon"]
+	}
+}
