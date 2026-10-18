@@ -8,7 +8,8 @@ const HELP := {
 	"follow": [
 		"מצב הליכה",
 		"WASD – תזוזה  |  Shift – ריצה  |  רווח – קפיצה",
-		"עכבר – סיבוב מצלמה  |  גלגלת – זום",
+		"E – לדבר / להיכנס / לנהוג  |  F או קליק – בגט ספוגי",
+		"I – תיק  |  Tab – יומן משימות  |  עכבר – סיבוב מצלמה",
 		"C – מצלמה חופשית  |  B – מצב בנייה  |  P – מצב צילום",
 		"F2 – איכות גרפיקה  |  F3 – נתוני ביצועים  |  F4 – בדיקת ביצועים",
 		"F5 – שמירה  |  F11 – מסך מלא  |  F12 – צילום מסך",
@@ -90,7 +91,11 @@ func _ready() -> void:
 	add_child(_root)
 
 	_stats = _label()
-	_stats.position = Vector2(12, 10)
+	_stats.anchor_top = 1.0
+	_stats.anchor_bottom = 1.0
+	_stats.offset_left = 12
+	_stats.offset_top = -34
+	_stats.grow_vertical = Control.GROW_DIRECTION_BEGIN
 	_root.add_child(_stats)
 
 	_mode = _label()
@@ -136,6 +141,9 @@ func _process(delta: float) -> void:
 
 
 func toast(text: String, seconds := 3.0) -> void:
+	if not _photo and GameUI.hud and GameUI.visible:
+		GameUI.hud.toast(text, seconds)
+		return
 	_toast.text = text
 	_toast_left = seconds
 	_toast.modulate.a = 1.0
@@ -169,6 +177,7 @@ func toggle_help() -> void:
 ## Photo mode hides all UI except what the photographer asks for.
 func set_photo(on: bool) -> void:
 	_photo = on
+	GameUI.visible = not on
 	help_visible = not on
 	_stats.visible = Settings.show_stats and not on
 	set_mode("photo" if on else "follow")

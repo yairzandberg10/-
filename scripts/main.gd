@@ -18,8 +18,8 @@ const SYSTEMS := [
 	"res://scripts/systems/pedestrian_system.gd",
 	"res://scripts/systems/npc_system.gd",
 	"res://scripts/systems/interior_system.gd",
-	"res://scripts/systems/story_system.gd",
 	"res://scripts/systems/combat_system.gd",
+	"res://scripts/systems/story_system.gd",
 	"res://scripts/systems/vehicle_system.gd",
 ]
 
@@ -416,6 +416,13 @@ func _run_smoke_test() -> void:
 		print("SMOKE: drive test moved car: %s" % drove)
 		if not drove or vehicles.is_driving() or not player.visible:
 			push_error("SMOKE: driving test failed")
+			ok = false
+	var story := get_tree().get_first_node_in_group("story_system")
+	if story:
+		var r: Dictionary = await story.debug_run()
+		print("SMOKE: story %s" % r)
+		if r.get("boxes", 0) != 3 or r.get("step", 0) != 2 or r.get("tomato_left", 1) != 0 or r.get("chips", 0) != 12:
+			push_error("SMOKE: story/combat test failed")
 			ok = false
 	Effects.puff(player.global_position, "dust", 6)
 	Audio.play_sfx("coin")

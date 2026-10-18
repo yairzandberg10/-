@@ -21,9 +21,10 @@ changes in natural language ("תבנה שכונה חדשה עם 50 בתים"). A
 ```
 python3 tools/city_tool.py validate
 godot --headless --path . -- --smoke
+xvfb-run -a godot --path . --rendering-driver opengl3 -- --test-story      # all 12 chapters complete
 xvfb-run -a -s "-screen 0 1280x720x24" godot --path . --rendering-driver opengl3 -- --shots --quality=low
 ```
-`--shots` writes 5 PNGs to `~/.local/share/TelBatata/shots/`; look at them. In the cloud container
+`--shots` writes 6 PNGs to `~/.local/share/TelBatata/shots/`; look at them. In the cloud container
 Godot 4.3 is not preinstalled: download the Linux build from the godotengine GitHub releases.
 `--benchmark --quality=low|medium|high` prints average / 1% low FPS and draw calls.
 Software rendering (llvmpipe) gave ~35 FPS / ~60 draw calls for the starter city at low quality.
@@ -35,3 +36,11 @@ Software rendering (llvmpipe) gave ~35 FPS / ~60 draw calls for the starter city
 - Depth fog (`FOG_MODE_DEPTH`) ending at the draw distance hides the far clip; keep sky ground
   colours equal to the fog colour.
 - Everything shares one vertex-coloured material; no textures. Keep it that way for performance.
+
+## Gameplay code map
+- Story is data (`data/story.json`); quest logic in `scripts/autoload/game_state.gd`; world side
+  (markers, drops, enemies, levers, challenges) in `scripts/systems/story_system.gd`; fights in
+  `combat_system.gd`; UI widgets in `scripts/ui/` wired by `scripts/autoload/game_ui.gd`.
+- UI widgets use RTL layout; set full-rect anchors from the parent (`GameUI._fill`), not in their own
+  `_ready`, or they end up zero-sized.
+- If you edit story.json, run `--test-story`.
