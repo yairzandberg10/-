@@ -13,6 +13,8 @@ Examples:
   python tools/city_tool.py init
   python tools/city_tool.py add-neighborhood --name "נווה פירה" --houses 50
   python tools/city_tool.py add-neighborhood --name "מגדלי הצ'יפס" --apartments 3 --shops 1 --direction south
+  python tools/city_tool.py add-neighborhood --name "רמת פריקסה" --houses 24 --shops 2 --civic police_station --detail rich
+  python tools/city_tool.py decorate --all --density normal --seed 1
   python tools/city_tool.py add-building --type kiosk --x 120 --z 30 --rot 90
   python tools/city_tool.py remove --id b_00042
   python tools/city_tool.py stats
@@ -37,7 +39,31 @@ KEEP_BACKUPS = 20
 
 HOUSE_TYPES = ["house_small", "house_small", "house_villa", "house_tall"]
 APARTMENT_TYPES = ["apartment_bauhaus", "apartment_bauhaus", "apartment_tower"]
-CIVIC_TYPES = ["town_hall", "school", "library"]
+CIVIC_TYPES = ["town_hall", "school", "library", "police_station", "friksa_workshop"]
+# one of each per commercial block (shuffled); cafe only on the long (z) sides
+SHOP_MIX = ["bakery", "ice_cream_shop", "pharmacy", "toy_shop", "falafel_stand",
+            "shop_small", "shop_small", "cafe"]
+# where the front door is (local x) so `decorate` keeps the entrance clear
+DOOR_X = {"house_tall": -1.3, "house_villa": -2.3, "shop_small": -2.6, "bakery": -2.6,
+          "ice_cream_shop": -2.6, "pharmacy": -2.6, "toy_shop": -2.6}
+LOT_Y = 0.15       # top of the lawn / lot surface inside a block (GroundKit.INNER_H)
+SIDEWALK_Y = 0.12  # top of the sidewalk (GroundKit.CURB_H)
+DENSITY = {  # lot props per block, chance per building anchor, props per sidewalk edge, beach props
+    "low": (3, 0.25, 1, 6), "normal": (6, 0.5, 2, 14), "rich": (14, 0.9, 3, 24)}
+LOT_POOLS = {
+    "residential": ["flower_pot", "flower_bed", "bike", "scooter", "cat", "trash_bin", "car_parked"],
+    "apartments": ["car_parked", "car_parked", "bike", "planter_box", "recycle_bins", "flower_bed", "cat"],
+    "commercial": ["market_stall", "ice_cream_cart", "planter_box", "flower_pot", "pigeons", "bike",
+                   "newspaper_stand", "trash_bin"],
+    "plaza": ["pigeons", "pigeons", "ice_cream_cart", "flower_pot", "water_fountain", "planter_box",
+              "newspaper_stand", "street_clock"],
+    "park": ["picnic_table", "flower_bed", "water_fountain", "trash_bin", "pigeons", "cat", "bike"],
+    "civic": ["bike", "flower_bed", "planter_box", "trash_bin", "car_parked", "recycle_bins", "flower_pot"],
+}
+SIDEWALK_POOL = ["trash_bin", "trash_bin", "fire_hydrant", "street_sign", "mailbox", "bike"]
+SIDEWALK_EXTRA = {"commercial": ["newspaper_stand", "flower_pot"], "plaza": ["newspaper_stand", "flower_pot"]}
+BEACH_POOL = ["deck_chair", "deck_chair", "deck_chair", "sand_castle", "ice_cream_cart", "trash_bin"]
+FREE_ROT = {"cat", "pigeons", "scooter", "sand_castle"}  # any angle looks natural
 KEY_ORDER = ["version", "name", "chunk_size", "grid", "environment", "next_ids",
              "districts", "blocks", "roads", "buildings", "props"]
 
@@ -180,7 +206,7 @@ class City:
         self.ensure_roads(i, j)
         return b
 
-    def add_object(self, t, x, z, rot=0, variant=None, district="", rng=None, check=False):
+    def add_object(self, t, x, z, rot=0, variant=None, district="", rng=None, check=False, y=None):
         if t not in self.types:
             raise ValueError(f"unknown type '{t}'")
         kind = "props" if self.types[t].get("detail") == "prop" else "buildings"
@@ -188,6 +214,8 @@ class City:
             variant = (rng or random).randrange(self.variant_count(t))
         o = {"id": None, "type": t, "pos": [round(x, 2), round(z, 2)], "rot": int(rot) % 360,
              "variant": int(variant), "district": district}
+        if y:
+            o["y"] = round(y, 3)
         if check:
             r = self.object_rect(o)
             for other in self.d["buildings"] + self.d["props"]:
@@ -292,8 +320,15 @@ def fill_commercial(city, blk, rng):
     inner = city.inner_rect(i, j)
     d = blk["district"]
     placed = 0
-    for ex, ez, rot in ring_lots(inner):
-        t = "cafe" if rng.random() < 0.3 and rot in (0, 180) else "shop_small"
+    lots = ring_lots(inner)
+    mix = list(SHOP_MIX)
+    rng.shuffle(mix)
+    mix = (mix * 2)[:len(lots)]
+    for k, (_, _, rot) in enumerate(lots):  # the cafe (9x10) only fits on the long sides
+        if mix[k] == "cafe" and rot not in (0, 180):
+            s = next(n for n, (_, _, r) in enumerate(lots) if r in (0, 180) and mix[n] != "cafe")
+            mix[k], mix[s] = mix[s], mix[k]
+    for (ex, ez, rot), t in zip(lots, mix):
         x, z = setback_pos(ex, ez, rot, 1.0 + city.footprint(t)[1] / 2)
         city.add_object(t, x, z, rot, None, d, rng)
         placed += 1
@@ -315,6 +350,9 @@ def fill_civic(city, blk, rng, kind):
     city.add_object(kind, cx, z1 - 1.5 - fd / 2, 0, None, d, rng)
     for x in (x0 + 2.5, x1 - 2.5):
         city.add_object("tree_round", x, z0 + 2.5, 0, None, d, rng)
+    if kind == "police_station":  # patrol cars parked behind the station
+        for k in range(3):
+            city.add_object("car_police", cx - 5 + k * 3, z0 + 5, 0, 0, d, y=LOT_Y)
     sidewalk_props(city, blk, rng)
     return 1
 
@@ -330,6 +368,11 @@ def fill_park(city, blk, rng):
         rot = (180 + k * 90) % 360  # bench front (+Z) faces the fountain
         bx, bz = cx + math.sin(a) * 5.5, cz + math.cos(a) * 5.5
         city.add_object("bench", bx, bz, rot, 0, d)
+    # playground in the north part, picnic tables in the south corners
+    play = city.add_object("playground", cx, z0 + 6.5, 0, 0, d, y=LOT_Y)
+    reserved = [city.object_rect(play)]
+    for x in (x0 + 6, x1 - 6):
+        reserved.append(city.object_rect(city.add_object("picnic_table", x, z1 - 6, 0, 0, d, y=LOT_Y)))
     trees = 0
     tries = 0
     spots = []
@@ -337,6 +380,8 @@ def fill_park(city, blk, rng):
         tries += 1
         x, z = rng.uniform(x0 + 1.5, x1 - 1.5), rng.uniform(z0 + 1.5, z1 - 1.5)
         if math.hypot(x - cx, z - cz) < 8.5 or any(math.hypot(x - a, z - b) < 3.5 for a, b in spots):
+            continue
+        if any(City.overlaps((x - 1, z - 1, x + 1, z + 1), r, -0.5) for r in reserved):
             continue
         spots.append((x, z))
         city.add_object("tree_round" if rng.random() < 0.8 else "tree_palm", x, z, 0, None, d, rng)
@@ -379,6 +424,205 @@ def fill_block(city, blk, rng, houses=8, civic=None):
     if t == "plaza":
         return fill_plaza(city, blk, rng)
     raise ValueError(f"unknown block type {t}")
+
+
+# ---------------------------------------------------------------- decorate
+
+class FreeSpace:
+    """Overlap index over every object (plus door clearances and roads) for adding small props."""
+    CELL = 8.0
+
+    def __init__(self, city):
+        self.city = city
+        self.buckets = {}
+        self.roads = [city.road_rect(r) for r in city.d["roads"]]
+        for o in city.d["buildings"] + city.d["props"]:
+            self.add_rect(city.object_rect(o))
+            if o["type"] in city.types and city.types[o["type"]].get("detail") != "prop":
+                self.add_rect(door_clearance(city, o))
+
+    def _keys(self, r):
+        c = self.CELL
+        for gx in range(math.floor(r[0] / c), math.floor(r[2] / c) + 1):
+            for gz in range(math.floor(r[1] / c), math.floor(r[3] / c) + 1):
+                yield (gx, gz)
+
+    def add_rect(self, r):
+        for k in self._keys(r):
+            self.buckets.setdefault(k, []).append(r)
+
+    def free(self, r, gap=0.2):
+        for k in self._keys(r):
+            for o in self.buckets.get(k, ()):
+                if City.overlaps(r, o, -gap):
+                    return False
+        return not any(City.overlaps(r, rr, 0.05) for rr in self.roads)
+
+
+def to_world(o, lx, lz):
+    a = math.radians(o.get("rot", 0))
+    x, z = o["pos"]
+    return x + lx * math.cos(a) + lz * math.sin(a), z - lx * math.sin(a) + lz * math.cos(a)
+
+
+def door_clearance(city, o):
+    """A 2.4 x 2.5 m strip in front of a building's door that props must leave free."""
+    fw, fd = city.footprint(o["type"])
+    x, z = to_world(o, DOOR_X.get(o["type"], 0.0), fd / 2 + 1.25)
+    a = round(o.get("rot", 0)) % 180
+    hw, hd = (1.2, 1.25) if a == 0 else (1.25, 1.2)
+    return (x - hw, z - hd, x + hw, z + hd)
+
+
+def inside(r, area):
+    return r[0] >= area[0] and r[1] >= area[1] and r[2] <= area[2] and r[3] <= area[3]
+
+
+def try_place(city, space, t, x, z, rot, district, area, y, rng):
+    o = {"type": t, "pos": [round(x, 2), round(z, 2)], "rot": int(rot) % 360}
+    r = city.object_rect(o)
+    if not inside(r, area) or not space.free(r):
+        return None
+    space.add_rect(r)
+    return city.add_object(t, x, z, rot, None, district, rng, y=y)
+
+
+def pick_rot(t, rng, facing=None):
+    if t in FREE_ROT:
+        return rng.randrange(0, 360, 15)
+    if facing is not None:
+        return facing
+    return rng.choice([0, 90, 180, 270])
+
+
+def decorate_block(city, space, blk, density, rng):
+    n_lot, p_anchor, n_edge, _ = DENSITY[density]
+    kind = blk["type"]
+    d = blk["district"]
+    i, j = blk["cell"]
+    outer = blk["rect"]
+    inner = city.inner_rect(i, j)
+    placed = []
+
+    def put(t, x, z, rot, area, y):
+        o = try_place(city, space, t, x, z, rot, d, area, y, rng)
+        if o:
+            placed.append(o)
+        return o
+
+    # 1) next to the buildings of this block: driveway cars, mailboxes, pots by the door, fences
+    x0, z0, x1, z1 = outer
+    own = [o for o in city.d["buildings"] if x0 <= o["pos"][0] <= x1 and z0 <= o["pos"][1] <= z1]
+    for b in own:
+        cat = city.types.get(b["type"], {}).get("category", "")
+        fw, fd = city.footprint(b["type"])
+        rot = b.get("rot", 0)
+        dx = DOOR_X.get(b["type"], 0.0)
+        side = 1 if dx <= 0 else -1  # the side away from the door
+        cands = []
+        if cat == "residential":
+            cands = [("car_parked", side * (fw / 2 + 1.6), fd / 2 - 2.2, rot),
+                     ("mailbox", dx - 2.3, fd / 2 + 1.5, rot),
+                     ("flower_pot", dx - 1.1, fd / 2 + 0.6, rot),
+                     ("fence_segment", side * (fw / 2 - 1.2), fd / 2 + 1.6, rot),
+                     ("bike", -side * (fw / 2 + 1.0), 0.0, (rot + 90) % 360)]
+        elif cat == "apartments":
+            cands = [("car_parked", side * (fw / 2 + 1.6), 0.0, rot),
+                     ("bike", fw / 2 - 2.0, fd / 2 + 0.9, rot),
+                     ("planter_box", -fw / 2 + 2.5, fd / 2 + 0.9, rot),
+                     ("recycle_bins", -side * (fw / 2 + 1.0), -fd / 2 + 2.0, (rot + 90) % 360)]
+        elif cat == "commercial":
+            cands = [("flower_pot", dx - 1.1, fd / 2 + 0.6, rot),
+                     ("planter_box", fw / 2 - 1.8, fd / 2 + 1.1, rot),
+                     ("trash_bin", side * (fw / 2 + 0.8), fd / 2 - 0.5, rot)]
+        elif cat in ("civic", "landmark"):
+            cands = [("flower_bed", -fw / 2 + 2.0, fd / 2 + 1.6, rot),
+                     ("flower_bed", fw / 2 - 2.0, fd / 2 + 1.6, rot),
+                     ("bike", fw / 2 + 1.2, fd / 2 - 1.0, (rot + 90) % 360)]
+        for t, lx, lz, r in cands:
+            if rng.random() < p_anchor:
+                x, z = to_world(b, lx, lz)
+                y = SIDEWALK_Y if cat == "commercial" else LOT_Y
+                put(t, x, z, pick_rot(t, rng, r), outer, y)
+
+    # 2) random spots on the lot
+    pool = LOT_POOLS.get(kind, LOT_POOLS["civic"])
+    got, tries = 0, 0
+    while got < n_lot and tries < n_lot * 40:
+        tries += 1
+        t = rng.choice(pool)
+        x, z = rng.uniform(inner[0] + 1, inner[2] - 1), rng.uniform(inner[1] + 1, inner[3] - 1)
+        if put(t, x, z, pick_rot(t, rng), inner, LOT_Y):
+            got += 1
+
+    # 3) sidewalk: bins, hydrants, signs... along the curb, facing the street
+    pool = SIDEWALK_POOL + SIDEWALK_EXTRA.get(kind, [])
+    edges = [(lambda u: (u, z1 - 0.8), 0, x0, x1), (lambda u: (u, z0 + 0.8), 180, x0, x1),
+             (lambda u: (x1 - 0.8, u), 90, z0, z1), (lambda u: (x0 + 0.8, u), 270, z0, z1)]
+    for pos_at, facing, a, b in edges:
+        got, tries = 0, 0
+        while got < n_edge and tries < 30:
+            tries += 1
+            t = rng.choice(pool)
+            x, z = pos_at(rng.uniform(a + 4, b - 4))
+            if t in ("bike", "newspaper_stand"):  # long side along the curb
+                rot = facing
+            else:
+                rot = pick_rot(t, rng, facing)
+            if put(t, x, z, rot, outer, SIDEWALK_Y):
+                got += 1
+    if kind in ("commercial", "plaza", "civic", "apartments") and rng.random() < (0.5 if density == "rich" else 0.3):
+        pos_at, facing, a, b = rng.choice(edges)
+        for _ in range(10):  # shelter's back to the lot, front to the road
+            x, z = pos_at(rng.uniform(a + 6, b - 6))
+            x, z = (x, z - 0.4) if facing == 0 else (x, z + 0.4) if facing == 180 else \
+                   (x - 0.4, z) if facing == 90 else (x + 0.4, z)
+            if put("bus_stop", x, z, facing, outer, SIDEWALK_Y):
+                break
+    return placed
+
+
+def decorate_beach(city, space, district, density, rng):
+    env = city.d["environment"]
+    if "sea_x" not in env:
+        return []
+    zs = [b["rect"][3] for b in city.d["blocks"]] or [100]
+    area = (env["sea_x"] + 5, 2, env.get("beach_x", 0) - 4, max(zs) - 2)
+    placed, tries = [], 0
+    want = DENSITY[density][3]
+    while len(placed) < want and tries < want * 40:
+        tries += 1
+        t = rng.choice(BEACH_POOL)
+        x, z = rng.uniform(area[0], area[2]), rng.uniform(area[1], area[3])
+        rot = rng.choice([90, 270]) if t == "deck_chair" else pick_rot(t, rng)
+        o = try_place(city, space, t, x, z, rot, district, area, 0.0, rng)
+        if o:
+            placed.append(o)
+    return placed
+
+
+def district_matches(dist, keys):
+    return dist["id"] in keys or dist["name"] in keys
+
+
+def decorate(city, density, seed, district_ids=None, exclude=()):
+    """Add small props on free spots of existing blocks. Never moves or removes anything."""
+    space = FreeSpace(city)
+    placed = []
+    for blk in list(city.d["blocks"]):
+        if district_ids is not None and blk["district"] not in district_ids:
+            continue
+        if blk["district"] in exclude:
+            continue
+        rng = random.Random(f"{seed}|{blk['id']}|{density}")
+        placed += decorate_block(city, space, blk, density, rng)
+    for dist in city.d["districts"]:
+        if dist.get("type") != "beach" or dist["id"] in exclude:
+            continue
+        if district_ids is not None and dist["id"] not in district_ids:
+            continue
+        placed += decorate_beach(city, space, dist["id"], density, random.Random(f"{seed}|{dist['id']}|{density}"))
+    return placed
 
 
 # -------------------------------------------------------------- region search
@@ -500,12 +744,47 @@ def cmd_add_neighborhood(args):
             houses_left -= fill_block(city, blk, rng, houses=n)
         else:
             fill_block(city, blk, rng, civic=civic_left.pop(0) if btype == "civic" else None)
+    n_detail = 0
+    if args.detail != "none":
+        seed = args.seed if args.seed is not None else len(city.ids)
+        n_detail = len(decorate(city, args.detail, seed, district_ids={dist["id"]}))
     write_city(data)
     added = {k: len(data[k]) - before[k] for k in before}
     print(f"added district {dist['id']} '{args.name}' on cells {cells}")
     print(f"  +{added['blocks']} blocks, +{added['buildings']} buildings "
-          f"({args.houses - houses_left} houses), +{added['props']} props, +{added['roads']} roads")
+          f"({args.houses - houses_left} houses), +{added['props']} props "
+          f"({n_detail} small details), +{added['roads']} roads")
     print_stats(data)
+
+
+def resolve_districts(data, keys):
+    out = set()
+    for k in keys:
+        hits = [d["id"] for d in data["districts"] if district_matches(d, {k})]
+        if not hits:
+            raise SystemExit(f"no district '{k}' (see `stats`)")
+        out.update(hits)
+    return out
+
+
+def cmd_decorate(args):
+    data = read_json(CITY_PATH)
+    city = City(data, read_json(TYPES_PATH))
+    if not args.all and not args.district:
+        raise SystemExit("give --district ID|NAME (repeatable) or --all")
+    only = None if args.all else resolve_districts(data, args.district)
+    exclude = resolve_districts(data, args.exclude or [])
+    placed = decorate(city, args.density, args.seed, only, exclude)
+    if not placed:
+        print("no free spots found, nothing added")
+        return
+    backup()
+    write_city(data)
+    by_type = {}
+    for o in placed:
+        by_type[o["type"]] = by_type.get(o["type"], 0) + 1
+    print(f"added {len(placed)} small details ({args.density}): "
+          + ", ".join(f"{t}={n}" for t, n in sorted(by_type.items())))
 
 
 def cmd_add_building(args):
@@ -657,10 +936,20 @@ def main():
     s.add_argument("--apartments", type=int, default=0, help="number of apartment blocks (4 buildings each)")
     s.add_argument("--shops", type=int, default=None, help="number of commercial blocks")
     s.add_argument("--parks", type=int, default=None, help="number of park blocks")
-    s.add_argument("--civic", default="", help="comma list: town_hall,school,library")
+    s.add_argument("--civic", default="", help="comma list: " + ",".join(CIVIC_TYPES))
+    s.add_argument("--detail", choices=["none", "low", "normal", "rich"], default="normal",
+                   help="small street/yard props added by `decorate` (default normal)")
     s.add_argument("--direction", choices=["auto", "east", "north", "south"], default="auto")
     s.add_argument("--seed", type=int, default=None)
     s.set_defaults(func=cmd_add_neighborhood)
+
+    s = sub.add_parser("decorate", help="add small detail props on free spots of existing blocks")
+    s.add_argument("--district", action="append", help="district id or name (repeatable)")
+    s.add_argument("--all", action="store_true", help="every block and the beach")
+    s.add_argument("--exclude", action="append", help="district id or name to skip (repeatable)")
+    s.add_argument("--density", choices=["low", "normal", "rich"], default="normal")
+    s.add_argument("--seed", type=int, default=1)
+    s.set_defaults(func=cmd_decorate)
 
     s = sub.add_parser("add-building", help="add one object at an exact position")
     s.add_argument("--type", required=True)
