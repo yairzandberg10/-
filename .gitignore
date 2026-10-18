@@ -1,0 +1,7 @@
+# Godot
+.godot/
+*.tmp
+export_presets.cfg
+# city_tool backups (git history already keeps every version)
+data/backups/
+__pycache__/

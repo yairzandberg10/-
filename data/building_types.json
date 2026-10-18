@@ -1,0 +1,219 @@
+{
+  "version": 1,
+  "palette": {"door": "#7a5230", "window": "#5d86a6", "glass": "#9fc3d6", "stone": "#cfc8bb", "trim": "#f7f3ea", "chimney": "#9c5b45", "dark": "#3b3f45", "metal": "#8a9099", "wood": "#9a6a44", "trunk": "#7b5537", "white": "#f6f4ee", "gold": "#d8b23a", "water": "#6fc3df", "red": "#d1495b", "lamp": "#fff3b0", "potato": "#c49a5a", "potato_dark": "#8c6a3a", "black": "#222222", "terracotta": "#c4683f", "leaf": "#5fa04e", "leaf_dark": "#4e8f45", "solar": "#2e4a6b", "court": "#d9774b", "ground_floor": "#e3ddd0"},
+  "types": {
+    "house_small": {"name": "בית קטן", "category": "residential", "footprint": [7, 7], "colors": {"wall": ["#f4e1c1", "#d8e8f0", "#f7d6d0", "#e4f0d8", "#fff3c4"], "roof": ["#c8553d", "#7a8fb3", "#b5654a", "#5f8a6a"]}, "parts": [
+      {"shape": "box", "size": [6, 3, 6], "pos": [0, 1.5, 0], "color": "wall", "lod": true},
+      {"shape": "gable", "size": [6.8, 2.2, 6.8], "pos": [0, 4.1, 0], "color": "roof", "lod": true},
+      {"shape": "box", "size": [1.1, 2, 0.1], "pos": [0, 1, 3.03], "color": "door"},
+      {"shape": "box", "size": [1.6, 0.2, 0.8], "pos": [0, 0.1, 3.4], "color": "stone"},
+      {"shape": "box", "size": [1, 1, 0.08], "pos": [1.8, 1.7, 3.03], "color": "window", "around": 4},
+      {"shape": "box", "size": [1, 1, 0.08], "pos": [-1.8, 1.7, 3.03], "color": "window", "around": 4},
+      {"shape": "box", "size": [1.2, 0.1, 0.25], "pos": [1.8, 1.15, 3.1], "color": "trim", "around": 4},
+      {"shape": "box", "size": [1.2, 0.1, 0.25], "pos": [-1.8, 1.15, 3.1], "color": "trim", "around": 4},
+      {"shape": "box", "size": [0.7, 1.4, 0.7], "pos": [1.6, 4.6, -1.2], "color": "chimney"}
+    ]},
+    "house_villa": {"name": "וילה ים־תיכונית", "category": "residential", "footprint": [9, 8], "colors": {"wall": ["#f6f3ec", "#f3e6d3", "#eaf1f4"], "accent": ["#2f7fb5", "#d9663c", "#3f9a6e", "#c94f7c"]}, "parts": [
+      {"shape": "box", "size": [8, 3, 7], "pos": [0, 1.5, 0], "color": "wall", "lod": true},
+      {"shape": "box", "size": [8.3, 0.25, 7.3], "pos": [0, 3.12, 0], "color": "trim", "lod": true},
+      {"shape": "box", "size": [4.5, 2.6, 4.5], "pos": [-1.6, 4.55, -1], "color": "wall", "lod": true},
+      {"shape": "box", "size": [4.8, 0.25, 4.8], "pos": [-1.6, 5.97, -1], "color": "trim", "lod": true},
+      {"shape": "box", "size": [3.6, 0.7, 0.1], "pos": [2.1, 3.6, 3.45], "color": "wall"},
+      {"shape": "box", "size": [1.2, 2.1, 0.1], "pos": [-2.3, 1.05, 3.53], "color": "accent"},
+      {"shape": "box", "size": [2.2, 1.2, 0.08], "pos": [1.4, 1.7, 3.53], "color": "window"},
+      {"shape": "box", "size": [2.6, 0.15, 0.12], "pos": [1.4, 2.4, 3.55], "color": "accent"},
+      {"shape": "box", "size": [0.08, 1.2, 1.6], "pos": [4.03, 1.7, 0], "color": "window"},
+      {"shape": "box", "size": [0.08, 1.2, 1.6], "pos": [-4.03, 1.7, 0], "color": "window"},
+      {"shape": "box", "size": [2.2, 1.2, 0.08], "pos": [0, 1.7, -3.53], "color": "window"},
+      {"shape": "box", "size": [1.6, 1.1, 0.08], "pos": [-1.6, 4.6, 1.28], "color": "window"},
+      {"shape": "box", "size": [0.6, 0.5, 0.6], "pos": [3.4, 3.5, 1.0], "color": "terracotta"},
+      {"shape": "sphere", "radius": 0.45, "pos": [3.4, 4.05, 1.0], "color": "leaf", "segments": 6, "rings": 3},
+      {"shape": "cylinder", "radius": 0.35, "height": 1.4, "rot": [0, 0, 90], "pos": [-1.6, 6.5, -2.2], "color": "white", "segments": 6},
+      {"shape": "box", "size": [1.4, 0.06, 1.0], "pos": [-1.6, 6.3, -0.6], "color": "solar", "rot": [-25, 0, 0]}
+    ]},
+    "house_tall": {"name": "בית עירוני צר", "category": "residential", "footprint": [6, 8], "colors": {"wall": ["#f0c9a0", "#c9dcef", "#e8b8b8", "#d3e6c3", "#f2e2a8"], "roof": ["#8e4a3a", "#4f5f7a", "#a1553f"], "accent": ["#ffffff", "#3b3f45"]}, "parts": [
+      {"shape": "box", "size": [5.5, 6, 7], "pos": [0, 3, 0], "color": "wall", "lod": true},
+      {"shape": "gable", "size": [6, 2.5, 7.4], "pos": [0, 7.25, 0], "color": "roof", "lod": true},
+      {"shape": "box", "size": [1.1, 2.1, 0.1], "pos": [-1.3, 1.05, 3.53], "color": "door"},
+      {"shape": "box", "size": [1.4, 0.2, 0.6], "pos": [-1.3, 0.1, 3.8], "color": "stone"},
+      {"shape": "box", "size": [1.2, 1.2, 0.08], "pos": [1.1, 1.8, 3.53], "color": "window"},
+      {"shape": "box", "size": [1.2, 1.2, 0.08], "pos": [0, 4.6, 3.53], "color": "window", "array": {"x": [2, 2.6]}},
+      {"shape": "box", "size": [3.6, 0.15, 0.9], "pos": [0, 3.35, 3.95], "color": "trim"},
+      {"shape": "box", "size": [3.6, 0.6, 0.08], "pos": [0, 3.7, 4.36], "color": "accent"},
+      {"shape": "box", "size": [0.08, 1.2, 1], "pos": [2.78, 3.2, 0], "color": "window", "array": {"z": [2, 3], "y": [2, 2.8]}},
+      {"shape": "box", "size": [0.08, 1.2, 1], "pos": [-2.78, 3.2, 0], "color": "window", "array": {"z": [2, 3], "y": [2, 2.8]}},
+      {"shape": "box", "size": [1.2, 1.2, 0.08], "pos": [0, 3.2, -3.53], "color": "window", "array": {"x": [2, 2.4], "y": [2, 2.8]}}
+    ]},
+    "apartment_bauhaus": {"name": "בניין באוהאוס", "category": "apartments", "footprint": [13, 11], "colors": {"wall": ["#f6f4ee", "#f1ece0", "#eef0ee"], "accent": ["#f6f4ee", "#f2c14e", "#7fb8d6", "#ef8a6f"]}, "parts": [
+      {"shape": "box", "size": [9, 3, 7], "pos": [0, 1.5, 0], "color": "ground_floor"},
+      {"shape": "box", "size": [12, 9, 9], "pos": [0, 7.5, 0], "color": "wall", "lod": true},
+      {"shape": "cylinder", "radius": 0.25, "height": 3, "pos": [0, 1.5, 0], "color": "white", "segments": 6, "array": {"x": [2, 11.2], "z": [2, 8.2]}},
+      {"shape": "cylinder", "radius": 1.7, "height": 12.6, "pos": [-6, 6.3, -1.5], "color": "wall", "segments": 10, "lod": true},
+      {"shape": "box", "size": [0.1, 8, 0.6], "pos": [-7.72, 7.2, -1.5], "color": "glass"},
+      {"shape": "box", "size": [12.6, 0.2, 1.5], "pos": [0, 7.0, 5.2], "color": "wall", "lod": true, "array": {"y": [3, 3]}},
+      {"shape": "box", "size": [12.6, 0.9, 0.15], "pos": [0, 7.55, 5.9], "color": "accent", "lod": true, "array": {"y": [3, 3]}},
+      {"shape": "box", "size": [10, 1.0, 0.08], "pos": [0, 8.4, 4.53], "color": "window", "lod": true, "array": {"y": [3, 3]}},
+      {"shape": "box", "size": [10, 1.0, 0.08], "pos": [0, 8.4, -4.53], "color": "window", "lod": true, "array": {"y": [3, 3]}},
+      {"shape": "box", "size": [0.08, 1.0, 6], "pos": [6.03, 8.4, 0], "color": "window", "array": {"y": [3, 3]}},
+      {"shape": "box", "size": [12.4, 0.5, 9.4], "pos": [0, 12.25, 0], "color": "white", "lod": true},
+      {"shape": "cylinder", "radius": 0.4, "height": 1.6, "rot": [0, 0, 90], "pos": [2.5, 13.2, -2.5], "color": "white", "segments": 6, "array": {"x": [3, 2.2]}},
+      {"shape": "box", "size": [1.6, 0.08, 1.2], "pos": [2.5, 12.85, -1.3], "color": "solar", "rot": [-30, 0, 0], "array": {"x": [3, 2.2]}},
+      {"shape": "box", "size": [1.6, 2.2, 0.1], "pos": [0, 1.1, 3.53], "color": "door"}
+    ]},
+    "apartment_tower": {"name": "מגדל מגורים", "category": "apartments", "footprint": [11, 11], "colors": {"wall": ["#e9d7c3", "#d6dfe8", "#efe2d0", "#cfd8cf"], "accent": ["#e07a5f", "#81b29a", "#f2cc8f", "#3d405b"]}, "parts": [
+      {"shape": "box", "size": [10, 24, 10], "pos": [0, 12, 0], "color": "wall", "lod": true},
+      {"shape": "box", "size": [10.4, 3, 10.4], "pos": [0, 1.5, 0], "color": "#d8d2c6"},
+      {"shape": "box", "size": [2.4, 2.4, 0.1], "pos": [0, 1.2, 5.23], "color": "glass"},
+      {"shape": "box", "size": [3.6, 0.15, 1.6], "pos": [0, 2.8, 5.9], "color": "accent"},
+      {"shape": "box", "size": [1.4, 1.5, 0.08], "pos": [0, 14.0, 5.03], "color": "window", "array": {"x": [4, 2.4], "y": [7, 3]}, "around": 4},
+      {"shape": "box", "size": [2.6, 0.15, 1.0], "pos": [0, 13.1, 5.5], "color": "trim", "array": {"x": [2, 4.8], "y": [7, 3]}, "around": 4},
+      {"shape": "box", "size": [2.6, 0.6, 0.08], "pos": [0, 13.45, 5.96], "color": "accent", "array": {"x": [2, 4.8], "y": [7, 3]}, "around": 4},
+      {"shape": "box", "size": [10.4, 0.4, 10.4], "pos": [0, 24.2, 0], "color": "trim", "lod": true},
+      {"shape": "box", "size": [3, 2, 3], "pos": [2, 25.4, 2], "color": "trim"},
+      {"shape": "cylinder", "radius": 0.08, "height": 3, "pos": [-3, 25.9, -3], "color": "metal", "segments": 4}
+    ]},
+    "shop_small": {"name": "חנות", "category": "commercial", "footprint": [8, 8], "colors": {"wall": ["#f2e8d5", "#e9d3c0", "#dfe7e2", "#f6e0b5"], "accent": ["#d1495b", "#2e86ab", "#3c9d5d", "#f18f01", "#8e6bbf"], "sign": ["#ffffff", "#ffe066", "#264653"], "produce": ["#e85d3f", "#8cc63f", "#ffb627"]}, "parts": [
+      {"shape": "box", "size": [7.6, 4, 7], "pos": [0, 2, 0], "color": "wall", "lod": true},
+      {"shape": "box", "size": [7.8, 0.6, 7.2], "pos": [0, 4.3, 0], "color": "trim", "lod": true},
+      {"shape": "box", "size": [4.8, 2.2, 0.08], "pos": [0.9, 1.5, 3.53], "color": "glass"},
+      {"shape": "box", "size": [5.0, 0.15, 0.12], "pos": [0.9, 2.65, 3.55], "color": "dark"},
+      {"shape": "box", "size": [1.2, 2.4, 0.1], "pos": [-2.6, 1.2, 3.53], "color": "door"},
+      {"shape": "box", "size": [7.4, 0.12, 1.6], "pos": [0, 3.15, 4.2], "color": "accent", "rot": [18, 0, 0]},
+      {"shape": "box", "size": [0.6, 0.16, 1.62], "pos": [0, 3.15, 4.2], "color": "white", "rot": [18, 0, 0], "array": {"x": [6, 1.2]}},
+      {"shape": "box", "size": [4, 0.7, 0.15], "pos": [0, 3.95, 3.7], "color": "sign"},
+      {"shape": "box", "size": [1.2, 0.5, 0.6], "pos": [2.6, 0.25, 4.1], "color": "#c9873c"},
+      {"shape": "box", "size": [1.1, 0.18, 0.5], "pos": [2.6, 0.59, 4.1], "color": "produce"}
+    ]},
+    "cafe": {"name": "בית קפה", "category": "commercial", "footprint": [9, 10], "colors": {"wall": ["#f7efe2", "#e8f1ee"], "accent": ["#e76f51", "#2a9d8f", "#e9c46a"], "sign": ["#264653", "#7a3e2e"]}, "parts": [
+      {"shape": "box", "size": [8, 3.6, 6], "pos": [0, 1.8, -1.8], "color": "wall", "lod": true},
+      {"shape": "box", "size": [8.4, 0.3, 6.4], "pos": [0, 3.75, -1.8], "color": "trim", "lod": true},
+      {"shape": "box", "size": [6.4, 2.3, 0.08], "pos": [0, 1.45, 1.23], "color": "glass"},
+      {"shape": "box", "size": [3.2, 0.6, 0.15], "pos": [0, 3.25, 1.3], "color": "sign"},
+      {"shape": "box", "size": [8.4, 0.12, 3.4], "pos": [0, 0.06, 2.9], "color": "wood"},
+      {"shape": "cylinder", "radius": 0.05, "height": 2.4, "pos": [0, 1.2, 2.9], "color": "metal", "segments": 4, "array": {"x": [3, 2.7]}},
+      {"shape": "cone", "radius": 1.2, "height": 0.5, "pos": [0, 2.5, 2.9], "color": "accent", "segments": 8, "array": {"x": [3, 2.7]}},
+      {"shape": "cylinder", "radius": 0.45, "height": 0.06, "pos": [0, 0.8, 2.9], "color": "white", "segments": 8, "array": {"x": [3, 2.7]}},
+      {"shape": "box", "size": [0.4, 0.45, 0.4], "pos": [0, 0.22, 2.2], "color": "accent", "array": {"x": [3, 2.7]}},
+      {"shape": "box", "size": [0.4, 0.45, 0.4], "pos": [0, 0.22, 3.6], "color": "accent", "array": {"x": [3, 2.7]}}
+    ]},
+    "kiosk": {"name": "קיוסק", "category": "commercial", "footprint": [4, 4], "colors": {"wall": ["#2e86ab", "#3c9d5d", "#d1495b"], "accent": ["#f6f4ee"], "sign": ["#ffe066", "#ffffff"]}, "parts": [
+      {"shape": "box", "size": [3, 2.6, 3], "pos": [0, 1.3, 0], "color": "wall", "lod": true},
+      {"shape": "box", "size": [4, 0.25, 4], "pos": [0, 2.72, 0], "color": "accent", "lod": true},
+      {"shape": "box", "size": [2.2, 1, 0.08], "pos": [0, 1.5, 1.53], "color": "glass"},
+      {"shape": "box", "size": [2.4, 0.1, 0.5], "pos": [0, 1.0, 1.75], "color": "wood"},
+      {"shape": "box", "size": [2.6, 0.6, 0.15], "pos": [0, 3.15, 0], "color": "sign"}
+    ]},
+    "town_hall": {"name": "בניין העירייה", "category": "civic", "footprint": [22, 16], "colors": {"wall": ["#efe6d6", "#e8dccb"], "roof": ["#4f6d7a", "#a85a3c"], "accent": ["#2e5cb8", "#d1495b"]}, "parts": [
+      {"shape": "box", "size": [20, 8, 12], "pos": [0, 4, -1], "color": "wall", "lod": true},
+      {"shape": "box", "size": [20.6, 0.5, 12.6], "pos": [0, 8.25, -1], "color": "trim", "lod": true},
+      {"shape": "box", "size": [16, 0.6, 3.2], "pos": [0, 0.3, 6.4], "color": "stone"},
+      {"shape": "cylinder", "radius": 0.45, "height": 7, "pos": [0, 4.1, 6.8], "color": "trim", "segments": 8, "array": {"x": [6, 3]}},
+      {"shape": "box", "size": [17, 0.6, 3], "pos": [0, 7.9, 6.5], "color": "trim"},
+      {"shape": "gable", "size": [17, 2.4, 2.4], "pos": [0, 9.4, 6.5], "color": "trim", "lod": true},
+      {"shape": "box", "size": [1.4, 2.6, 0.08], "pos": [0, 4.4, 5.03], "color": "window", "array": {"x": [5, 3.4], "y": [2, 3.4]}},
+      {"shape": "box", "size": [0.08, 2.6, 1.4], "pos": [10.03, 4.4, -1], "color": "window", "array": {"z": [3, 3.4], "y": [2, 3.4]}},
+      {"shape": "box", "size": [0.08, 2.6, 1.4], "pos": [-10.03, 4.4, -1], "color": "window", "array": {"z": [3, 3.4], "y": [2, 3.4]}},
+      {"shape": "box", "size": [4.4, 6, 4.4], "pos": [0, 11.5, -2], "color": "wall", "lod": true},
+      {"shape": "cone", "radius": 3.3, "height": 3.5, "segments": 4, "rot": [0, 45, 0], "pos": [0, 16.25, -2], "color": "roof", "lod": true},
+      {"shape": "cylinder", "radius": 1.2, "height": 0.12, "rot": [90, 0, 0], "pos": [0, 12.4, 0.26], "color": "white", "segments": 12},
+      {"shape": "box", "size": [0.12, 0.9, 0.05], "pos": [0, 12.75, 0.36], "color": "dark"},
+      {"shape": "box", "size": [0.7, 0.12, 0.05], "pos": [0.3, 12.4, 0.36], "color": "dark"},
+      {"shape": "cylinder", "radius": 0.06, "height": 6, "pos": [9, 3, 7.2], "color": "metal", "segments": 4},
+      {"shape": "box", "size": [1.6, 1, 0.05], "pos": [9.85, 5.4, 7.2], "color": "accent"}
+    ]},
+    "school": {"name": "בית ספר", "category": "civic", "footprint": [24, 18], "colors": {"wall": ["#f4d58d", "#bfe3c8", "#c9d7f2"], "accent": ["#e76f51", "#2a9d8f", "#7b6cd9"], "sign": ["#ffffff"]}, "parts": [
+      {"shape": "box", "size": [22, 7, 8], "pos": [0, 3.5, -5], "color": "wall", "lod": true},
+      {"shape": "box", "size": [8, 7, 9], "pos": [-7, 3.5, 3.5], "color": "wall", "lod": true},
+      {"shape": "box", "size": [22.4, 0.4, 8.4], "pos": [0, 7.2, -5], "color": "trim", "lod": true},
+      {"shape": "box", "size": [8.4, 0.4, 9.4], "pos": [-7, 7.2, 3.5], "color": "trim", "lod": true},
+      {"shape": "box", "size": [22.1, 0.6, 8.1], "pos": [0, 0.3, -5], "color": "accent"},
+      {"shape": "box", "size": [1.6, 1.4, 0.08], "pos": [4, 3.9, -0.97], "color": "window", "array": {"x": [5, 3], "y": [2, 3.4]}},
+      {"shape": "box", "size": [0.08, 1.4, 1.6], "pos": [-2.97, 3.9, 3.5], "color": "window", "array": {"z": [3, 2.8], "y": [2, 3.4]}},
+      {"shape": "box", "size": [1.6, 1.4, 0.08], "pos": [0, 3.9, -9.03], "color": "window", "array": {"x": [7, 3], "y": [2, 3.4]}},
+      {"shape": "box", "size": [2, 2.4, 0.1], "pos": [-7, 1.2, 8.03], "color": "accent"},
+      {"shape": "box", "size": [5, 0.9, 0.15], "pos": [4, 6.4, -0.9], "color": "sign"},
+      {"shape": "box", "size": [10, 0.06, 7], "pos": [5, 0.03, 4.5], "color": "court"},
+      {"shape": "box", "size": [0.12, 0.07, 7], "pos": [5, 0.035, 4.5], "color": "white"},
+      {"shape": "cylinder", "radius": 0.07, "height": 3, "pos": [5, 1.5, 4.5], "color": "metal", "segments": 4, "array": {"z": [2, 6.4]}},
+      {"shape": "box", "size": [1.2, 0.8, 0.08], "pos": [5, 3, 4.5], "color": "white", "array": {"z": [2, 6.0]}},
+      {"shape": "cylinder", "radius": 0.06, "height": 6, "pos": [11, 3, 8], "color": "metal", "segments": 4},
+      {"shape": "box", "size": [1.5, 1, 0.05], "pos": [11.8, 5.4, 8], "color": "accent"}
+    ]},
+    "library": {"name": "ספרייה", "category": "civic", "footprint": [18, 14], "colors": {"wall": ["#e3d5c2", "#d9c9b5"], "roof": ["#5b8c85", "#8b6f5c"]}, "parts": [
+      {"shape": "box", "size": [16, 6, 11], "pos": [0, 3, -0.5], "color": "wall", "lod": true},
+      {"shape": "box", "size": [16.4, 0.5, 11.4], "pos": [0, 6.2, -0.5], "color": "trim", "lod": true},
+      {"shape": "sphere", "radius": 4, "pos": [0, 6.4, -0.5], "scale": [1, 0.7, 1], "color": "roof", "segments": 12, "rings": 6, "lod": true},
+      {"shape": "cylinder", "radius": 4.3, "height": 0.6, "pos": [0, 6.6, -0.5], "color": "trim", "segments": 12},
+      {"shape": "cylinder", "radius": 0.6, "height": 1, "pos": [0, 9.6, -0.5], "color": "trim", "segments": 8},
+      {"shape": "box", "size": [12, 0.5, 2.2], "pos": [0, 0.25, 6.0], "color": "stone"},
+      {"shape": "cylinder", "radius": 0.35, "height": 5, "pos": [0, 3, 6.3], "color": "trim", "segments": 8, "array": {"x": [4, 3]}},
+      {"shape": "box", "size": [12.6, 0.5, 2.6], "pos": [0, 5.75, 6.2], "color": "trim"},
+      {"shape": "box", "size": [1.2, 2.4, 0.08], "pos": [0, 2.8, 5.03], "color": "window", "array": {"x": [2, 11]}},
+      {"shape": "box", "size": [0.08, 2.4, 1.2], "pos": [8.03, 2.8, -0.5], "color": "window", "array": {"z": [3, 3.2]}},
+      {"shape": "box", "size": [0.08, 2.4, 1.2], "pos": [-8.03, 2.8, -0.5], "color": "window", "array": {"z": [3, 3.2]}}
+    ]},
+    "potato_statue": {"name": "פסל הבטטה", "category": "landmark", "footprint": [5, 5], "colors": {"stone": ["#cfc6b8"]}, "parts": [
+      {"shape": "box", "size": [4, 1.2, 4], "pos": [0, 0.6, 0], "color": "stone", "lod": true},
+      {"shape": "box", "size": [3, 0.8, 3], "pos": [0, 1.6, 0], "color": "stone", "lod": true},
+      {"shape": "box", "size": [1.6, 0.5, 0.06], "pos": [0, 1.6, 1.53], "color": "gold"},
+      {"shape": "sphere", "radius": 1.6, "pos": [0, 3.6, 0], "scale": [1.25, 1, 0.9], "color": "potato", "segments": 12, "rings": 6, "lod": true},
+      {"shape": "sphere", "radius": 0.18, "pos": [0.9, 4.2, 1.18], "scale": [1, 1, 0.5], "color": "potato_dark", "segments": 6, "rings": 3},
+      {"shape": "sphere", "radius": 0.16, "pos": [-1.3, 3.2, 1.0], "scale": [1, 1, 0.5], "color": "potato_dark", "segments": 6, "rings": 3},
+      {"shape": "sphere", "radius": 0.15, "pos": [1.5, 3.0, 0.85], "scale": [1, 1, 0.5], "color": "potato_dark", "segments": 6, "rings": 3},
+      {"shape": "sphere", "radius": 0.26, "pos": [0, 3.95, 1.3], "color": "white", "segments": 8, "rings": 4, "array": {"x": [2, 1.0]}},
+      {"shape": "sphere", "radius": 0.13, "pos": [0, 3.95, 1.52], "color": "black", "segments": 6, "rings": 3, "array": {"x": [2, 1.0]}},
+      {"shape": "box", "size": [0.8, 0.12, 0.12], "pos": [0, 3.3, 1.42], "color": "#5a3d1f"},
+      {"shape": "cone", "radius": 0.65, "height": 0.7, "pos": [0, 5.45, 0], "color": "gold", "segments": 5}
+    ]},
+    "fountain": {"name": "מזרקה", "category": "landmark", "footprint": [6, 6], "colors": {"stone": ["#d7d0c4", "#c9d3d6"]}, "parts": [
+      {"shape": "cylinder", "radius": 2.8, "height": 0.6, "pos": [0, 0.3, 0], "color": "stone", "segments": 12, "lod": true},
+      {"shape": "cylinder", "radius": 2.5, "height": 0.05, "pos": [0, 0.58, 0], "color": "water", "segments": 12},
+      {"shape": "cylinder", "radius": 0.3, "height": 1.6, "pos": [0, 1.1, 0], "color": "stone", "segments": 8},
+      {"shape": "cylinder", "radius": 0.9, "bottom": 0.4, "height": 0.3, "pos": [0, 1.95, 0], "color": "stone", "segments": 10},
+      {"shape": "cone", "radius": 0.5, "height": 0.8, "pos": [0, 2.45, 0], "color": "#9fd8ea", "segments": 8}
+    ]},
+    "lifeguard_tower": {"name": "סוכת מציל", "category": "beach", "footprint": [3, 4], "colors": {"cabin": ["#f2c14e", "#e76f51"]}, "parts": [
+      {"shape": "cylinder", "radius": 0.12, "height": 2.5, "pos": [0, 1.25, 0], "color": "wood", "segments": 4, "array": {"x": [2, 2.2], "z": [2, 2.2]}},
+      {"shape": "box", "size": [2.8, 1.8, 2.8], "pos": [0, 3.4, 0], "color": "cabin", "lod": true},
+      {"shape": "box", "size": [3.2, 0.2, 3.2], "pos": [0, 4.4, 0], "color": "red", "lod": true},
+      {"shape": "box", "size": [2, 0.8, 0.08], "pos": [0, 3.6, 1.42], "color": "window"},
+      {"shape": "box", "size": [0.9, 0.08, 3.4], "pos": [0, 1.25, 2.6], "color": "wood", "rot": [40, 0, 0]}
+    ]},
+    "tree_round": {"name": "עץ", "category": "nature", "detail": "prop", "far": true, "footprint": [2, 2], "colors": {"leaf": ["#5fa04e", "#6cb35a", "#4e8f45", "#7cbf5e"]}, "parts": [
+      {"shape": "cylinder", "radius": 0.18, "top": 0.14, "height": 1.8, "pos": [0, 0.9, 0], "color": "trunk", "segments": 5, "lod": true},
+      {"shape": "sphere", "radius": 1.6, "pos": [0, 2.9, 0], "color": "leaf", "segments": 7, "rings": 4, "lod": true},
+      {"shape": "sphere", "radius": 1.1, "pos": [0.7, 2.5, 0.4], "color": "leaf_dark", "segments": 6, "rings": 3}
+    ]},
+    "tree_palm": {"name": "דקל", "category": "nature", "detail": "prop", "far": true, "footprint": [2, 2], "colors": {"leaf": ["#4f9a45", "#62a84d"]}, "parts": [
+      {"shape": "cylinder", "radius": 0.25, "top": 0.15, "height": 5, "pos": [0, 2.5, 0], "color": "trunk", "segments": 5, "lod": true},
+      {"shape": "box", "size": [2.8, 0.08, 0.7], "pos": [1.3, 5.0, 0], "color": "leaf", "rot": [0, 0, -18], "around": 6, "lod": true},
+      {"shape": "sphere", "radius": 0.3, "pos": [0, 4.9, 0], "color": "#7a5a2b", "segments": 5, "rings": 3}
+    ]},
+    "lamp": {"name": "פנס רחוב", "category": "street", "detail": "prop", "footprint": [1, 1], "parts": [
+      {"shape": "cylinder", "radius": 0.07, "height": 4, "pos": [0, 2, 0], "color": "dark", "segments": 5},
+      {"shape": "box", "size": [0.9, 0.08, 0.08], "pos": [0.4, 4, 0], "color": "dark"},
+      {"shape": "box", "size": [0.45, 0.15, 0.3], "pos": [0.8, 3.92, 0], "color": "lamp"}
+    ]},
+    "bench": {"name": "ספסל", "category": "street", "detail": "prop", "footprint": [2, 1], "parts": [
+      {"shape": "box", "size": [1.6, 0.08, 0.45], "pos": [0, 0.45, 0], "color": "wood"},
+      {"shape": "box", "size": [1.6, 0.4, 0.06], "pos": [0, 0.75, -0.2], "color": "wood"},
+      {"shape": "box", "size": [0.06, 0.45, 0.4], "pos": [0, 0.22, 0], "color": "dark", "array": {"x": [2, 1.4]}}
+    ]},
+    "hedge": {"name": "גדר חיה", "category": "nature", "detail": "prop", "footprint": [3, 1], "parts": [
+      {"shape": "box", "size": [3, 0.8, 0.8], "pos": [0, 0.4, 0], "color": "leaf_dark"}
+    ]},
+    "beach_umbrella": {"name": "שמשייה", "category": "beach", "detail": "prop", "far": true, "footprint": [3, 3], "colors": {"accent": ["#e63946", "#f4a261", "#2a9d8f", "#457b9d", "#ffb703"], "towel": ["#ffb703", "#e63946", "#8ecae6", "#2a9d8f"]}, "parts": [
+      {"shape": "cylinder", "radius": 0.04, "height": 2.2, "pos": [0, 1.1, 0], "color": "white", "segments": 4},
+      {"shape": "cone", "radius": 1.3, "height": 0.5, "pos": [0, 2.2, 0], "color": "accent", "segments": 8, "lod": true},
+      {"shape": "box", "size": [0.8, 0.02, 1.8], "pos": [0.9, 0.02, 0.6], "color": "towel"}
+    ]},
+    "car": {"name": "מכונית", "category": "vehicle", "detail": "prop", "placeable": false, "footprint": [2, 4], "colors": {"body": ["#e63946", "#457b9d", "#f4a261", "#2a9d8f", "#f1faee", "#ffb703"]}, "parts": [
+      {"shape": "box", "size": [1.8, 0.7, 4], "pos": [0, 0.65, 0], "color": "body"},
+      {"shape": "box", "size": [1.6, 0.6, 2.2], "pos": [0, 1.3, -0.2], "color": "glass"},
+      {"shape": "box", "size": [1.62, 0.08, 2.0], "pos": [0, 1.62, -0.2], "color": "body"},
+      {"shape": "cylinder", "radius": 0.35, "height": 0.3, "rot": [0, 0, 90], "pos": [0, 0.35, 0], "color": "black", "segments": 8, "array": {"x": [2, 1.7], "z": [2, 2.6]}},
+      {"shape": "box", "size": [0.4, 0.15, 0.05], "pos": [0, 0.75, 2.01], "color": "lamp", "array": {"x": [2, 1.1]}},
+      {"shape": "box", "size": [0.4, 0.15, 0.05], "pos": [0, 0.75, -2.01], "color": "red", "array": {"x": [2, 1.1]}}
+    ]}
+  }
+}
