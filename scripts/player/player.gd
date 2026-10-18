@@ -13,6 +13,9 @@ var cam_yaw := 0.0
 var _model: Node3D
 var _bob := 0.0
 var _gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
+var _was_on_floor := true
+var _step_side := 0.0
+var _fx_left := 0.0
 
 
 func setup(material: Material) -> void:
@@ -44,7 +47,9 @@ func _physics_process(delta: float) -> void:
 	velocity.z = move_toward(velocity.z, dir.z * speed, 40.0 * delta)
 	if control_enabled and not GameState.input_locked and Input.is_action_just_pressed("jump") and is_on_floor():
 		velocity.y = JUMP
+		_sfx("jump", -6.0)
 	move_and_slide()
+	_feet_effects(delta, dir, speed)
 
 	if dir.length_squared() > 0.01:
 		_model.rotation.y = lerp_angle(_model.rotation.y, atan2(dir.x, dir.z), 12.0 * delta)
@@ -55,6 +60,31 @@ func _physics_process(delta: float) -> void:
 	if global_position.y < -20.0:
 		global_position = CityData.get_player_spawn()
 		velocity = Vector3.ZERO
+
+
+## Footsteps, landing thumps, running dust and sea splashes.
+func _feet_effects(delta: float, dir: Vector3, speed: float) -> void:
+	var on_floor := is_on_floor()
+	var in_sea := global_position.x < float(CityData.environment.get("sea_x", -1e9))
+	if on_floor and not _was_on_floor:
+		_sfx("splash" if in_sea else "step", -2.0)
+		Effects.puff(global_position, "splash" if in_sea else "dust", 5)
+	_was_on_floor = on_floor
+	if not on_floor or dir.length_squared() < 0.01:
+		return
+	_step_side += delta * (2.8 if speed == RUN else 1.9)
+	if _step_side >= 1.0:
+		_step_side = 0.0
+		_sfx("splash" if in_sea else "step", -10.0 if not in_sea else -8.0)
+	_fx_left -= delta
+	if _fx_left <= 0.0 and (speed == RUN or in_sea):
+		_fx_left = 0.18
+		Effects.puff(global_position + Vector3(0, 0.05, 0), "splash" if in_sea else "dust", 1)
+
+
+func _sfx(name: String, db: float) -> void:
+	if has_node("/root/Audio"):
+		Audio.play_sfx(name, db)
 
 
 func _build_mesh(material: Material) -> ArrayMesh:

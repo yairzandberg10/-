@@ -35,6 +35,8 @@ const PRESETS := {
 var quality := "low"
 var presets: Dictionary = PRESETS.duplicate(true)
 var show_stats := true
+var music_volume := 0.6
+var sfx_volume := 0.85
 var auto_quality := true
 
 
@@ -87,6 +89,8 @@ func save() -> void:
 	cfg.set_value("graphics", "quality", quality)
 	cfg.set_value("graphics", "show_stats", show_stats)
 	cfg.set_value("graphics", "auto_quality", auto_quality)
+	cfg.set_value("audio", "music", music_volume)
+	cfg.set_value("audio", "sfx", sfx_volume)
 	cfg.save(PATH)
 
 
@@ -99,6 +103,8 @@ func _load() -> void:
 		quality = q
 	show_stats = bool(cfg.get_value("graphics", "show_stats", show_stats))
 	auto_quality = bool(cfg.get_value("graphics", "auto_quality", auto_quality))
+	music_volume = float(cfg.get_value("audio", "music", music_volume))
+	sfx_volume = float(cfg.get_value("audio", "sfx", sfx_volume))
 
 
 ## Physical keycodes, so WASD works the same on a Hebrew keyboard layout.

@@ -16,6 +16,7 @@ var _rng := RandomNumberGenerator.new()
 
 func setup(lib) -> void:
 	super.setup(lib)
+	add_to_group("traffic_system")
 	_rng.seed = 1234
 	for r in CityData.roads:
 		var a := Vector2(float(r["a"][0]), float(r["a"][1]))
@@ -78,6 +79,15 @@ func _process(delta: float) -> void:
 		var p: Vector2 = car["pos"]
 		_mms[car["mm"]].set_instance_transform(car["slot"],
 				Transform3D(Basis(Vector3.UP, atan2(h.x, h.y)), Vector3(p.x, CAR_Y, p.y)))
+
+
+## Distance from `pos` to the closest traffic car (used for bumping the player's car).
+func nearest_car_distance(pos: Vector3) -> float:
+	var best := INF
+	var p2 := Vector2(pos.x, pos.z)
+	for car in _cars:
+		best = minf(best, p2.distance_to(car["pos"]))
+	return best
 
 
 func _key(p: Vector2) -> Vector2i:

@@ -20,6 +20,8 @@ CityData="*res://scripts/autoload/city_data.gd"
 GameState="*res://scripts/autoload/game_state.gd"
 GameUI="*res://scripts/autoload/game_ui.gd"
 Interact="*res://scripts/autoload/interact.gd"
+Audio="*res://scripts/autoload/audio.gd"
+Effects="*res://scripts/autoload/effects.gd"
 
 [display]
 

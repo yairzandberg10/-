@@ -20,6 +20,7 @@ const SYSTEMS := [
 	"res://scripts/systems/interior_system.gd",
 	"res://scripts/systems/story_system.gd",
 	"res://scripts/systems/combat_system.gd",
+	"res://scripts/systems/vehicle_system.gd",
 ]
 
 var library
@@ -113,10 +114,12 @@ func _unhandled_input(event: InputEvent) -> void:
 				rig.toggle_free()
 				_refresh_mode()
 		KEY_B:
-			if not photo_mode.active:
+			if not photo_mode.active and not _driving():
 				build_mode.toggle()
 				_refresh_mode()
 		KEY_P:
+			if _driving():
+				return
 			if build_mode.active:
 				build_mode.toggle()
 			photo_mode.toggle()
@@ -173,6 +176,11 @@ func _auto_quality(delta: float) -> void:
 	if fps < 24.0 and _uptime - _last_auto_drop > 20.0 and Settings.lower_quality():
 		_last_auto_drop = _uptime
 		hud.toast("ה־FPS נמוך – האיכות הורדה ל%s (F2 לשינוי)" % Settings.quality_label(), 4.0)
+
+
+func _driving() -> bool:
+	var v := get_tree().get_first_node_in_group("vehicle_system")
+	return v != null and v.is_driving()
 
 
 func _refresh_mode() -> void:
@@ -399,6 +407,15 @@ func _run_smoke_test() -> void:
 	if CityData.objects.size() != n0:
 		push_error("SMOKE: build + undo changed object count")
 		ok = false
+	var vehicles := get_tree().get_first_node_in_group("vehicle_system")
+	if vehicles:
+		var drove: bool = await vehicles.debug_drive(1.5)
+		print("SMOKE: drive test moved car: %s" % drove)
+		if not drove or vehicles.is_driving() or not player.visible:
+			push_error("SMOKE: driving test failed")
+			ok = false
+	Effects.puff(player.global_position, "dust", 6)
+	Audio.play_sfx("coin")
 	for i in 30:
 		await get_tree().process_frame
 	print("SMOKE %s" % ("OK" if ok else "FAILED"))
