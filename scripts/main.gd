@@ -302,13 +302,16 @@ func take_screenshot() -> void:
 ## Renders preset views to user://shots/*.png and quits (for checking changes).
 func _run_shots() -> void:
 	var b: Rect2 = CityData.bounds
-	var c := Vector3(b.get_center().x, 0.0, b.get_center().y)
+	# Anchored on the original town centre (the potato statue sits at c - 24),
+	# so new neighbourhoods growing the bounds don't move the camera.
+	var c := Vector3(96.0, 0.0, 96.0)
 	var views := {
 		"overview": [c + Vector3(-120, 110, 150), c],
 		"plaza": [c + Vector3(-40, 22, -10), c + Vector3(-24, 0, -24)],
 		"street": [Vector3(c.x - 40, 1.7, c.z + 1.8), Vector3(c.x + 10, 1.5, c.z + 1.8)],
 		"beach": [Vector3(-60, 14, c.z + 40), Vector3(-10, 0, c.z)],
 		"houses": [Vector3(b.end.x + 25, 20, c.z + 30), Vector3(b.end.x - 30, 0, c.z)],
+		"friksa": [Vector3(c.x + 40, 26, b.end.y + 20), Vector3(c.x - 20, 0, b.end.y - 60)],
 	}
 	rig.external = true
 	hud.visible = false

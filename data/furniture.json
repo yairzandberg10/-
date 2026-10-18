@@ -1,0 +1,482 @@
+{
+  "version": 1,
+  "comment": "Interior furniture for scripts/systems/interior_system.gd. Same part format as building_types.json (see docs/CITY_DATA.md). Front faces +Z. footprint = collision box; collide:false for rugs, wall decorations and small things.",
+  "palette": {"wood": "#9a6a44", "wood_light": "#c99a66", "wood_dark": "#6b4a32", "white": "#f6f4ee", "dark": "#3b3f45", "metal": "#8a9099", "steel": "#b9c0c8", "glass": "#9fc3d6", "screen": "#4a90c2", "black": "#222222", "gold": "#d8b23a", "red": "#d1495b", "leaf": "#5fa04e", "leaf_dark": "#4e8f45", "terracotta": "#c4683f", "potato": "#c49a5a", "potato_dark": "#8c6a3a", "cream": "#f3e9d2", "bread": "#d9a456", "crust": "#b97a3a", "pink": "#f7a1c4", "blue": "#2e5cb8", "paper": "#fbf8ef", "chalk": "#2f5a45", "lamp": "#fff3b0", "stone": "#cfc8bb", "sky": "#bfe3f5", "yellow": "#ffd23f", "green": "#3c9d5d", "orange": "#f18f01", "cork": "#c8955a"},
+  "types": {
+    "sofa": {"name": "ספה", "footprint": [2.2, 0.9], "colors": {"fabric": ["#5b8fb9", "#e07a5f", "#81b29a", "#c9a227", "#8e6bbf"], "cushion": ["#f6f4ee", "#f2cc8f", "#ffd6e0"]}, "parts": [
+      {"shape": "box", "size": [2.2, 0.4, 0.9], "pos": [0, 0.26, 0], "color": "fabric", "lod": true},
+      {"shape": "box", "size": [2.2, 0.62, 0.24], "pos": [0, 0.75, -0.33], "color": "fabric", "lod": true},
+      {"shape": "box", "size": [0.22, 0.62, 0.9], "pos": [0, 0.45, 0], "color": "fabric", "array": {"x": [2, 2.0]}},
+      {"shape": "box", "size": [0.86, 0.14, 0.62], "pos": [0, 0.52, 0.08], "color": "fabric", "array": {"x": [2, 0.9]}},
+      {"shape": "box", "size": [0.42, 0.36, 0.12], "pos": [0, 0.8, -0.16], "rot": [-12, 0, 0], "color": "cushion", "array": {"x": [2, 1.25]}},
+      {"shape": "box", "size": [0.08, 0.08, 0.08], "pos": [0, 0.04, 0], "color": "wood_dark", "array": {"x": [2, 1.9], "z": [2, 0.7]}}
+    ]},
+    "armchair": {"name": "כורסה", "footprint": [1.0, 0.9], "colors": {"fabric": ["#e9c46a", "#2a9d8f", "#e76f51", "#c5a3d9"]}, "parts": [
+      {"shape": "box", "size": [1.0, 0.4, 0.9], "pos": [0, 0.26, 0], "color": "fabric", "lod": true},
+      {"shape": "box", "size": [1.0, 0.6, 0.22], "pos": [0, 0.75, -0.34], "color": "fabric"},
+      {"shape": "box", "size": [0.18, 0.55, 0.9], "pos": [0, 0.43, 0], "color": "fabric", "array": {"x": [2, 0.82]}},
+      {"shape": "box", "size": [0.64, 0.12, 0.62], "pos": [0, 0.51, 0.08], "color": "white"}
+    ]},
+    "tv_stand": {"name": "טלוויזיה", "footprint": [1.6, 0.5], "colors": {"cab": ["#9a6a44", "#f6f4ee", "#3b3f45"]}, "parts": [
+      {"shape": "box", "size": [1.6, 0.5, 0.5], "pos": [0, 0.25, 0], "color": "cab", "lod": true},
+      {"shape": "box", "size": [0.7, 0.36, 0.02], "pos": [0, 0.25, 0.25], "color": "wood_dark", "array": {"x": [2, 0.76]}},
+      {"shape": "box", "size": [0.3, 0.06, 0.2], "pos": [0, 0.53, -0.05], "color": "black"},
+      {"shape": "box", "size": [1.4, 0.82, 0.06], "pos": [0, 1.0, -0.05], "color": "black"},
+      {"shape": "box", "size": [1.28, 0.7, 0.02], "pos": [0, 1.0, -0.01], "color": "screen"},
+      {"shape": "box", "size": [1.28, 0.22, 0.02], "pos": [0, 0.76, 0.0], "color": "#7cc35a"},
+      {"shape": "sphere", "radius": 0.11, "pos": [0.38, 1.18, 0.0], "scale": [1, 1, 0.2], "color": "yellow", "segments": 8, "rings": 4},
+      {"shape": "sphere", "radius": 0.13, "pos": [-0.2, 0.92, 0.01], "scale": [1, 1.2, 0.3], "color": "potato", "segments": 8, "rings": 4}
+    ]},
+    "rug": {"name": "שטיח", "footprint": [3, 2], "collide": false, "colors": {"rug": ["#e9c46a", "#e76f51", "#8ab6d6", "#c5a3d9", "#a3d9a5"], "border": ["#f6f4ee", "#264653", "#f2cc8f"]}, "parts": [
+      {"shape": "box", "size": [3, 0.02, 2], "pos": [0, 0.012, 0], "color": "border", "lod": true},
+      {"shape": "box", "size": [2.6, 0.022, 1.6], "pos": [0, 0.014, 0], "color": "rug"},
+      {"shape": "box", "size": [1.4, 0.024, 0.6], "pos": [0, 0.016, 0], "color": "border"}
+    ]},
+    "runner": {"name": "שטיח אדום", "footprint": [1.8, 7], "collide": false, "colors": {"rug": ["#b8323f"], "border": ["#d8b23a"]}, "parts": [
+      {"shape": "box", "size": [1.8, 0.02, 7], "pos": [0, 0.012, 0], "color": "border", "lod": true},
+      {"shape": "box", "size": [1.5, 0.022, 6.7], "pos": [0, 0.014, 0], "color": "rug"}
+    ]},
+    "coffee_table": {"name": "שולחן סלון", "footprint": [1.1, 0.6], "parts": [
+      {"shape": "box", "size": [1.1, 0.06, 0.6], "pos": [0, 0.42, 0], "color": "wood_light", "lod": true},
+      {"shape": "cylinder", "radius": 0.03, "height": 0.4, "pos": [0, 0.2, 0], "color": "wood_dark", "segments": 4, "array": {"x": [2, 0.95], "z": [2, 0.45]}},
+      {"shape": "cylinder", "radius": 0.05, "height": 0.1, "pos": [0.28, 0.5, 0.05], "color": "red", "segments": 6},
+      {"shape": "box", "size": [0.3, 0.04, 0.22], "pos": [-0.25, 0.47, -0.02], "color": "blue", "rot": [0, 15, 0]}
+    ]},
+    "dining_table": {"name": "שולחן אוכל", "footprint": [1.6, 1.0], "colors": {"top": ["#c99a66", "#9a6a44", "#f6f4ee"], "cloth": ["#f6f4ee", "#e9c46a", "#bfe3f5"]}, "parts": [
+      {"shape": "box", "size": [1.6, 0.07, 1.0], "pos": [0, 0.75, 0], "color": "top", "lod": true},
+      {"shape": "box", "size": [0.08, 0.72, 0.08], "pos": [0, 0.36, 0], "color": "wood_dark", "array": {"x": [2, 1.4], "z": [2, 0.8]}},
+      {"shape": "box", "size": [0.5, 0.01, 1.02], "pos": [0, 0.79, 0], "color": "cloth"},
+      {"shape": "cylinder", "radius": 0.18, "bottom": 0.1, "height": 0.1, "pos": [0, 0.84, 0], "color": "white", "segments": 8},
+      {"shape": "sphere", "radius": 0.07, "pos": [0, 0.92, 0], "color": "red", "segments": 6, "rings": 3, "array": {"x": [2, 0.12]}},
+      {"shape": "sphere", "radius": 0.07, "pos": [0, 0.94, 0.08], "color": "yellow", "segments": 6, "rings": 3},
+      {"shape": "sphere", "radius": 0.06, "pos": [0.04, 0.95, -0.08], "color": "#8cc63f", "segments": 6, "rings": 3}
+    ]},
+    "chair": {"name": "כיסא", "footprint": [0.5, 0.5], "colors": {"wood": ["#9a6a44", "#e76f51", "#2a9d8f", "#f6f4ee", "#f2c14e"]}, "parts": [
+      {"shape": "box", "size": [0.46, 0.06, 0.46], "pos": [0, 0.46, 0], "color": "wood", "lod": true},
+      {"shape": "box", "size": [0.46, 0.46, 0.05], "pos": [0, 0.74, -0.2], "color": "wood"},
+      {"shape": "box", "size": [0.05, 0.45, 0.05], "pos": [0, 0.22, 0], "color": "wood", "array": {"x": [2, 0.38], "z": [2, 0.38]}}
+    ]},
+    "bed": {"name": "מיטה", "footprint": [1.4, 2.1], "colors": {"blanket": ["#8ab6d6", "#f7a1c4", "#e9c46a", "#81b29a", "#c5a3d9"], "frame": ["#9a6a44", "#f6f4ee"]}, "parts": [
+      {"shape": "box", "size": [1.4, 0.32, 2.1], "pos": [0, 0.2, 0], "color": "frame", "lod": true},
+      {"shape": "box", "size": [1.3, 0.2, 1.95], "pos": [0, 0.45, 0], "color": "white"},
+      {"shape": "box", "size": [1.36, 0.1, 1.35], "pos": [0, 0.58, 0.32], "color": "blanket"},
+      {"shape": "box", "size": [1.36, 0.25, 0.04], "pos": [0, 0.47, 1.0], "color": "blanket"},
+      {"shape": "box", "size": [0.95, 0.14, 0.4], "pos": [0, 0.6, -0.68], "color": "white"},
+      {"shape": "box", "size": [1.4, 0.95, 0.08], "pos": [0, 0.6, -1.03], "color": "frame"}
+    ]},
+    "bookshelf": {"name": "כוננית ספרים", "footprint": [1.6, 0.4], "colors": {"frame": ["#9a6a44", "#f6f4ee", "#6b4a32"], "b1": ["#d1495b", "#2e86ab", "#3c9d5d"], "b2": ["#f2c14e", "#8e6bbf", "#e76f51"], "b3": ["#2e5cb8", "#f6f4ee", "#264653"]}, "parts": [
+      {"shape": "box", "size": [1.6, 2.0, 0.05], "pos": [0, 1.0, -0.18], "color": "frame", "lod": true},
+      {"shape": "box", "size": [0.06, 2.0, 0.4], "pos": [0, 1.0, 0], "color": "frame", "array": {"x": [2, 1.54]}},
+      {"shape": "box", "size": [1.6, 0.05, 0.4], "pos": [0, 1.0, 0], "color": "frame", "array": {"y": [5, 0.48]}},
+      {"shape": "box", "size": [0.12, 0.34, 0.28], "pos": [-0.15, 0.97, 0.0], "color": "b1", "array": {"x": [3, 0.46], "y": [4, 0.48]}},
+      {"shape": "box", "size": [0.12, 0.3, 0.28], "pos": [0.0, 0.95, 0.0], "color": "b2", "array": {"x": [3, 0.46], "y": [4, 0.48]}},
+      {"shape": "box", "size": [0.1, 0.36, 0.28], "pos": [0.14, 0.98, 0.0], "color": "b3", "array": {"x": [3, 0.46], "y": [4, 0.48]}}
+    ]},
+    "plant_big": {"name": "עציץ גדול", "footprint": [0.6, 0.6], "colors": {"pot": ["#c4683f", "#f6f4ee", "#2e86ab", "#e9c46a"]}, "parts": [
+      {"shape": "cylinder", "radius": 0.24, "bottom": 0.18, "height": 0.45, "pos": [0, 0.225, 0], "color": "pot", "segments": 8, "lod": true},
+      {"shape": "sphere", "radius": 0.38, "pos": [0, 0.95, 0], "scale": [1, 1.2, 1], "color": "leaf", "segments": 8, "rings": 4},
+      {"shape": "sphere", "radius": 0.24, "pos": [0.18, 1.35, 0.05], "color": "leaf_dark", "segments": 6, "rings": 3},
+      {"shape": "sphere", "radius": 0.22, "pos": [-0.2, 0.7, 0.12], "color": "leaf_dark", "segments": 6, "rings": 3}
+    ]},
+    "plant_small": {"name": "עציץ קטן", "footprint": [0.4, 0.4], "collide": false, "colors": {"pot": ["#c4683f", "#f7a1c4", "#f6f4ee"], "flower": ["#e63946", "#ffd23f", "#c5a3d9"]}, "parts": [
+      {"shape": "cylinder", "radius": 0.14, "bottom": 0.1, "height": 0.25, "pos": [0, 0.125, 0], "color": "pot", "segments": 8},
+      {"shape": "sphere", "radius": 0.17, "pos": [0, 0.36, 0], "color": "leaf", "segments": 6, "rings": 3},
+      {"shape": "sphere", "radius": 0.06, "pos": [0.08, 0.47, 0.06], "color": "flower", "segments": 6, "rings": 3, "around": 3}
+    ]},
+    "floor_lamp": {"name": "מנורה", "footprint": [0.4, 0.4], "parts": [
+      {"shape": "cylinder", "radius": 0.18, "height": 0.05, "pos": [0, 0.025, 0], "color": "dark", "segments": 8},
+      {"shape": "cylinder", "radius": 0.025, "height": 1.5, "pos": [0, 0.75, 0], "color": "dark", "segments": 4, "lod": true},
+      {"shape": "cylinder", "radius": 0.16, "bottom": 0.3, "height": 0.35, "pos": [0, 1.6, 0], "color": "lamp", "segments": 8}
+    ]},
+    "fridge": {"name": "מקרר", "footprint": [0.8, 0.7], "colors": {"body": ["#f6f4ee", "#9fd8cb", "#f7c6c7", "#ffe8a3"]}, "parts": [
+      {"shape": "box", "size": [0.8, 1.9, 0.7], "pos": [0, 0.95, 0], "color": "body", "lod": true},
+      {"shape": "box", "size": [0.8, 0.03, 0.02], "pos": [0, 1.25, 0.36], "color": "metal"},
+      {"shape": "box", "size": [0.04, 0.35, 0.05], "pos": [0.3, 1.5, 0.37], "color": "metal"},
+      {"shape": "box", "size": [0.04, 0.45, 0.05], "pos": [0.3, 0.85, 0.37], "color": "metal"},
+      {"shape": "box", "size": [0.12, 0.12, 0.02], "pos": [-0.15, 1.6, 0.36], "color": "red"},
+      {"shape": "box", "size": [0.1, 0.14, 0.02], "pos": [0.0, 1.45, 0.36], "color": "yellow"},
+      {"shape": "box", "size": [0.18, 0.22, 0.02], "pos": [-0.1, 0.95, 0.36], "color": "paper"}
+    ]},
+    "kitchen_counter": {"name": "מטבח", "footprint": [2.4, 0.65], "colors": {"cab": ["#f6f4ee", "#9fd8cb", "#f2cc8f", "#c5d8f0"]}, "parts": [
+      {"shape": "box", "size": [2.4, 0.85, 0.6], "pos": [0, 0.425, -0.02], "color": "cab", "lod": true},
+      {"shape": "box", "size": [2.45, 0.06, 0.66], "pos": [0, 0.88, 0], "color": "stone"},
+      {"shape": "box", "size": [0.55, 0.6, 0.02], "pos": [0, 0.42, 0.29], "color": "white", "array": {"x": [4, 0.6]}},
+      {"shape": "box", "size": [0.12, 0.03, 0.04], "pos": [0, 0.66, 0.31], "color": "metal", "array": {"x": [4, 0.6]}},
+      {"shape": "box", "size": [0.7, 0.02, 0.5], "pos": [0.65, 0.92, 0], "color": "black"},
+      {"shape": "cylinder", "radius": 0.1, "height": 0.02, "pos": [0, 0.935, 0], "color": "dark", "segments": 8, "array": {"x": [2, 0.32]}, "rot": [0, 0, 0]},
+      {"shape": "cylinder", "radius": 0.14, "height": 0.18, "pos": [0.5, 1.03, 0], "color": "red", "segments": 8},
+      {"shape": "box", "size": [0.5, 0.04, 0.4], "pos": [-0.55, 0.9, 0], "color": "steel"},
+      {"shape": "cylinder", "radius": 0.02, "height": 0.3, "pos": [-0.55, 1.06, -0.24], "color": "steel", "segments": 4},
+      {"shape": "box", "size": [0.3, 0.02, 0.2], "pos": [-0.1, 0.92, 0.05], "color": "wood_light"}
+    ]},
+    "picture": {"name": "תמונה", "footprint": [0.8, 0.1], "collide": false, "colors": {"art": ["#bfe3f5", "#f7d6d0", "#d8f0c8", "#fff3c4"], "blob": ["#f18f01", "#2e86ab", "#c49a5a", "#e63946"]}, "parts": [
+      {"shape": "box", "size": [0.8, 0.62, 0.04], "pos": [0, 1.65, 0.02], "color": "wood_dark"},
+      {"shape": "box", "size": [0.66, 0.48, 0.02], "pos": [0, 1.65, 0.045], "color": "art"},
+      {"shape": "sphere", "radius": 0.12, "pos": [0.1, 1.62, 0.055], "scale": [1.2, 1, 0.2], "color": "blob", "segments": 8, "rings": 4},
+      {"shape": "box", "size": [0.66, 0.1, 0.02], "pos": [0, 1.46, 0.05], "color": "#7cc35a"}
+    ]},
+    "portrait": {"name": "דיוקן ראש העיר", "footprint": [1.1, 0.1], "collide": false, "parts": [
+      {"shape": "box", "size": [1.1, 1.35, 0.06], "pos": [0, 1.9, 0.03], "color": "gold"},
+      {"shape": "box", "size": [0.9, 1.15, 0.02], "pos": [0, 1.9, 0.07], "color": "#2f3e66"},
+      {"shape": "sphere", "radius": 0.3, "pos": [0, 1.85, 0.08], "scale": [1, 1.25, 0.3], "color": "potato", "segments": 10, "rings": 5},
+      {"shape": "cylinder", "radius": 0.17, "height": 0.25, "pos": [0, 2.32, 0.09], "color": "black", "segments": 8},
+      {"shape": "box", "size": [0.08, 0.08, 0.02], "pos": [0, 1.92, 0.18], "color": "white", "array": {"x": [2, 0.18]}}
+    ]},
+    "toy_blocks": {"name": "קוביות", "footprint": [0.6, 0.6], "collide": false, "parts": [
+      {"shape": "box", "size": [0.2, 0.2, 0.2], "pos": [0, 0.1, 0], "color": "red"},
+      {"shape": "box", "size": [0.2, 0.2, 0.2], "pos": [0.22, 0.1, 0.05], "color": "blue", "rot": [0, 20, 0]},
+      {"shape": "box", "size": [0.2, 0.2, 0.2], "pos": [0.1, 0.3, 0.02], "color": "yellow", "rot": [0, 40, 0]},
+      {"shape": "box", "size": [0.2, 0.2, 0.2], "pos": [-0.15, 0.1, 0.25], "color": "green", "rot": [0, 10, 0]}
+    ]},
+    "ball": {"name": "כדור", "footprint": [0.4, 0.4], "collide": false, "colors": {"c": ["#e63946", "#2e86ab", "#ffd23f"]}, "parts": [
+      {"shape": "sphere", "radius": 0.18, "pos": [0, 0.18, 0], "color": "c", "segments": 8, "rings": 4},
+      {"shape": "sphere", "radius": 0.185, "pos": [0, 0.18, 0], "scale": [1, 0.25, 1], "color": "white", "segments": 8, "rings": 2}
+    ]},
+    "teddy": {"name": "דובי", "footprint": [0.4, 0.4], "collide": false, "colors": {"fur": ["#a9744f", "#f2cc8f", "#e8b8c8"]}, "parts": [
+      {"shape": "sphere", "radius": 0.18, "pos": [0, 0.18, 0], "scale": [1, 1.1, 0.9], "color": "fur", "segments": 8, "rings": 4},
+      {"shape": "sphere", "radius": 0.13, "pos": [0, 0.44, 0.02], "color": "fur", "segments": 8, "rings": 4},
+      {"shape": "sphere", "radius": 0.05, "pos": [0, 0.55, 0], "color": "fur", "segments": 6, "rings": 3, "array": {"x": [2, 0.2]}},
+      {"shape": "sphere", "radius": 0.05, "pos": [0, 0.42, 0.13], "color": "cream", "segments": 6, "rings": 3},
+      {"shape": "sphere", "radius": 0.02, "pos": [0, 0.47, 0.13], "color": "black", "segments": 4, "rings": 2, "array": {"x": [2, 0.09]}}
+    ]},
+    "cat": {"name": "חתול", "footprint": [0.7, 0.4], "collide": false, "colors": {"fur": ["#f4a261", "#8a8a8a", "#333333", "#f6f4ee"]}, "parts": [
+      {"shape": "sphere", "radius": 0.2, "pos": [0, 0.16, 0], "scale": [1.5, 0.8, 1], "color": "fur", "segments": 8, "rings": 4},
+      {"shape": "sphere", "radius": 0.14, "pos": [0.3, 0.27, 0.04], "color": "fur", "segments": 8, "rings": 4},
+      {"shape": "cone", "radius": 0.05, "height": 0.1, "pos": [0.3, 0.42, 0.04], "color": "fur", "segments": 4, "array": {"z": [2, 0.15]}},
+      {"shape": "cylinder", "radius": 0.035, "height": 0.4, "pos": [-0.38, 0.12, 0.14], "rot": [0, 30, 80], "color": "fur", "segments": 4},
+      {"shape": "sphere", "radius": 0.025, "pos": [0.42, 0.3, 0.04], "color": "#2f5a45", "segments": 4, "rings": 2, "array": {"z": [2, 0.1]}},
+      {"shape": "sphere", "radius": 0.02, "pos": [0.44, 0.25, 0.04], "color": "pink", "segments": 4, "rings": 2}
+    ]},
+    "shelf_goods": {"name": "מדף סחורה", "footprint": [2.0, 0.6], "colors": {"frame": ["#f6f4ee", "#9a6a44", "#f6f4ee", "#f6f4ee", "#c99a66"], "g1": ["#e63946", "#f18f01", "#3c9d5d", "#e63946", "#ffd23f"], "g2": ["#ffd23f", "#2e86ab", "#f6f4ee", "#2e86ab", "#8e6bbf"], "g3": ["#3c9d5d", "#e9c46a", "#9fd8cb", "#f7a1c4", "#e63946"]}, "parts": [
+      {"shape": "box", "size": [2.0, 1.9, 0.06], "pos": [0, 0.95, -0.27], "color": "frame", "lod": true},
+      {"shape": "box", "size": [0.06, 1.9, 0.6], "pos": [0, 0.95, 0], "color": "frame", "array": {"x": [2, 1.94]}},
+      {"shape": "box", "size": [2.0, 0.05, 0.6], "pos": [0, 0.82, 0], "color": "frame", "array": {"y": [4, 0.45]}},
+      {"shape": "box", "size": [0.16, 0.26, 0.4], "pos": [-0.21, 0.98, 0.02], "color": "g1", "array": {"x": [4, 0.48], "y": [4, 0.45]}},
+      {"shape": "cylinder", "radius": 0.08, "height": 0.3, "pos": [-0.04, 1.0, 0.05], "color": "g2", "segments": 6, "array": {"x": [4, 0.48], "y": [4, 0.45]}},
+      {"shape": "box", "size": [0.14, 0.2, 0.3], "pos": [0.13, 0.95, 0.04], "color": "g3", "array": {"x": [4, 0.48], "y": [4, 0.45]}}
+    ]},
+    "produce_stand": {"name": "דוכן ירקות", "footprint": [1.6, 0.9], "colors": {"fruit1": ["#e63946", "#f18f01"], "fruit2": ["#8cc63f", "#ffd23f"]}, "parts": [
+      {"shape": "box", "size": [1.6, 0.7, 0.9], "pos": [0, 0.35, 0], "color": "wood", "lod": true},
+      {"shape": "box", "size": [0.75, 0.18, 0.8], "pos": [0, 0.8, 0], "rot": [15, 0, 0], "color": "wood_light", "array": {"x": [2, 0.8]}},
+      {"shape": "sphere", "radius": 0.08, "pos": [-0.4, 0.92, 0.0], "color": "fruit1", "segments": 6, "rings": 3, "array": {"x": [4, 0.16], "z": [4, 0.17]}},
+      {"shape": "sphere", "radius": 0.08, "pos": [0.4, 0.92, 0.0], "color": "fruit2", "segments": 6, "rings": 3, "array": {"x": [4, 0.16], "z": [4, 0.17]}}
+    ]},
+    "shop_counter": {"name": "דלפק", "footprint": [2.2, 0.8], "colors": {"body": ["#e76f51", "#2a9d8f", "#f2c14e", "#8e6bbf", "#f6f4ee"]}, "parts": [
+      {"shape": "box", "size": [2.2, 1.0, 0.7], "pos": [0, 0.5, 0], "color": "body", "lod": true},
+      {"shape": "box", "size": [2.3, 0.06, 0.8], "pos": [0, 1.03, 0], "color": "wood_light"},
+      {"shape": "box", "size": [2.2, 0.12, 0.02], "pos": [0, 0.8, 0.36], "color": "white"},
+      {"shape": "box", "size": [0.45, 0.22, 0.4], "pos": [0.6, 1.17, -0.05], "color": "dark"},
+      {"shape": "box", "size": [0.4, 0.2, 0.04], "pos": [0.6, 1.36, -0.15], "rot": [-25, 0, 0], "color": "#7fd3a0"},
+      {"shape": "box", "size": [0.08, 0.04, 0.08], "pos": [0.55, 1.29, 0.05], "color": "white", "array": {"x": [3, 0.1]}},
+      {"shape": "cylinder", "radius": 0.12, "height": 0.25, "pos": [-0.5, 1.18, 0.05], "color": "glass", "segments": 8},
+      {"shape": "sphere", "radius": 0.05, "pos": [-0.5, 1.12, 0.05], "color": "pink", "segments": 6, "rings": 3, "around": 3},
+      {"shape": "sphere", "radius": 0.05, "pos": [-0.47, 1.2, 0.08], "color": "yellow", "segments": 6, "rings": 3}
+    ]},
+    "bread_shelf": {"name": "מדף לחמים", "footprint": [2.0, 0.6], "parts": [
+      {"shape": "box", "size": [2.0, 1.9, 0.06], "pos": [0, 0.95, -0.27], "color": "wood", "lod": true},
+      {"shape": "box", "size": [0.06, 1.9, 0.6], "pos": [0, 0.95, 0], "color": "wood", "array": {"x": [2, 1.94]}},
+      {"shape": "box", "size": [2.0, 0.05, 0.6], "pos": [0, 0.92, 0], "rot": [-8, 0, 0], "color": "wood_light", "array": {"y": [3, 0.55]}},
+      {"shape": "sphere", "radius": 0.15, "pos": [-0.1, 1.07, 0.02], "scale": [1.4, 0.75, 1], "color": "bread", "segments": 8, "rings": 4, "array": {"x": [4, 0.45], "y": [3, 0.55]}},
+      {"shape": "sphere", "radius": 0.1, "pos": [0.13, 1.03, 0.1], "scale": [1, 0.7, 1], "color": "crust", "segments": 6, "rings": 3, "array": {"x": [4, 0.45], "y": [3, 0.55]}},
+      {"shape": "cylinder", "radius": 0.25, "bottom": 0.2, "height": 0.3, "pos": [0.7, 0.15, 0.05], "color": "#c8955a", "segments": 8},
+      {"shape": "cylinder", "radius": 0.05, "height": 0.8, "pos": [0.7, 0.55, 0.05], "rot": [12, 0, 8], "color": "bread", "segments": 6, "around": 4}
+    ]},
+    "bakery_case": {"name": "ויטרינת עוגות", "footprint": [2.0, 0.8], "colors": {"cake": ["#f7a1c4", "#7a4b2a", "#fff3c4"]}, "parts": [
+      {"shape": "box", "size": [2.0, 0.9, 0.8], "pos": [0, 0.45, 0], "color": "white", "lod": true},
+      {"shape": "box", "size": [2.0, 0.08, 0.02], "pos": [0, 0.75, 0.41], "color": "pink"},
+      {"shape": "box", "size": [2.02, 0.5, 0.04], "pos": [0, 1.15, -0.38], "color": "glass"},
+      {"shape": "cylinder", "radius": 0.2, "height": 0.2, "pos": [-0.65, 1.0, 0], "color": "cake", "segments": 10},
+      {"shape": "cylinder", "radius": 0.2, "height": 0.2, "pos": [0, 1.0, 0], "color": "#7a4b2a", "segments": 10},
+      {"shape": "cylinder", "radius": 0.2, "height": 0.2, "pos": [0.65, 1.0, 0], "color": "#fff3c4", "segments": 10},
+      {"shape": "sphere", "radius": 0.05, "pos": [0, 1.13, 0], "color": "red", "segments": 6, "rings": 3, "array": {"x": [3, 0.65]}},
+      {"shape": "sphere", "radius": 0.06, "pos": [0, 0.97, 0.28], "color": "bread", "segments": 6, "rings": 3, "array": {"x": [8, 0.22]}}
+    ]},
+    "cafe_table": {"name": "שולחן קפה", "footprint": [0.8, 0.8], "colors": {"top": ["#f6f4ee", "#e9c46a", "#2a9d8f"]}, "parts": [
+      {"shape": "cylinder", "radius": 0.4, "height": 0.05, "pos": [0, 0.74, 0], "color": "top", "segments": 10, "lod": true},
+      {"shape": "cylinder", "radius": 0.04, "height": 0.72, "pos": [0, 0.36, 0], "color": "dark", "segments": 4},
+      {"shape": "cylinder", "radius": 0.22, "height": 0.04, "pos": [0, 0.02, 0], "color": "dark", "segments": 8},
+      {"shape": "cylinder", "radius": 0.05, "height": 0.08, "pos": [0.12, 0.8, 0.05], "color": "white", "segments": 6},
+      {"shape": "cylinder", "radius": 0.08, "height": 0.01, "pos": [0.12, 0.77, 0.05], "color": "white", "segments": 6},
+      {"shape": "sphere", "radius": 0.07, "pos": [-0.12, 0.8, -0.05], "scale": [1.3, 0.6, 1], "color": "bread", "segments": 6, "rings": 3}
+    ]},
+    "coffee_machine": {"name": "מכונת קפה", "footprint": [0.8, 0.6], "parts": [
+      {"shape": "box", "size": [0.8, 0.9, 0.55], "pos": [0, 0.45, 0], "color": "wood_dark", "lod": true},
+      {"shape": "box", "size": [0.6, 0.55, 0.42], "pos": [0, 1.18, -0.02], "color": "steel"},
+      {"shape": "box", "size": [0.5, 0.12, 0.3], "pos": [0, 1.52, -0.02], "color": "red"},
+      {"shape": "cylinder", "radius": 0.03, "height": 0.1, "pos": [0, 1.0, 0.15], "color": "black", "segments": 4, "array": {"x": [2, 0.25]}},
+      {"shape": "cylinder", "radius": 0.04, "height": 0.07, "pos": [0, 0.94, 0.15], "color": "white", "segments": 6, "array": {"x": [2, 0.25]}},
+      {"shape": "cylinder", "radius": 0.04, "height": 0.08, "pos": [0, 1.62, 0], "color": "white", "segments": 6, "array": {"x": [3, 0.15]}}
+    ]},
+    "menu_board": {"name": "לוח תפריט", "footprint": [1.4, 0.1], "collide": false, "colors": {"board": ["#2f5a45", "#3b3f45"]}, "parts": [
+      {"shape": "box", "size": [1.4, 0.9, 0.04], "pos": [0, 2.0, 0.02], "color": "wood_dark"},
+      {"shape": "box", "size": [1.28, 0.78, 0.02], "pos": [0, 2.0, 0.045], "color": "board"},
+      {"shape": "box", "size": [0.7, 0.04, 0.01], "pos": [-0.15, 2.0, 0.06], "color": "white", "array": {"y": [5, 0.13]}},
+      {"shape": "box", "size": [0.15, 0.04, 0.01], "pos": [0.42, 2.0, 0.06], "color": "yellow", "array": {"y": [5, 0.13]}}
+    ]},
+    "freezer_case": {"name": "מקפיא גלידות", "footprint": [2.0, 0.8], "parts": [
+      {"shape": "box", "size": [2.0, 0.85, 0.8], "pos": [0, 0.425, 0], "color": "white", "lod": true},
+      {"shape": "box", "size": [2.0, 0.1, 0.02], "pos": [0, 0.6, 0.41], "color": "#7fb8d6"},
+      {"shape": "box", "size": [1.9, 0.02, 0.7], "pos": [0, 0.86, 0], "color": "#dff3fb"},
+      {"shape": "cylinder", "radius": 0.15, "height": 0.12, "pos": [-0.72, 0.9, 0.05], "color": "pink", "segments": 8},
+      {"shape": "cylinder", "radius": 0.15, "height": 0.12, "pos": [-0.36, 0.9, 0.05], "color": "#7a4b2a", "segments": 8},
+      {"shape": "cylinder", "radius": 0.15, "height": 0.12, "pos": [0.0, 0.9, 0.05], "color": "#fff3c4", "segments": 8},
+      {"shape": "cylinder", "radius": 0.15, "height": 0.12, "pos": [0.36, 0.9, 0.05], "color": "#8cc63f", "segments": 8},
+      {"shape": "cylinder", "radius": 0.15, "height": 0.12, "pos": [0.72, 0.9, 0.05], "color": "#f18f01", "segments": 8},
+      {"shape": "sphere", "radius": 0.1, "pos": [0, 0.98, 0.05], "color": "white", "segments": 6, "rings": 3, "array": {"x": [5, 0.36]}},
+      {"shape": "box", "size": [2.02, 0.45, 0.04], "pos": [0, 1.1, -0.38], "color": "glass"},
+      {"shape": "cone", "radius": 0.05, "height": 0.16, "pos": [0, 1.18, -0.2], "rot": [180, 0, 0], "color": "bread", "segments": 6, "array": {"x": [6, 0.12]}}
+    ]},
+    "drinks_fridge": {"name": "מקרר שתייה", "footprint": [1.0, 0.7], "colors": {"body": ["#d1495b", "#2e86ab"]}, "parts": [
+      {"shape": "box", "size": [1.0, 2.0, 0.7], "pos": [0, 1.0, 0], "color": "body", "lod": true},
+      {"shape": "box", "size": [0.84, 1.5, 0.02], "pos": [0, 1.0, 0.35], "color": "#dff3fb"},
+      {"shape": "cylinder", "radius": 0.05, "height": 0.25, "pos": [-0.25, 0.5, 0.25], "color": "orange", "segments": 6, "array": {"x": [3, 0.15], "y": [4, 0.36]}},
+      {"shape": "cylinder", "radius": 0.05, "height": 0.25, "pos": [0.25, 0.5, 0.25], "color": "green", "segments": 6, "array": {"x": [3, 0.15], "y": [4, 0.36]}},
+      {"shape": "box", "size": [0.9, 0.2, 0.04], "pos": [0, 1.88, 0.36], "color": "white"}
+    ]},
+    "newspaper_rack": {"name": "עיתונים", "footprint": [0.8, 0.4], "parts": [
+      {"shape": "box", "size": [0.8, 1.0, 0.3], "pos": [0, 0.5, -0.05], "color": "metal", "lod": true},
+      {"shape": "box", "size": [0.34, 0.45, 0.04], "pos": [0, 0.75, 0.13], "rot": [-15, 0, 0], "color": "paper", "array": {"x": [2, 0.38]}},
+      {"shape": "box", "size": [0.3, 0.08, 0.05], "pos": [0, 0.92, 0.14], "rot": [-15, 0, 0], "color": "red", "array": {"x": [2, 0.38]}},
+      {"shape": "box", "size": [0.34, 0.4, 0.04], "pos": [0, 0.3, 0.13], "rot": [-15, 0, 0], "color": "paper", "array": {"x": [2, 0.38]}}
+    ]},
+    "falafel_counter": {"name": "דלפק פלאפל", "footprint": [2.4, 0.8], "parts": [
+      {"shape": "box", "size": [2.4, 1.0, 0.7], "pos": [0, 0.5, 0], "color": "#2a9d8f", "lod": true},
+      {"shape": "box", "size": [2.5, 0.06, 0.8], "pos": [0, 1.03, 0], "color": "steel"},
+      {"shape": "cylinder", "radius": 0.3, "height": 0.3, "pos": [0.75, 1.21, 0], "color": "dark", "segments": 10},
+      {"shape": "cylinder", "radius": 0.27, "height": 0.02, "pos": [0.75, 1.36, 0], "color": "#e9b949", "segments": 10},
+      {"shape": "sphere", "radius": 0.05, "pos": [0.75, 1.38, 0], "color": "#7a4b2a", "segments": 6, "rings": 3, "around": 6, "around_start": 0, "array": {"x": [2, 0.2]}},
+      {"shape": "cylinder", "radius": 0.14, "height": 0.1, "pos": [-0.2, 1.11, 0], "color": "white", "segments": 8, "array": {"x": [3, 0.33]}},
+      {"shape": "sphere", "radius": 0.1, "pos": [-0.53, 1.17, 0], "scale": [1, 0.4, 1], "color": "red", "segments": 6, "rings": 3},
+      {"shape": "sphere", "radius": 0.1, "pos": [-0.2, 1.17, 0], "scale": [1, 0.4, 1], "color": "#8cc63f", "segments": 6, "rings": 3},
+      {"shape": "sphere", "radius": 0.1, "pos": [0.13, 1.17, 0], "scale": [1, 0.4, 1], "color": "cream", "segments": 6, "rings": 3},
+      {"shape": "cylinder", "radius": 0.15, "height": 0.12, "pos": [-0.95, 1.12, 0.05], "color": "#f0d9a8", "segments": 8}
+    ]},
+    "desk": {"name": "שולחן עבודה", "footprint": [1.6, 0.8], "colors": {"top": ["#c99a66", "#f6f4ee", "#9a6a44"]}, "parts": [
+      {"shape": "box", "size": [1.6, 0.06, 0.8], "pos": [0, 0.75, 0], "color": "top", "lod": true},
+      {"shape": "box", "size": [0.06, 0.72, 0.75], "pos": [0, 0.36, 0], "color": "top", "array": {"x": [2, 1.5]}},
+      {"shape": "box", "size": [0.45, 0.6, 0.7], "pos": [0.5, 0.36, 0], "color": "top"},
+      {"shape": "box", "size": [0.6, 0.4, 0.05], "pos": [0, 1.05, -0.25], "color": "dark"},
+      {"shape": "box", "size": [0.54, 0.34, 0.02], "pos": [0, 1.05, -0.22], "color": "screen"},
+      {"shape": "box", "size": [0.1, 0.2, 0.08], "pos": [0, 0.85, -0.28], "color": "dark"},
+      {"shape": "box", "size": [0.45, 0.03, 0.16], "pos": [0, 0.79, 0.1], "color": "dark"},
+      {"shape": "box", "size": [0.25, 0.02, 0.32], "pos": [-0.55, 0.79, 0.0], "rot": [0, 10, 0], "color": "paper"},
+      {"shape": "cylinder", "radius": 0.045, "height": 0.1, "pos": [0.55, 0.83, 0.1], "color": "red", "segments": 6}
+    ]},
+    "office_chair": {"name": "כיסא משרדי", "footprint": [0.6, 0.6], "colors": {"c": ["#3b3f45", "#2e5cb8", "#d1495b"]}, "parts": [
+      {"shape": "cylinder", "radius": 0.27, "height": 0.1, "pos": [0, 0.5, 0], "color": "c", "segments": 8, "lod": true},
+      {"shape": "box", "size": [0.48, 0.5, 0.08], "pos": [0, 0.82, -0.24], "color": "c"},
+      {"shape": "cylinder", "radius": 0.03, "height": 0.45, "pos": [0, 0.24, 0], "color": "metal", "segments": 4},
+      {"shape": "box", "size": [0.55, 0.04, 0.06], "pos": [0, 0.03, 0], "color": "metal", "around": 2, "around_start": 45}
+    ]},
+    "mayor_desk": {"name": "שולחן ראש העיר", "footprint": [2.6, 1.1], "parts": [
+      {"shape": "box", "size": [2.6, 0.08, 1.1], "pos": [0, 0.8, 0], "color": "wood_dark", "lod": true},
+      {"shape": "box", "size": [2.5, 0.76, 0.06], "pos": [0, 0.38, 0.5], "color": "wood"},
+      {"shape": "box", "size": [0.6, 0.76, 1.0], "pos": [0, 0.38, 0], "color": "wood", "array": {"x": [2, 1.9]}},
+      {"shape": "box", "size": [2.5, 0.06, 0.02], "pos": [0, 0.7, 0.54], "color": "gold"},
+      {"shape": "box", "size": [0.6, 0.14, 0.08], "pos": [0, 0.91, 0.42], "rot": [-25, 0, 0], "color": "gold"},
+      {"shape": "box", "size": [0.4, 0.02, 0.3], "pos": [-0.6, 0.85, 0], "rot": [0, -12, 0], "color": "paper"},
+      {"shape": "box", "size": [0.4, 0.02, 0.3], "pos": [-0.58, 0.87, 0.02], "rot": [0, 5, 0], "color": "paper"},
+      {"shape": "cylinder", "radius": 0.06, "height": 0.12, "pos": [0.5, 0.9, 0.05], "color": "red", "segments": 6},
+      {"shape": "sphere", "radius": 0.15, "pos": [0.9, 1.05, -0.2], "color": "#4a90c2", "segments": 8, "rings": 4},
+      {"shape": "cylinder", "radius": 0.02, "height": 0.12, "pos": [0.9, 0.88, -0.2], "color": "gold", "segments": 4},
+      {"shape": "sphere", "radius": 0.07, "pos": [0.95, 1.1, -0.1], "scale": [1, 0.6, 0.6], "color": "#7cc35a", "segments": 6, "rings": 3}
+    ]},
+    "throne_chair": {"name": "כיסא ראש העיר", "footprint": [0.8, 0.7], "parts": [
+      {"shape": "box", "size": [0.75, 0.5, 0.65], "pos": [0, 0.25, 0], "color": "#b8323f", "lod": true},
+      {"shape": "box", "size": [0.75, 1.1, 0.12], "pos": [0, 0.95, -0.28], "color": "#b8323f"},
+      {"shape": "box", "size": [0.8, 0.08, 0.14], "pos": [0, 1.53, -0.28], "color": "gold"},
+      {"shape": "sphere", "radius": 0.07, "pos": [0, 1.62, -0.28], "color": "gold", "segments": 6, "rings": 3, "array": {"x": [2, 0.7]}}
+    ]},
+    "flag": {"name": "דגל", "footprint": [0.5, 0.5], "colors": {"field": ["#f6f4ee", "#f2a541"], "stripe": ["#2e5cb8", "#7a4b2a"]}, "parts": [
+      {"shape": "cylinder", "radius": 0.2, "height": 0.08, "pos": [0, 0.04, 0], "color": "gold", "segments": 8},
+      {"shape": "cylinder", "radius": 0.025, "height": 2.5, "pos": [0, 1.25, 0], "color": "gold", "segments": 4, "lod": true},
+      {"shape": "sphere", "radius": 0.06, "pos": [0, 2.52, 0], "color": "gold", "segments": 6, "rings": 3},
+      {"shape": "box", "size": [0.03, 0.62, 0.95], "pos": [0, 2.08, 0.5], "color": "field"},
+      {"shape": "box", "size": [0.035, 0.09, 0.95], "pos": [0, 2.08, 0.5], "color": "stripe", "array": {"y": [2, 0.42]}},
+      {"shape": "sphere", "radius": 0.1, "pos": [0, 2.08, 0.5], "scale": [0.3, 1, 1], "color": "stripe", "segments": 6, "rings": 3}
+    ]},
+    "mini_statue": {"name": "פסל בטטה קטן", "footprint": [0.8, 0.8], "parts": [
+      {"shape": "box", "size": [0.7, 0.9, 0.7], "pos": [0, 0.45, 0], "color": "stone", "lod": true},
+      {"shape": "sphere", "radius": 0.3, "pos": [0, 1.2, 0], "scale": [1.2, 1, 0.9], "color": "gold", "segments": 8, "rings": 4},
+      {"shape": "cone", "radius": 0.14, "height": 0.18, "pos": [0, 1.56, 0], "color": "gold", "segments": 5}
+    ]},
+    "jail_cell": {"name": "תא מעצר", "footprint": [3.0, 2.4], "parts": [
+      {"shape": "box", "size": [3.0, 0.04, 2.4], "pos": [0, 0.02, 0], "color": "#9aa0a8", "lod": true},
+      {"shape": "cylinder", "radius": 0.035, "height": 2.6, "pos": [0, 1.3, 1.2], "color": "dark", "segments": 4, "array": {"x": [13, 0.24]}},
+      {"shape": "cylinder", "radius": 0.035, "height": 2.6, "pos": [-1.5, 1.3, 0.0], "color": "dark", "segments": 4, "array": {"z": [10, 0.24]}},
+      {"shape": "box", "size": [3.05, 0.1, 0.1], "pos": [0, 2.6, 1.2], "color": "dark", "array": {"y": [2, 1.8]}},
+      {"shape": "box", "size": [0.1, 0.1, 2.4], "pos": [-1.5, 2.6, 0], "color": "dark", "array": {"y": [2, 1.8]}},
+      {"shape": "box", "size": [1.6, 0.1, 0.5], "pos": [0.4, 0.45, -0.9], "color": "wood"},
+      {"shape": "box", "size": [0.08, 0.45, 0.4], "pos": [0.4, 0.22, -0.9], "color": "dark", "array": {"x": [2, 1.4]}},
+      {"shape": "sphere", "radius": 0.12, "pos": [1.0, 0.58, -0.9], "scale": [1.5, 0.6, 1], "color": "white", "segments": 6, "rings": 3},
+      {"shape": "box", "size": [0.3, 0.12, 0.04], "pos": [0.6, 2.2, 1.24], "color": "yellow"}
+    ]},
+    "water_cooler": {"name": "מתקן מים", "footprint": [0.45, 0.45], "parts": [
+      {"shape": "box", "size": [0.4, 1.0, 0.4], "pos": [0, 0.5, 0], "color": "white", "lod": true},
+      {"shape": "cylinder", "radius": 0.16, "height": 0.45, "pos": [0, 1.22, 0], "color": "#7fc4e8", "segments": 8},
+      {"shape": "box", "size": [0.08, 0.06, 0.06], "pos": [0, 0.8, 0.22], "color": "blue", "array": {"x": [2, 0.12]}}
+    ]},
+    "lockers": {"name": "לוקרים", "footprint": [1.8, 0.5], "colors": {"c": ["#7f8fa6", "#5d86a6"]}, "parts": [
+      {"shape": "box", "size": [1.8, 1.9, 0.5], "pos": [0, 0.95, 0], "color": "c", "lod": true},
+      {"shape": "box", "size": [0.02, 1.8, 0.02], "pos": [0, 0.95, 0.26], "color": "dark", "array": {"x": [3, 0.45]}},
+      {"shape": "box", "size": [0.25, 0.03, 0.02], "pos": [0, 1.6, 0.26], "color": "dark", "array": {"x": [4, 0.45], "y": [3, 0.06]}},
+      {"shape": "box", "size": [0.04, 0.12, 0.04], "pos": [0.15, 1.0, 0.27], "color": "steel", "array": {"x": [4, 0.45]}}
+    ]},
+    "notice_board": {"name": "לוח מודעות", "footprint": [1.5, 0.1], "collide": false, "parts": [
+      {"shape": "box", "size": [1.5, 1.0, 0.04], "pos": [0, 1.7, 0.02], "color": "wood_dark"},
+      {"shape": "box", "size": [1.38, 0.88, 0.02], "pos": [0, 1.7, 0.045], "color": "cork"},
+      {"shape": "box", "size": [0.3, 0.38, 0.01], "pos": [-0.45, 1.75, 0.06], "color": "paper", "rot": [0, 0, 4]},
+      {"shape": "box", "size": [0.3, 0.38, 0.01], "pos": [0.0, 1.72, 0.06], "color": "paper", "rot": [0, 0, -3]},
+      {"shape": "box", "size": [0.3, 0.3, 0.01], "pos": [0.45, 1.78, 0.06], "color": "#fff3c4", "rot": [0, 0, 6]},
+      {"shape": "sphere", "radius": 0.08, "pos": [-0.45, 1.79, 0.066], "scale": [1, 1.2, 0.2], "color": "potato", "segments": 6, "rings": 3, "array": {"x": [2, 0.45]}},
+      {"shape": "sphere", "radius": 0.025, "pos": [0, 1.93, 0.07], "color": "red", "segments": 4, "rings": 2, "array": {"x": [3, 0.45]}}
+    ]},
+    "school_desk": {"name": "שולחן תלמיד", "footprint": [0.9, 1.1], "colors": {"c": ["#e76f51", "#2a9d8f", "#f2c14e", "#7b6cd9"]}, "parts": [
+      {"shape": "box", "size": [0.9, 0.05, 0.55], "pos": [0, 0.68, -0.2], "color": "wood_light", "lod": true},
+      {"shape": "box", "size": [0.05, 0.66, 0.05], "pos": [0, 0.33, -0.2], "color": "metal", "array": {"x": [2, 0.8], "z": [2, 0.45]}},
+      {"shape": "box", "size": [0.42, 0.05, 0.4], "pos": [0, 0.42, 0.35], "color": "c"},
+      {"shape": "box", "size": [0.42, 0.36, 0.05], "pos": [0, 0.66, 0.55], "color": "c"},
+      {"shape": "box", "size": [0.04, 0.42, 0.04], "pos": [0, 0.21, 0.35], "color": "metal", "array": {"x": [2, 0.36], "z": [2, 0.34]}},
+      {"shape": "box", "size": [0.3, 0.03, 0.22], "pos": [0.1, 0.72, -0.15], "color": "paper", "rot": [0, 8, 0]},
+      {"shape": "box", "size": [0.18, 0.02, 0.02], "pos": [-0.2, 0.72, -0.2], "color": "yellow", "rot": [0, 30, 0]}
+    ]},
+    "blackboard": {"name": "לוח", "footprint": [3.0, 0.1], "collide": false, "parts": [
+      {"shape": "box", "size": [3.0, 1.3, 0.05], "pos": [0, 1.65, 0.025], "color": "wood_dark"},
+      {"shape": "box", "size": [2.85, 1.15, 0.02], "pos": [0, 1.65, 0.055], "color": "chalk"},
+      {"shape": "box", "size": [2.9, 0.06, 0.12], "pos": [0, 1.0, 0.08], "color": "wood_dark"},
+      {"shape": "box", "size": [0.9, 0.04, 0.01], "pos": [-0.7, 1.95, 0.07], "color": "white"},
+      {"shape": "box", "size": [0.6, 0.04, 0.01], "pos": [-0.85, 1.8, 0.07], "color": "white"},
+      {"shape": "box", "size": [1.0, 0.04, 0.01], "pos": [-0.65, 1.65, 0.07], "color": "white"},
+      {"shape": "sphere", "radius": 0.3, "pos": [0.7, 1.7, 0.06], "scale": [1.2, 1, 0.05], "color": "white", "segments": 10, "rings": 4},
+      {"shape": "sphere", "radius": 0.27, "pos": [0.7, 1.7, 0.065], "scale": [1.2, 1, 0.05], "color": "chalk", "segments": 10, "rings": 4},
+      {"shape": "box", "size": [0.1, 0.03, 0.03], "pos": [0.3, 1.04, 0.1], "color": "white"}
+    ]},
+    "globe": {"name": "גלובוס", "footprint": [0.5, 0.5], "parts": [
+      {"shape": "cylinder", "radius": 0.18, "height": 0.05, "pos": [0, 0.025, 0], "color": "wood_dark", "segments": 8},
+      {"shape": "cylinder", "radius": 0.025, "height": 0.8, "pos": [0, 0.4, 0], "color": "gold", "segments": 4},
+      {"shape": "sphere", "radius": 0.28, "pos": [0, 1.0, 0], "color": "#4a90c2", "segments": 10, "rings": 5, "lod": true},
+      {"shape": "sphere", "radius": 0.12, "pos": [0.12, 1.08, 0.16], "scale": [1, 1, 0.6], "color": "#7cc35a", "segments": 6, "rings": 3},
+      {"shape": "sphere", "radius": 0.1, "pos": [-0.15, 0.92, 0.14], "scale": [1, 1, 0.6], "color": "#7cc35a", "segments": 6, "rings": 3}
+    ]},
+    "mailboxes": {"name": "תיבות דואר", "footprint": [1.6, 0.1], "collide": false, "parts": [
+      {"shape": "box", "size": [1.6, 1.0, 0.2], "pos": [0, 1.3, 0.1], "color": "steel"},
+      {"shape": "box", "size": [0.34, 0.2, 0.02], "pos": [0, 1.3, 0.21], "color": "metal", "array": {"x": [4, 0.38], "y": [4, 0.23]}},
+      {"shape": "box", "size": [0.15, 0.02, 0.02], "pos": [0, 1.35, 0.225], "color": "dark", "array": {"x": [4, 0.38], "y": [4, 0.23]}}
+    ]},
+    "elevator": {"name": "מעלית", "footprint": [1.6, 0.1], "collide": false, "parts": [
+      {"shape": "box", "size": [1.6, 2.5, 0.06], "pos": [0, 1.25, 0.03], "color": "stone"},
+      {"shape": "box", "size": [0.62, 2.1, 0.04], "pos": [0, 1.05, 0.07], "color": "steel", "array": {"x": [2, 0.64]}},
+      {"shape": "box", "size": [0.12, 0.25, 0.04], "pos": [0.95, 1.2, 0.07], "color": "dark"},
+      {"shape": "sphere", "radius": 0.03, "pos": [0.95, 1.2, 0.09], "color": "yellow", "segments": 4, "rings": 2, "array": {"y": [2, 0.1]}},
+      {"shape": "box", "size": [0.5, 0.15, 0.04], "pos": [0, 2.3, 0.07], "color": "dark"}
+    ]},
+    "stairs": {"name": "מדרגות", "footprint": [1.4, 3.0], "parts": [
+      {"shape": "box", "size": [1.4, 0.3, 3.0], "pos": [0, 0.15, 0], "color": "stone", "lod": true},
+      {"shape": "box", "size": [1.4, 0.3, 2.5], "pos": [0, 0.45, -0.25], "color": "stone"},
+      {"shape": "box", "size": [1.4, 0.3, 2.0], "pos": [0, 0.75, -0.5], "color": "stone"},
+      {"shape": "box", "size": [1.4, 0.3, 1.5], "pos": [0, 1.05, -0.75], "color": "stone"},
+      {"shape": "box", "size": [1.4, 0.3, 1.0], "pos": [0, 1.35, -1.0], "color": "stone"},
+      {"shape": "box", "size": [1.4, 0.3, 0.5], "pos": [0, 1.65, -1.25], "color": "stone"},
+      {"shape": "box", "size": [0.05, 0.05, 3.3], "pos": [0.72, 1.6, 0], "rot": [-31, 0, 0], "color": "wood"}
+    ]},
+    "clock": {"name": "שעון", "footprint": [0.5, 0.1], "collide": false, "parts": [
+      {"shape": "cylinder", "radius": 0.28, "height": 0.05, "rot": [90, 0, 0], "pos": [0, 2.3, 0.03], "color": "red", "segments": 12},
+      {"shape": "cylinder", "radius": 0.24, "height": 0.02, "rot": [90, 0, 0], "pos": [0, 2.3, 0.06], "color": "white", "segments": 12},
+      {"shape": "box", "size": [0.03, 0.18, 0.01], "pos": [0, 2.37, 0.075], "color": "black"},
+      {"shape": "box", "size": [0.13, 0.03, 0.01], "pos": [0.06, 2.3, 0.075], "color": "black"}
+    ]},
+    "window": {"name": "חלון", "footprint": [1.4, 0.1], "collide": false, "colors": {"curtain": ["#f7a1c4", "#f2cc8f", "#9fd8cb", "#f6f4ee", "#c5a3d9"]}, "parts": [
+      {"shape": "box", "size": [1.4, 1.15, 0.05], "pos": [0, 1.65, 0.025], "color": "white"},
+      {"shape": "box", "size": [1.2, 0.95, 0.03], "pos": [0, 1.65, 0.05], "color": "sky"},
+      {"shape": "box", "size": [0.06, 0.95, 0.04], "pos": [0, 1.65, 0.06], "color": "white"},
+      {"shape": "box", "size": [1.2, 0.06, 0.04], "pos": [0, 1.65, 0.06], "color": "white"},
+      {"shape": "box", "size": [1.55, 0.06, 0.16], "pos": [0, 1.06, 0.08], "color": "white"},
+      {"shape": "box", "size": [0.28, 1.35, 0.05], "pos": [0, 1.6, 0.1], "color": "curtain", "array": {"x": [2, 1.6]}},
+      {"shape": "box", "size": [1.9, 0.04, 0.04], "pos": [0, 2.3, 0.12], "color": "wood_dark"}
+    ]},
+    "door_inside": {"name": "דלת", "footprint": [1.3, 0.1], "collide": false, "parts": [
+      {"shape": "box", "size": [1.35, 2.3, 0.06], "pos": [0, 1.15, 0.03], "color": "white"},
+      {"shape": "box", "size": [1.1, 2.1, 0.05], "pos": [0, 1.05, 0.06], "color": "#7a5230"},
+      {"shape": "box", "size": [0.8, 0.6, 0.02], "pos": [0, 1.5, 0.09], "color": "#8d6239", "array": {"y": [2, 0.8]}},
+      {"shape": "sphere", "radius": 0.05, "pos": [0.4, 1.0, 0.11], "color": "gold", "segments": 6, "rings": 3},
+      {"shape": "box", "size": [0.5, 0.18, 0.03], "pos": [0, 2.45, 0.05], "color": "#3c9d5d"},
+      {"shape": "box", "size": [0.12, 0.08, 0.01], "pos": [0.12, 2.45, 0.07], "color": "white", "rot": [0, 0, 30]},
+      {"shape": "box", "size": [1.2, 0.02, 0.7], "pos": [0, 0.01, 0.45], "color": "#b5654a"}
+    ]},
+    "workbench": {"name": "שולחן עבודה", "footprint": [2.0, 0.9], "parts": [
+      {"shape": "box", "size": [2.0, 0.1, 0.9], "pos": [0, 0.85, 0], "color": "wood", "lod": true},
+      {"shape": "box", "size": [0.1, 0.8, 0.1], "pos": [0, 0.4, 0], "color": "wood_dark", "array": {"x": [2, 1.8], "z": [2, 0.7]}},
+      {"shape": "box", "size": [1.9, 0.05, 0.8], "pos": [0, 0.25, 0], "color": "wood_dark"},
+      {"shape": "box", "size": [0.3, 0.05, 0.08], "pos": [-0.5, 0.93, 0.1], "color": "metal", "rot": [0, 30, 0]},
+      {"shape": "box", "size": [0.08, 0.08, 0.14], "pos": [-0.62, 0.95, 0.03], "color": "dark", "rot": [0, 30, 0]},
+      {"shape": "box", "size": [0.3, 0.2, 0.25], "pos": [0.6, 1.0, -0.2], "color": "red"},
+      {"shape": "cylinder", "radius": 0.04, "height": 0.35, "pos": [0.1, 0.94, 0.15], "rot": [0, 0, 90], "color": "steel", "segments": 4},
+      {"shape": "cylinder", "radius": 0.08, "height": 0.04, "pos": [0.25, 0.92, -0.15], "color": "gold", "segments": 8, "array": {"x": [3, 0.18]}},
+      {"shape": "box", "size": [1.9, 0.9, 0.04], "pos": [0, 1.4, -0.43], "color": "cork"},
+      {"shape": "box", "size": [0.05, 0.3, 0.05], "pos": [0, 1.45, -0.38], "color": "metal", "array": {"x": [5, 0.35]}}
+    ]},
+    "blueprint": {"name": "שרטוט", "footprint": [1.6, 0.1], "collide": false, "parts": [
+      {"shape": "box", "size": [1.6, 1.1, 0.03], "pos": [0, 1.9, 0.02], "color": "#2e5c9e"},
+      {"shape": "box", "size": [1.4, 0.03, 0.01], "pos": [0, 1.9, 0.04], "color": "white", "array": {"y": [2, 0.9]}},
+      {"shape": "box", "size": [0.03, 0.9, 0.01], "pos": [0, 1.9, 0.04], "color": "white", "array": {"x": [2, 1.4]}},
+      {"shape": "cylinder", "radius": 0.22, "height": 0.01, "rot": [90, 0, 0], "pos": [-0.3, 1.95, 0.04], "color": "white", "segments": 10},
+      {"shape": "cylinder", "radius": 0.19, "height": 0.012, "rot": [90, 0, 0], "pos": [-0.3, 1.95, 0.045], "color": "#2e5c9e", "segments": 10},
+      {"shape": "box", "size": [0.5, 0.3, 0.012], "pos": [0.35, 1.8, 0.045], "color": "white"},
+      {"shape": "box", "size": [0.44, 0.24, 0.014], "pos": [0.35, 1.8, 0.05], "color": "#2e5c9e"}
+    ]},
+    "crate": {"name": "ארגז", "footprint": [1.0, 1.0], "parts": [
+      {"shape": "box", "size": [1.0, 0.9, 1.0], "pos": [0, 0.45, 0], "color": "wood_light", "lod": true},
+      {"shape": "box", "size": [1.04, 0.1, 1.04], "pos": [0, 0.45, 0], "color": "wood", "array": {"y": [3, 0.38]}},
+      {"shape": "box", "size": [0.1, 0.92, 1.04], "pos": [0, 0.45, 0], "color": "wood", "array": {"x": [2, 0.9]}}
+    ]},
+    "barrel": {"name": "חבית", "footprint": [0.7, 0.7], "colors": {"c": ["#d1495b", "#3c9d5d", "#2e86ab"]}, "parts": [
+      {"shape": "cylinder", "radius": 0.33, "height": 1.0, "pos": [0, 0.5, 0], "color": "c", "segments": 10, "lod": true},
+      {"shape": "cylinder", "radius": 0.345, "height": 0.06, "pos": [0, 0.5, 0], "color": "dark", "segments": 10, "array": {"y": [3, 0.4]}}
+    ]},
+    "wall_pipes": {"name": "צינורות", "footprint": [4.0, 0.3], "collide": false, "parts": [
+      {"shape": "cylinder", "radius": 0.1, "height": 4.0, "rot": [0, 0, 90], "pos": [0, 2.5, 0.15], "color": "#c4683f", "segments": 6},
+      {"shape": "cylinder", "radius": 0.07, "height": 4.0, "rot": [0, 0, 90], "pos": [0, 2.75, 0.12], "color": "steel", "segments": 6},
+      {"shape": "cylinder", "radius": 0.14, "height": 0.08, "rot": [0, 0, 90], "pos": [0, 2.5, 0.15], "color": "dark", "segments": 6, "array": {"x": [3, 1.6]}},
+      {"shape": "cylinder", "radius": 0.15, "height": 0.06, "rot": [90, 0, 0], "pos": [0.8, 2.5, 0.28], "color": "red", "segments": 8}
+    ]},
+    "friksa_machine": {"name": "מכונת הפריך", "footprint": [9.0, 3.6], "parts": [
+      {"shape": "box", "size": [6.0, 3.4, 3.0], "pos": [0, 1.7, -0.2], "color": "#7f8fa6", "lod": true},
+      {"shape": "box", "size": [6.2, 0.3, 3.2], "pos": [0, 3.5, -0.2], "color": "#5d6b80"},
+      {"shape": "box", "size": [6.1, 0.25, 3.1], "pos": [0, 0.12, -0.2], "color": "dark"},
+      {"shape": "cylinder", "radius": 1.0, "height": 0.25, "rot": [90, 0, 0], "pos": [-1.6, 2.0, 1.4], "color": "gold", "segments": 14},
+      {"shape": "box", "size": [0.35, 0.3, 0.24], "pos": [-1.6, 3.1, 1.4], "color": "gold", "around": 1},
+      {"shape": "box", "size": [2.5, 0.3, 0.24], "pos": [-1.6, 2.0, 1.4], "color": "gold", "rot": [0, 0, 0]},
+      {"shape": "box", "size": [0.3, 2.5, 0.24], "pos": [-1.6, 2.0, 1.4], "color": "gold"},
+      {"shape": "box", "size": [2.3, 0.3, 0.24], "pos": [-1.6, 2.0, 1.4], "rot": [0, 0, 45], "color": "gold"},
+      {"shape": "box", "size": [2.3, 0.3, 0.24], "pos": [-1.6, 2.0, 1.4], "rot": [0, 0, -45], "color": "gold"},
+      {"shape": "cylinder", "radius": 0.25, "height": 0.4, "rot": [90, 0, 0], "pos": [-1.6, 2.0, 1.5], "color": "dark", "segments": 8},
+      {"shape": "cylinder", "radius": 0.6, "height": 0.22, "rot": [90, 0, 0], "pos": [0.3, 2.7, 1.4], "color": "#c4683f", "segments": 12},
+      {"shape": "box", "size": [1.5, 0.22, 0.2], "pos": [0.3, 2.7, 1.42], "color": "#c4683f"},
+      {"shape": "box", "size": [0.22, 1.5, 0.2], "pos": [0.3, 2.7, 1.42], "color": "#c4683f"},
+      {"shape": "cylinder", "radius": 0.15, "height": 0.3, "rot": [90, 0, 0], "pos": [0.3, 2.7, 1.52], "color": "dark", "segments": 6},
+      {"shape": "cylinder", "radius": 0.9, "height": 3.6, "pos": [3.6, 1.8, -0.2], "color": "glass", "segments": 12, "lod": true},
+      {"shape": "cylinder", "radius": 0.95, "height": 0.2, "pos": [3.6, 0.1, -0.2], "color": "dark", "segments": 12, "array": {"y": [2, 3.6]}},
+      {"shape": "cylinder", "radius": 0.8, "height": 2.0, "pos": [3.6, 1.2, -0.2], "color": "#9fe0a8", "segments": 12},
+      {"shape": "sphere", "radius": 0.15, "pos": [3.6, 1.5, 0.55], "color": "white", "segments": 6, "rings": 3, "array": {"y": [3, 0.55]}},
+      {"shape": "cone", "radius": 1.3, "height": 1.4, "rot": [180, 0, 0], "pos": [-1.0, 4.4, -0.6], "color": "#5d6b80", "segments": 10},
+      {"shape": "cylinder", "radius": 1.3, "height": 0.3, "pos": [-1.0, 5.2, -0.6], "color": "#5d6b80", "segments": 10},
+      {"shape": "cylinder", "radius": 0.35, "height": 2.6, "pos": [1.8, 4.6, -1.0], "color": "#c4683f", "segments": 8},
+      {"shape": "cylinder", "radius": 0.45, "height": 0.3, "pos": [1.8, 5.9, -1.0], "color": "dark", "segments": 8},
+      {"shape": "cylinder", "radius": 0.18, "height": 3.0, "rot": [0, 0, 90], "pos": [2.4, 3.2, 0.9], "color": "steel", "segments": 6},
+      {"shape": "sphere", "radius": 0.12, "pos": [-2.6, 3.0, 1.32], "color": "red", "segments": 6, "rings": 3},
+      {"shape": "sphere", "radius": 0.12, "pos": [-2.2, 3.0, 1.32], "color": "yellow", "segments": 6, "rings": 3},
+      {"shape": "sphere", "radius": 0.12, "pos": [2.0, 1.0, 1.32], "color": "#7fd3a0", "segments": 6, "rings": 3},
+      {"shape": "box", "size": [2.2, 0.5, 1.6], "pos": [1.2, 0.5, 2.0], "color": "dark"},
+      {"shape": "box", "size": [2.2, 0.06, 1.5], "pos": [1.2, 0.78, 2.0], "color": "#5b5f66"},
+      {"shape": "box", "size": [0.4, 0.06, 0.3], "pos": [1.2, 0.84, 2.0], "color": "#ecd9a8", "array": {"x": [4, 0.5], "z": [2, 0.6]}},
+      {"shape": "box", "size": [1.0, 1.1, 0.12], "pos": [-1.6, 0.6, 1.36], "color": "dark"}
+    ]},
+    "lever_panel": {"name": "לוח ידיות", "footprint": [1.6, 0.6], "parts": [
+      {"shape": "box", "size": [1.6, 1.2, 0.5], "pos": [0, 0.6, 0], "color": "#5d6b80", "lod": true},
+      {"shape": "box", "size": [1.5, 0.06, 0.45], "pos": [0, 1.22, 0.02], "rot": [20, 0, 0], "color": "dark"},
+      {"shape": "cylinder", "radius": 0.035, "height": 0.5, "rot": [-25, 0, 0], "pos": [0, 1.45, 0.08], "color": "steel", "segments": 4, "array": {"x": [3, 0.45]}},
+      {"shape": "sphere", "radius": 0.08, "pos": [0, 1.68, 0.18], "color": "red", "segments": 6, "rings": 3, "array": {"x": [3, 0.45]}},
+      {"shape": "sphere", "radius": 0.05, "pos": [0, 0.95, 0.26], "color": "#7fd3a0", "segments": 4, "rings": 2, "array": {"x": [5, 0.25]}}
+    ]}
+  }
+}
