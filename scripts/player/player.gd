@@ -36,13 +36,13 @@ func _physics_process(delta: float) -> void:
 	if not is_on_floor():
 		velocity.y -= _gravity * delta
 	var input := Vector2.ZERO
-	if control_enabled:
+	if control_enabled and not GameState.input_locked:
 		input = Input.get_vector("move_left", "move_right", "move_forward", "move_back")
 	var dir := Vector3(input.x, 0.0, input.y).rotated(Vector3.UP, cam_yaw)
 	var speed := RUN if Input.is_action_pressed("run") else WALK
 	velocity.x = move_toward(velocity.x, dir.x * speed, 40.0 * delta)
 	velocity.z = move_toward(velocity.z, dir.z * speed, 40.0 * delta)
-	if control_enabled and Input.is_action_just_pressed("jump") and is_on_floor():
+	if control_enabled and not GameState.input_locked and Input.is_action_just_pressed("jump") and is_on_floor():
 		velocity.y = JUMP
 	move_and_slide()
 

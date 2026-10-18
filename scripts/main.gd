@@ -15,6 +15,11 @@ const Benchmark = preload("res://scripts/modes/benchmark.gd")
 ## Pluggable systems (see scripts/systems/city_system.gd). Add residents etc. here.
 const SYSTEMS := [
 	"res://scripts/systems/traffic_system.gd",
+	"res://scripts/systems/pedestrian_system.gd",
+	"res://scripts/systems/npc_system.gd",
+	"res://scripts/systems/interior_system.gd",
+	"res://scripts/systems/story_system.gd",
+	"res://scripts/systems/combat_system.gd",
 ]
 
 var library
@@ -53,17 +58,21 @@ func _ready() -> void:
 	player.name = "Player"
 	add_child(player)
 	player.setup(library.material)
+	player.add_to_group("player")
 	player.global_position = CityData.get_player_spawn()
 
 	rig = CameraRig.new()
 	rig.name = "CameraRig"
 	add_child(rig)
 	rig.setup(player)
+	rig.add_to_group("camera_rig")
+	add_to_group("main")
 	rig.yaw = float(CityData.get_player_state().get("yaw", PI))
 	world.focus = rig.camera
 	world.load_around_now(player.global_position, 1)
 
 	hud = Hud.new()
+	hud.add_to_group("hud")
 	add_child(hud)
 	build_mode = BuildMode.new()
 	add_child(build_mode)
@@ -295,7 +304,11 @@ func _run_shots() -> void:
 	}
 	rig.external = true
 	hud.visible = false
-	DirAccess.make_dir_recursive_absolute("user://shots")
+	var dir := "user://shots"
+	for a in OS.get_cmdline_user_args():
+		if a.begins_with("--shots-tag="):
+			dir += "_" + a.get_slice("=", 1)
+	DirAccess.make_dir_recursive_absolute(dir)
 	for name in views:
 		var v: Array = views[name]
 		rig.camera.global_position = v[0]
@@ -305,7 +318,7 @@ func _run_shots() -> void:
 			await get_tree().process_frame
 		await RenderingServer.frame_post_draw
 		var img := get_viewport().get_texture().get_image()
-		img.save_png("user://shots/%s.png" % name)
+		img.save_png("%s/%s.png" % [dir, name])
 		print("SHOT %s  draw calls %d  fps %d" % [name,
 				Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME), Engine.get_frames_per_second()])
 	get_tree().quit()

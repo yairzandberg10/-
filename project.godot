@@ -17,6 +17,9 @@ config/custom_user_dir_name="TelBatata"
 
 Settings="*res://scripts/autoload/settings.gd"
 CityData="*res://scripts/autoload/city_data.gd"
+GameState="*res://scripts/autoload/game_state.gd"
+GameUI="*res://scripts/autoload/game_ui.gd"
+Interact="*res://scripts/autoload/interact.gd"
 
 [display]
 
