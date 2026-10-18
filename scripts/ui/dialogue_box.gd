@@ -121,7 +121,7 @@ func _finish_typing() -> void:
 			b.alignment = HORIZONTAL_ALIGNMENT_RIGHT
 			b.focus_mode = Control.FOCUS_NONE
 			_choices.add_child(b)
-		_hint.text = "בחרו תשובה (1/2/3)"
+		_hint.text = "בחרו תשובה: 1 / 2  (E = הראשונה)"
 	else:
 		_hint.text = "E / רווח / קליק – המשך  ◂" if index < lines.size() - 1 else "E / רווח / קליק – סיום  ✓"
 	_hint.visible = true

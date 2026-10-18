@@ -29,7 +29,8 @@ func _process(_delta: float) -> void:
 			if not is_instance_valid(p):
 				continue
 			for it in p.get_interactions(pos):
-				var d := pos.distance_to(it["position"])
+				# "priority" (metres) lets talking win over a door right behind the NPC.
+				var d := pos.distance_to(it["position"]) - float(it.get("priority", 0.0))
 				if d < best_d:
 					best_d = d
 					best = it
@@ -49,4 +50,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _can_interact(player: Node) -> bool:
+	# Hidden / disabled player = driving a car (the car handles its own E).
+	if not player.visible or player.process_mode == Node.PROCESS_MODE_DISABLED:
+		return false
 	return bool(player.get("control_enabled")) and not GameState.input_locked and not GameUI.is_modal_open()

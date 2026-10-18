@@ -1,7 +1,8 @@
 extends CanvasLayer
 ## Game interface. Other systems call only these methods; the widgets live in
-## scripts/ui/ (game_hud, dialogue_box, shop_window, inventory_window, quest_log).
-##   I = inventory, Tab = quest log, Esc = close, E / Space / click = next line.
+## scripts/ui/ (game_hud, dialogue_box, shop_window, inventory_window, quest_log,
+## main_menu). Starts on the home screen; while it is open the city turns slowly.
+##   I = inventory, Tab = quest log, Esc = close / pause menu, E / Space / click = next line.
 
 signal dialogue_finished(speaker: String)
 
@@ -10,6 +11,9 @@ const DIALOGUE := preload("res://scripts/ui/dialogue_box.gd")
 const SHOP := preload("res://scripts/ui/shop_window.gd")
 const INVENTORY := preload("res://scripts/ui/inventory_window.gd")
 const QUEST_LOG := preload("res://scripts/ui/quest_log.gd")
+const MENU := preload("res://scripts/ui/main_menu.gd")
+const T := preload("res://scripts/ui/ui_theme.gd")
+const TEST_ARGS := ["--smoke", "--shots", "--benchmark", "--test-story", "--test-interiors"]
 
 var hud: Control
 var _dialogue: Control
@@ -20,13 +24,16 @@ var _queue: Array = []  # [speaker, lines, on_done]
 var _on_done := Callable()
 var _mouse_was_captured := false
 var _quiet := false  # unattended test runs: no HUD in screenshots
+var menu: Control
+var _orbit := 0.0
 
 
 func _ready() -> void:
 	layer = 5
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	var args := OS.get_cmdline_user_args()
-	_quiet = ("--shots" in args or "--benchmark" in args or "--test-story" in args) and not "--with-ui" in args
+	_quiet = ("--shots" in args or "--benchmark" in args or "--test-story" in args or "--test-interiors" in args) \
+			and not "--with-ui" in args
 	hud = HUD.new()
 	add_child(hud)
 	_fill(hud)
@@ -38,7 +45,16 @@ func _ready() -> void:
 	_inventory.closed.connect(_close.bind(_inventory))
 	_quest_log = _add_hidden(QUEST_LOG.new())
 	_quest_log.closed.connect(_close.bind(_quest_log))
+	menu = _add_hidden(MENU.new())
+	menu.closed.connect(_refresh_modal)
 	visible = not _quiet
+	var testing := false
+	for a in TEST_ARGS:
+		testing = testing or a in args
+	if not testing:
+		(func():
+			menu.open(false)
+			_refresh_modal()).call_deferred()
 	GameState.story_message.connect(show_dialogue)
 	GameState.quest_completed.connect(_on_quest_completed)
 	GameState.hearts_changed.connect(_on_hearts)
@@ -63,6 +79,7 @@ func _fill(c: Control) -> void:
 	c.offset_top = 0.0
 	c.offset_right = 0.0
 	c.offset_bottom = 0.0
+	c.theme = T.get_theme()
 
 
 ## Shows a dialogue box. lines: Array of Strings (or {"text", "choices"}).
@@ -130,17 +147,30 @@ func set_prompt(text: String) -> void:
 
 ## True while any modal window (dialogue, shop, menu) is open.
 func is_modal_open() -> bool:
-	return _dialogue.visible or _shop.visible or _inventory.visible or _quest_log.visible
+	return _dialogue.visible or _shop.visible or _inventory.visible or _quest_log.visible or menu.visible
+
+
+func is_menu_open() -> bool:
+	return menu.visible
 
 
 func _input(event: InputEvent) -> void:
 	if not (event is InputEventKey) or not event.pressed or event.echo:
 		return
 	var k := (event as InputEventKey).physical_keycode
+	if menu.visible:
+		if k == KEY_ESCAPE and menu.paused_mode:
+			menu.visible = false
+			_refresh_modal()
+		get_viewport().set_input_as_handled()
+		return
 	if _dialogue.visible:
 		match k:
 			KEY_E, KEY_SPACE, KEY_ENTER, KEY_KP_ENTER:
-				_dialogue.advance()
+				if _dialogue.is_choosing():
+					_dialogue.choose_index(0)
+				else:
+					_dialogue.advance()
 			KEY_ESCAPE:
 				_dialogue.skip_all()
 			KEY_1, KEY_2, KEY_3:
@@ -151,7 +181,10 @@ func _input(event: InputEvent) -> void:
 		KEY_ESCAPE:
 			if _shop.visible or _inventory.visible or _quest_log.visible:
 				_close_windows()
-				get_viewport().set_input_as_handled()
+			elif visible and GameState.started:
+				menu.open(true)
+				_refresh_modal()
+			get_viewport().set_input_as_handled()
 		KEY_I:
 			_toggle(_inventory)
 			get_viewport().set_input_as_handled()
@@ -184,7 +217,13 @@ func _close_windows() -> void:
 func _refresh_modal() -> void:
 	var modal := is_modal_open()
 	GameState.set_lock("ui", modal)
-	hud.visible = not _dialogue.visible
+	hud.visible = not modal
+	var rig := get_tree().get_first_node_in_group("camera_rig")
+	if rig:
+		if menu.visible and not menu.paused_mode:
+			rig.external = true
+		elif rig.external and not menu.visible:
+			rig.external = false
 	if modal and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 		_mouse_was_captured = true
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
@@ -217,3 +256,19 @@ func _on_event(name: String, _data: Dictionary) -> void:
 	if name.begins_with("chapter:"):
 		var q := GameState.current_quest()
 		banner(str(q.get("chapter", "")), str(q.get("title", "")), 3.0)
+
+
+## Home screen backdrop: the camera circles the town centre.
+func _process(delta: float) -> void:
+	if not menu.visible or menu.paused_mode:
+		return
+	var rig := get_tree().get_first_node_in_group("camera_rig")
+	if rig == null or rig.camera == null:
+		return
+	_orbit += delta * 0.06
+	var c := Vector3(96, 0, 120)
+	rig.camera.global_position = c + Vector3(cos(_orbit) * 120.0, 62.0, sin(_orbit) * 120.0)
+	rig.camera.look_at(c + Vector3(0, -10, 0))
+	var main := get_tree().get_first_node_in_group("main")
+	if main and main.get("world"):
+		main.world.focus = rig.camera

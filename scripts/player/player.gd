@@ -57,6 +57,10 @@ func _physics_process(delta: float) -> void:
 		_model.position.y = absf(sin(_bob)) * 0.1
 	else:
 		_model.position.y = lerpf(_model.position.y, 0.0, 10.0 * delta)
+	# Teleported before the chunk's ground collision existed: pop back up.
+	if global_position.y < -0.3 and global_position.x > float(CityData.environment.get("sea_x", -1e9)):
+		global_position.y = 0.4
+		velocity.y = 0.0
 	if global_position.y < -20.0:
 		global_position = CityData.get_player_spawn()
 		velocity = Vector3.ZERO

@@ -38,7 +38,9 @@ const HELP := {
 	],
 }
 
-var help_visible := true
+## Off at start in walking mode (the home screen has "how to play"); the
+## other modes show their keys because they are less obvious.
+var help_visible := false
 
 var _root: Control
 var _stats: Label
@@ -151,6 +153,7 @@ func toast(text: String, seconds := 3.0) -> void:
 
 func set_mode(key: String) -> void:
 	_mode_key = key
+	help_visible = key == "build" or key == "free" or (key == "photo" and help_visible)
 	_help.text = "\n".join(HELP.get(key, []))
 	_mode.text = HELP.get(key, [""])[0]
 	_build_panel.visible = key == "build"
@@ -199,7 +202,7 @@ func set_letterbox(on: bool) -> void:
 
 func _refresh() -> void:
 	_help_panel.visible = help_visible
-	_mode.visible = not _photo
+	_mode.visible = not _photo and _mode_key != "follow"
 
 
 func _label() -> Label:

@@ -75,7 +75,7 @@ func _spawn_parked() -> void:
 	var roads := CityData.roads.duplicate()
 	roads.sort_custom(func(a, b): return _road_mid(a).distance_to(spawn) < _road_mid(b).distance_to(spawn))
 	var count := 0
-	for i in range(0, roads.size(), 2):
+	for i in roads.size():
 		if count >= PARKED:
 			break
 		var r: Dictionary = roads[i]
@@ -83,10 +83,34 @@ func _spawn_parked() -> void:
 		var b := Vector3(float(r["b"][0]), 0, float(r["b"][1]))
 		var d := (b - a).normalized()
 		var right := Vector3(-d.z, 0, d.x)
-		var pos := a.lerp(b, 0.35 + 0.3 * float(i % 3) / 2.0) + right * 2.8
+		var pos := Vector3.INF
+		for t in [0.5, 0.35, 0.65, 0.25, 0.75]:
+			var p: Vector3 = a.lerp(b, t) + right * 2.8
+			if _spot_clear(p, d):
+				pos = p
+				break
+		if pos == Vector3.INF:
+			continue
 		var type_id := "car_police" if count == 0 and library.has_type("car_police") else "car"
 		_cars.append(_make_car(type_id, count % library.variant_count(type_id), pos, atan2(d.x, d.z)))
 		count += 1
+
+
+## No props (bins, hydrants, parked prop cars) or other drivable cars in a
+## lane-sized box around `p`, so a car is never boxed in.
+func _spot_clear(p: Vector3, d: Vector3) -> bool:
+	var half := Vector2(absf(d.x) * 5.0 + absf(d.z) * 1.6, absf(d.z) * 5.0 + absf(d.x) * 1.6)
+	var r := Rect2(Vector2(p.x, p.z) - half, half * 2.0)
+	var key := CityData.chunk_key(p)
+	for dx in range(-1, 2):
+		for dz in range(-1, 2):
+			for o in CityData.get_chunk_objects(key + Vector2i(dx, dz)):
+				if r.intersects(CityData.object_rect(o)):
+					return false
+	for c in _cars:
+		if c.global_position.distance_to(p) < 8.0:
+			return false
+	return true
 
 
 func _road_mid(r: Dictionary) -> Vector3:

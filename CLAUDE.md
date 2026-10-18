@@ -24,6 +24,8 @@ godot --headless --path . -- --smoke
 xvfb-run -a godot --path . --rendering-driver opengl3 -- --test-story      # all 12 chapters complete
 xvfb-run -a -s "-screen 0 1280x720x24" godot --path . --rendering-driver opengl3 -- --shots --quality=low
 ```
+For UI/gameplay changes also run `--playtest` (real key presses as a new player, 27 PNGs in
+`~/.local/share/TelBatata/playtest/`) and look at them – logic tests don't catch layout bugs.
 `--shots` writes 6 PNGs to `~/.local/share/TelBatata/shots/`; look at them. In the cloud container
 Godot 4.3 is not preinstalled: download the Linux build from the godotengine GitHub releases.
 `--benchmark --quality=low|medium|high` prints average / 1% low FPS and draw calls.

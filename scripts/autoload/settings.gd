@@ -34,7 +34,7 @@ const PRESETS := {
 
 var quality := "low"
 var presets: Dictionary = PRESETS.duplicate(true)
-var show_stats := true
+var show_stats := false
 var music_volume := 0.6
 var sfx_volume := 0.85
 var auto_quality := true
@@ -87,7 +87,7 @@ func lower_quality() -> bool:
 func save() -> void:
 	var cfg := ConfigFile.new()
 	cfg.set_value("graphics", "quality", quality)
-	cfg.set_value("graphics", "show_stats", show_stats)
+	cfg.set_value("graphics", "show_fps", show_stats)
 	cfg.set_value("graphics", "auto_quality", auto_quality)
 	cfg.set_value("audio", "music", music_volume)
 	cfg.set_value("audio", "sfx", sfx_volume)
@@ -101,7 +101,7 @@ func _load() -> void:
 	var q := str(cfg.get_value("graphics", "quality", quality))
 	if PRESETS.has(q):
 		quality = q
-	show_stats = bool(cfg.get_value("graphics", "show_stats", show_stats))
+	show_stats = bool(cfg.get_value("graphics", "show_fps", show_stats))
 	auto_quality = bool(cfg.get_value("graphics", "auto_quality", auto_quality))
 	music_volume = float(cfg.get_value("audio", "music", music_volume))
 	sfx_volume = float(cfg.get_value("audio", "sfx", sfx_volume))

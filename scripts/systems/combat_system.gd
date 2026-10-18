@@ -11,7 +11,7 @@ const MeshBuilder = preload("res://scripts/core/mesh_builder.gd")
 const REACH := 2.4
 const SWING_COOLDOWN := 0.35
 const KINDS := {
-	"tomato": {"hp": 2, "speed": 3.2, "radius": 0.45, "sight": 16.0, "hit_cd": 1.2},
+	"tomato": {"hp": 2, "speed": 3.0, "radius": 0.45, "sight": 16.0, "hit_cd": 2.0},
 	"boss": {"hp": 10, "speed": 4.2, "radius": 1.1, "sight": 30.0, "hit_cd": 1.0},
 }
 
@@ -35,6 +35,7 @@ var _player: CharacterBody3D
 var _meshes := {}
 var _baguette: MeshInstance3D
 var _swing_cd := 0.0
+var _invuln := 0.0  # after a squirt the player can't be hit again for a moment
 var _rng := RandomNumberGenerator.new()
 
 
@@ -63,6 +64,7 @@ func spawn(kind: String, center: Vector3, radius := 6.0, tag := "") -> Node3D:
 	e.kind = kind
 	e.tag = tag
 	e.hp = cfg["hp"]
+	e.hit_cd = 1.5  # grace period: a fresh tomato hops around before it squirts
 	var a := _rng.randf() * TAU
 	var r := _rng.randf_range(0.3, 1.0) * radius
 	e.home = center + Vector3(cos(a) * r, 0, sin(a) * r)
@@ -172,6 +174,7 @@ func _defeat(e: Enemy) -> void:
 
 func _process(delta: float) -> void:
 	_swing_cd -= delta
+	_invuln -= delta
 	if _player == null:
 		return
 	var pp := _player.global_position
@@ -223,6 +226,9 @@ func _think(e: Enemy, pp: Vector3, delta: float, frozen: bool) -> void:
 
 
 func _squirt_player(dir: Vector3) -> void:
+	if _invuln > 0.0:
+		return
+	_invuln = 1.6
 	GameState.damage(1)
 	Audio.play_sfx("hurt", -2.0)
 	Effects.puff(_player.global_position + Vector3(0, 1.0, 0), "splash", 6)

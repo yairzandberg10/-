@@ -22,6 +22,7 @@ const ROOM_ORIGIN := Vector3(6000, 0, 0)
 const LAYER_WALLS := 2      # follow camera collides with these
 const LAYER_FURNITURE := 1  # player only
 const WALL_T := 0.3
+const CUTAWAY := 0.7        # visible height of the wall facing the camera
 const DOOR_RANGE := 4.0
 
 const TYPE_KIND := {
@@ -52,6 +53,7 @@ var _furn_body: StaticBody3D
 var _rng := RandomNumberGenerator.new()
 var _mirror := false
 var _hx := 5.0
+var _outside_cam: Array = []  # [distance, pitch] of the street camera
 var _hz := 4.0
 var _kind := ""
 var _obj: Dictionary = {}
@@ -138,7 +140,7 @@ func kind_for(type_id: String) -> String:
 	if def.has("interior"):
 		var k := str(def["interior"])
 		return k if ROOM.has(k) else ""
-	if not bool(def.get("enterable", true)):
+	if not bool(def.get("enterable", true)) or str(def.get("detail", "")) == "prop":
 		return ""
 	if TYPE_KIND.has(type_id):
 		return TYPE_KIND[type_id]
@@ -167,6 +169,11 @@ func enter_building(o: Dictionary, kind := "") -> void:
 	player.global_position = ROOM_ORIGIN + Vector3(0, 0.05, _hz - 1.3)
 	player.velocity = Vector3.ZERO
 	rig.yaw = 0.0
+	# Dollhouse view: from above the open-top walls, far enough to see the room.
+	_outside_cam = [rig.distance, rig.pitch]
+	rig.indoor = true
+	rig.distance = clampf(maxf(_hx, _hz) * 1.2 + 2.5, 7.0, 15.0)
+	rig.pitch = -0.95
 	if model:
 		model.rotation.y = PI
 	_hold_city(true)
@@ -193,6 +200,10 @@ func exit_interior() -> void:
 			model.rotation.y = _outside_model_yaw
 	if rig:
 		rig.yaw = _outside_yaw
+		rig.indoor = false
+		if not _outside_cam.is_empty():
+			rig.distance = _outside_cam[0]
+			rig.pitch = _outside_cam[1]
 	_hold_city(false)
 	_sfx("door")
 	_obj = {}
@@ -353,8 +364,9 @@ func _shell(kind: String, h: float) -> void:
 			wall = Color("f4e7b8")
 	var w := _hx * 2.0
 	var d := _hz * 2.0
-	var pad := maxf(w, d) + 60.0
-	_mb.add_box(Vector3(pad, 0.1, pad), Vector3(0, -0.06, 0), Color("a8cf86"))
+	# Dark "stage" around the room: from the dollhouse camera you only see the room.
+	var pad := maxf(w, d) + 240.0
+	_mb.add_box(Vector3(pad, 0.1, pad), Vector3(0, -0.06, 0), Color("2c2733"))
 	_mb.add_box(Vector3(w + WALL_T * 2.0, 0.1, d + WALL_T * 2.0), Vector3(0, -0.04, 0), floor_c)
 	# Floor boards / tiles.
 	var line := floor_c.darkened(0.12)
@@ -372,7 +384,17 @@ func _shell(kind: String, h: float) -> void:
 		[Vector3(WALL_T, h, d), Vector3(-_hx - WALL_T * 0.5, h * 0.5, 0), Vector3(0.02, 1.0, d), Vector3(-_hx + 0.01, 0.5, 0)],
 		[Vector3(WALL_T, h, d), Vector3(_hx + WALL_T * 0.5, h * 0.5, 0), Vector3(0.02, 1.0, d), Vector3(_hx - 0.01, 0.5, 0)],
 	]
-	for wl in walls:
+	for wi in walls.size():
+		var wl: Array = walls[wi]
+		if wi == 1:
+			# Front (door) wall faces the camera: drawn as a low cutaway so the
+			# room reads like a dollhouse; its collision stays full height.
+			var low: Vector3 = wl[0]
+			low.y = CUTAWAY
+			_mb.add_box(low, Vector3(wl[1].x, CUTAWAY * 0.5, wl[1].z), wall)
+			_mb.add_box(Vector3(low.x + 0.06, 0.1, low.z + 0.06), Vector3(wl[1].x, CUTAWAY + 0.05, wl[1].z), Color("f7f3ea"))
+			_add_wall_shape(wl)
+			continue
 		_mb.add_box(wl[0], wl[1], wall)
 		_mb.add_box(wl[2], wl[3], lower)
 		var trim_size: Vector3 = wl[0] + Vector3(0.06, 0.0, 0.06)
@@ -382,13 +404,17 @@ func _shell(kind: String, h: float) -> void:
 		skirt.y = 0.12
 		_mb.add_box(skirt * Vector3(1, 1, 1) + Vector3(0.02 if skirt.x < 0.1 else 0.0, 0, 0.02 if skirt.z < 0.1 else 0.0),
 				Vector3(wl[3].x, 1.04, wl[3].z), Color("f7f3ea"))
-		var cs := CollisionShape3D.new()
-		var bs := BoxShape3D.new()
-		bs.size = wl[0]
-		cs.shape = bs
-		cs.position = wl[1]
-		_walls.add_child(cs)
-	_wall_item("door_inside", "s", 0.0)
+		_add_wall_shape(wl)
+	_put("rug", 0.0, _hz - 0.7, 0.0)
+
+
+func _add_wall_shape(wl: Array) -> void:
+	var cs := CollisionShape3D.new()
+	var bs := BoxShape3D.new()
+	bs.size = wl[0]
+	cs.shape = bs
+	cs.position = wl[1]
+	_walls.add_child(cs)
 
 
 # ---------------------------------------------------------------- placing
@@ -425,6 +451,8 @@ func _put(type_id: String, x: float, z: float, rot := 0.0, variant := -1, y := 0
 ## Item hung on / standing against a wall: "n", "s", "w", "e"; `along` is the
 ## offset along the wall, `out` how far the item centre stands from it.
 func _wall_item(type_id: String, wall: String, along: float, out := 0.0, variant := -1) -> void:
+	if wall == "s":
+		return  # the front wall is a low cutaway; nothing hangs on it
 	match wall:
 		"n": _put(type_id, along, -_hz + out, 0.0, variant)
 		"s": _put(type_id, along, _hz - out, 180.0, variant)

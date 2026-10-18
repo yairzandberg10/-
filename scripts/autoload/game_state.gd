@@ -77,7 +77,12 @@ func _ready() -> void:
 	item_db = it.get("items", {})
 	shops = it.get("shops", {})
 	var args := OS.get_cmdline_user_args()
-	if "--smoke" in args or "--shots" in args or "--benchmark" in args or "--test-story" in args:
+	if "--playtest" in args:
+		# A brand-new player, without touching the real save.
+		save_path = "user://playtest_progress.json"
+		DirAccess.remove_absolute(save_path)
+		_reset_values()
+	elif "--smoke" in args or "--shots" in args or "--benchmark" in args or "--test-story" in args:
 		# Unattended runs never touch the player's real progress.
 		save_path = "user://test_progress.json"
 		DirAccess.remove_absolute(save_path)

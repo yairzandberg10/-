@@ -158,7 +158,7 @@ func get_interactions(player_pos: Vector3) -> Array:
 		var prompt: String = "לדבר עם " + n.display_name
 		if n.shop_type != "":
 			prompt += " (חנות)"
-		out.append({"position": p, "prompt": prompt, "action": talk.bind(n)})
+		out.append({"position": p, "prompt": prompt, "action": talk.bind(n), "priority": 1.0})
 	return out
 
 

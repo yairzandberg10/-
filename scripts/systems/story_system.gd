@@ -49,9 +49,8 @@ func setup(lib) -> void:
 	GameState.game_event.connect(_on_event)
 	GameState.challenges_changed.connect(_build_chips)
 	(func():
-		if not GameState.started:
-			GameState.new_game()
-		else:
+		# A new story starts from the home screen (GameUI menu).
+		if GameState.started:
 			GameState.broadcast_all()
 		_build_chips()
 		_build_rings()
@@ -158,9 +157,21 @@ func _ground(p: Vector3) -> Vector3:
 func _on_new_game() -> void:
 	_step_key = ""
 	_reached.clear()
-	if _player and not CityData.objects.is_empty():
-		var p := place_pos("home") + Vector3(0, 0.3, 3.0)
-		_player.global_position = p
+	var home := home_object()
+	if _player and not home.is_empty():
+		# Start on the pavement in front of the new house, looking at it.
+		var door := Places.door_position(home, 0.0)
+		var out := (Places.door_position(home, 1.0) - door).normalized()
+		var p := door + out * 9.0
+		var main := get_tree().get_first_node_in_group("main")
+		if main and main.get("world"):
+			main.world.load_around_now(p, 1)
+		_player.global_position = _ground(p) + Vector3(0, 0.4, 0)
+		_player.velocity = Vector3.ZERO
+		var rig := get_tree().get_first_node_in_group("camera_rig")
+		if rig:
+			rig.yaw = atan2(out.x, out.z)
+			rig.pitch = -0.3
 	(func(): _build_chips(); _sync_step()).call_deferred()
 
 
@@ -223,11 +234,23 @@ func _meet(npc_id: String, place: String) -> void:
 		return
 	if _meet_npcs.has(npc_id) and is_instance_valid(_meet_npcs[npc_id]):
 		_meet_npcs[npc_id].queue_free()
-	var p := _ground(place_pos(place) + Vector3(1.5, 0, 1.5))
+	var p := _meet_spot(place)
 	var n: Node3D = _npcs.spawn_npc(npc_id, self, p, 0.0, {"indoor": false})
 	_meet_npcs[npc_id] = n
 	if _player:
 		n.face(_player.global_position)
+
+
+## Where a story NPC waits: in front of the home (not on the doorstep, or E
+## would open the door instead of talking), else next to the place centre.
+func _meet_spot(place: String) -> Vector3:
+	if GameState.story.get("places", {}).get(place, {}).get("home", false):
+		var home := home_object()
+		if not home.is_empty():
+			var door := Places.door_position(home, 0.0)
+			var out := (Places.door_position(home, 1.0) - door).normalized()
+			return _ground(door + out * 4.5 + Vector3(out.z, 0, -out.x) * 1.5)
+	return _ground(place_pos(place) + Vector3(1.5, 0, 1.5))
 
 
 func _drop_items(d: Dictionary, count: int) -> void:
@@ -446,7 +469,16 @@ func _update_marker(pp: Vector3) -> void:
 	var best := Vector3.INF
 	var label := ""
 	var bd := INF
-	for t in GameState.current_targets():
+	if _interior and _interior.is_inside():
+		# The marker points at the street; inside, the room is the whole world.
+		hud.target = Vector3.INF
+		hud.target_label = ""
+		return
+	var targets := GameState.current_targets()
+	var meet: Dictionary = GameState.current_step().get("meet", {})
+	if not meet.is_empty():
+		targets = [{"npc": str(meet.get("npc", ""))}]
+	for t in targets:
 		var p := _target_pos(t)
 		if p == Vector3.INF:
 			continue

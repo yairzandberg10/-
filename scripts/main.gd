@@ -103,6 +103,10 @@ func _ready() -> void:
 		_run_shots.call_deferred()
 	elif "--benchmark" in args:
 		benchmark.start(true)
+	elif "--playtest" in args:
+		var pt: Node = load("res://scripts/dev/playtest.gd").new()
+		add_child(pt)
+		pt.run.call_deferred(self)
 
 
 func _unhandled_input(event: InputEvent) -> void:

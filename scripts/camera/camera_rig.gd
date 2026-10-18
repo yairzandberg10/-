@@ -13,6 +13,9 @@ var mode := Mode.FOLLOW
 var camera: Camera3D
 var target: CharacterBody3D
 var external := false
+## Inside a building: steep dollhouse view over the open-top walls (no wall
+## collision, pitch kept steep so the backdrop, not the sky, is behind).
+var indoor := false
 var capture_on_click := true
 
 var yaw := 0.0
@@ -99,7 +102,9 @@ func _unhandled_input(event: InputEvent) -> void:
 		var d: Vector2 = (event as InputEventMouseMotion).relative * mouse_sensitivity
 		if mode == Mode.FOLLOW:
 			yaw -= d.x
-			pitch = clampf(pitch - d.y, -1.35, 0.3)
+			if indoor:
+				yaw = clampf(yaw, -0.7, 0.7)  # stay on the cutaway side of the room
+			pitch = clampf(pitch - d.y, -1.35, -0.7 if indoor else 0.3)
 		else:
 			fly_yaw -= d.x
 			fly_pitch = clampf(fly_pitch - d.y, -1.55, 1.55)
@@ -118,7 +123,7 @@ func _follow() -> void:
 	var pivot := target.global_position + Vector3(0, 1.3, 0)
 	var want := pivot + Basis.from_euler(Vector3(pitch, yaw, 0)) * Vector3(0, 0, distance)
 	var q := PhysicsRayQueryParameters3D.create(pivot, want, LAYER_BUILDINGS)
-	var hit := get_world_3d().direct_space_state.intersect_ray(q)
+	var hit := {} if indoor else get_world_3d().direct_space_state.intersect_ray(q)
 	if not hit.is_empty():
 		want = hit["position"] + (pivot - want).normalized() * 0.3
 	want.y = maxf(want.y, 0.3)
