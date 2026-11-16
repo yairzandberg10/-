@@ -1,0 +1,31 @@
+Performing Streamed Install
+Success
+Performing Streamed Install
+Success
+shot 01-home-not-enabled
+shot 02-home
+after opening instagram stub:   mCurrentFocus=Window{bae3472 u0 com.ogen.app/com.ogen.app.BlockActivity}
+PASS instagram blocked
+shot 03-instagram-blocked
+shot 04-limit
+shot 05-lock
+shot 06-social
+shot 07-allow
+tapped 'הוספת אפליקציה'
+shot 08-picker
+tapped 'קבע מגבלה'
+shot 09-limit-confirm
+tapped 'אישור'
+shot 10-home-with-limit
+NOT FOUND: '5 דקות'
+shot 11-lock-confirm
+NOT FOUND: 'נעל'
+shot 12-home-locked
+settings during lock:   mCurrentFocus=Window{3ec713c u0 com.android.settings/com.android.settings.Settings}
+FAIL settings open in lock
+shot 13-settings-in-lock
+dialer during lock:   mCurrentFocus=Window{5390fbb u0 com.android.dialer/com.android.dialer.main.impl.MainActivity}
+PASS dialer allowed
+shot 14-dialer-in-lock
+shot 15-block-locked
+done
