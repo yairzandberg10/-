@@ -162,18 +162,26 @@ public final class Rules {
                 || "com.miui.securitycenter".equals(pkg) || "com.coloros.safecenter".equals(pkg);
     }
 
+    /**
+     * Only the actual escape screens. Normal Settings (Wi-Fi, Bluetooth, sound, display, the main
+     * list...) must stay usable, so we never match words that also appear as list entries.
+     */
     private static final String[] TAMPER_CLASSES = {
-            "DeviceAdmin", "Accessibility", "DateTime", "Development", "MasterClear", "FactoryReset",
-            "ResetDashboard", "InstalledAppDetails", "AppInfo", "ManageApplications", "RunningServices",
-            "UsageAccess", "RestrictedSettings", "DefaultHome", "Uninstall"
+            "DeviceAdminSettings", "DeviceAdminAdd", "DateTimeSettings", "DevelopmentSettings",
+            "MasterClear", "FactoryReset", "MainClear", "ToggleAccessibilityServicePreferenceFragment",
+            "AccessibilityServiceWarning", "InstalledAppDetails", "UninstallerActivity"
     };
 
+    /** Our own name: shown only on screens that could disable or remove us (app info, accessibility, admins). */
     private static final String[] TAMPER_TEXT = {
-            "עוגן", "Ogen",
-            "date & time", "date and time", "תאריך ושעה", "日期和时间", "日期與時間",
-            "developer options", "אפשרויות למפתחים", "开发者选项", "usb debugging", "ניפוי באגים",
-            "factory reset", "erase all data", "איפוס להגדרות היצרן", "恢复出厂设置",
-            "device admin", "מנהלי מכשיר", "אפליקציות לניהול המכשיר", "设备管理"
+            "עוגן", "ogen",
+            // controls that only exist on the date/time screen
+            "set time", "set date", "use network-provided time", "automatic date", "הגדרת שעה", "הגדרת תאריך",
+            "שעה אוטומטית", "תאריך ושעה אוטומטיים", "设置时间", "设置日期", "自动确定日期和时间",
+            // only on the developer options screen
+            "usb debugging", "ניפוי באגים ב-usb", "ניפוי באגים באמצעות usb", "usb调试",
+            // only on the factory reset screen
+            "erase all data (factory reset)", "מחיקת כל הנתונים (איפוס", "清除所有数据（恢复出厂设置）"
     };
 
     public static boolean tamperClass(String cls) {

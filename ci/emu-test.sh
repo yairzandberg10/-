@@ -26,6 +26,24 @@ case "$F" in *com.ogen.app/com.ogen.app.BlockActivity*) log "PASS instagram bloc
 shot 03-instagram-blocked 0
 adb shell input keyevent KEYCODE_HOME; sleep 1
 
+# --- normal Settings must stay usable when no lock is active
+adb shell am start -n com.android.settings/.Settings; sleep 4
+F=$(focus); log "settings (no lock): $F"
+case "$F" in *BlockActivity*) log "FAIL settings blocked without lock";; *) log "PASS settings usable without lock";; esac
+shot 03b-settings-open 0
+adb shell am start -a android.settings.WIFI_SETTINGS; sleep 4
+F=$(focus); case "$F" in *BlockActivity*) log "FAIL wifi settings blocked";; *) log "PASS wifi settings usable";; esac
+adb shell am start -a android.settings.DATE_SETTINGS; sleep 4
+F=$(focus); log "date settings: $F"
+case "$F" in *BlockActivity*) log "PASS date settings blocked";; *) log "FAIL date settings open";; esac
+adb shell am start -a android.settings.ACCESSIBILITY_SETTINGS; sleep 4
+F=$(focus); log "accessibility settings: $F"
+case "$F" in *BlockActivity*) log "PASS accessibility settings blocked";; *) log "FAIL accessibility settings open";; esac
+adb shell am start -a android.settings.APPLICATION_DETAILS_SETTINGS -d package:com.ogen.app; sleep 4
+F=$(focus); log "ogen app info: $F"
+case "$F" in *BlockActivity*) log "PASS ogen app info blocked";; *) log "FAIL ogen app info open";; esac
+adb shell input keyevent KEYCODE_HOME; sleep 1
+
 # --- sub pages
 for pg in 1:04-limit 2:05-lock 4:06-social 3:07-allow; do
   adb shell am start -n com.ogen.app/.MainActivity --ei page ${pg%%:*}; shot ${pg#*:}
