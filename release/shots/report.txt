@@ -4,18 +4,18 @@ Performing Streamed Install
 Success
 shot 01-home-not-enabled
 shot 02-home
-after opening instagram stub:   mCurrentFocus=Window{43f05a9 u0 com.ogen.app/com.ogen.app.BlockActivity}
+after opening instagram stub:   mCurrentFocus=Window{c434252 u0 com.ogen.app/com.ogen.app.BlockActivity}
 PASS instagram blocked
 shot 03-instagram-blocked
-settings (no lock):   mCurrentFocus=Window{371e184 u0 com.android.settings/com.android.settings.Settings}
+settings (no lock):   mCurrentFocus=Window{a153232 u0 com.android.settings/com.android.settings.Settings}
 PASS settings usable without lock
 shot 03b-settings-open
 PASS wifi settings usable
-date settings:   mCurrentFocus=Window{b072c4f u0 com.ogen.app/com.ogen.app.BlockActivity}
+date settings:   mCurrentFocus=Window{c76fe78 u0 com.ogen.app/com.ogen.app.BlockActivity}
 PASS date settings blocked
-accessibility settings:   mCurrentFocus=Window{c4f60d4 u0 com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity}
+accessibility settings:   mCurrentFocus=Window{a56f45f u0 com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity}
 FAIL accessibility settings open
-ogen app info:   mCurrentFocus=Window{e1807a6 u0 com.ogen.app/com.ogen.app.BlockActivity}
+ogen app info:   mCurrentFocus=Window{4adcb51 u0 com.ogen.app/com.ogen.app.BlockActivity}
 PASS ogen app info blocked
 shot 04-limit
 shot 06-social
@@ -31,12 +31,12 @@ shot 09b-limit-confirm
 tapped 'אישור' (exact)
 shot 10-home-with-limit
 shot 11-home-half-used
-clock after 16 min of use:   mCurrentFocus=Window{a860066 u0 com.ogen.app/com.ogen.app.BlockActivity}
+clock after 16 min of use:   mCurrentFocus=Window{5a4e47 u0 com.ogen.app/com.ogen.app.BlockActivity}
 PASS time ran out -> blocked
 shot 12-time-up
 shot 13-home-time-up
 PASS settings blocked when time is up
-dialer when time is up:   mCurrentFocus=Window{5b36608 u0 com.android.dialer/com.android.dialer.main.impl.MainActivity}
+dialer when time is up:   mCurrentFocus=Window{e8fcfa5 u0 com.android.dialer/com.android.dialer.main.impl.MainActivity}
 PASS dialer allowed
 shot 14-dialer-time-up
 done
