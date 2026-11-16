@@ -173,14 +173,14 @@ public class GuardService extends AccessibilityService {
             String screen = stateChange ? cls : foregroundClass;
             if (screen != null && screen.contains("DeviceAdminAdd") && !adminActive()) return;
             if (locked) { block(BlockActivity.R_LOCKED, true); return; }
-            if (Rules.tamperClass(screen) || settingsTextIsTamper()) { block(BlockActivity.R_TAMPER, true); }
+            if (Rules.tamperClass(screen) || settingsTextIsTamper()) { block(BlockActivity.R_TAMPER, true, pkg); }
             return;
         }
 
         // 2. Installing / uninstalling apps is off while any commitment is active.
         String activity = stateChange ? cls : foregroundClass;
         if (committed && Rules.isStore(pkg, activity) && !isSelfUpdate(pkg, activity)) {
-            block(BlockActivity.R_STORE, true);
+            block(BlockActivity.R_STORE, true, pkg);
             return;
         }
 
@@ -288,7 +288,7 @@ public class GuardService extends AccessibilityService {
         if (!force && el - lastBlockEl < 1200) return;
         if (el - lastBlockEl < 400) return;
         lastBlockEl = el;
-        if (reason == BlockActivity.R_TAMPER || reason == BlockActivity.R_STORE || reason == BlockActivity.R_SITE) {
+        if (reason == BlockActivity.R_SITE) {   // leave the blocked page, or reopening the browser re-blocks forever
             performGlobalAction(GLOBAL_ACTION_BACK);
         }
         showBlockScreen(reason);
