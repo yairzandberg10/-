@@ -133,8 +133,8 @@ public class BlockActivity extends BaseActivity {
         p.tick(now);
         long end = p.lockEnds(now);
         if (end > now) {
-            big.setText(Ui.hm(end - now));
-            sub.setText("עד שהזמן מתאפס · " + Ui.when(Store.toWall(this, end), System.currentTimeMillis()));
+            big.setText("0:00");
+            sub.setText("מתאפס בחצות, בעוד " + Ui.words(end - now));
             big.setVisibility(View.VISIBLE);
         } else if (p.committed(now)) {
             if (p.limitMs != Policy.NONE) {

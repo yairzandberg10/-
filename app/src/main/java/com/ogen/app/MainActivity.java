@@ -204,10 +204,10 @@ public class MainActivity extends BaseActivity {
             c.setPadding(Ui.dp(this, 16), Ui.dp(this, 16), Ui.dp(this, 16), Ui.dp(this, 16));
             long end = p.lockEnds(now);
             c.addView(center(Ui.text(this, "זמן המסך להיום נגמר", 13, R.color.on_night_muted, Ui.MEDIUM)));
-            TextView big = center(Ui.text(this, Ui.hm(end - now), 58, R.color.on_night, Ui.LIGHT));
+            TextView big = center(Ui.text(this, "0:00", 58, R.color.on_night, Ui.LIGHT));
             big.setIncludeFontPadding(false);
             c.addView(big, Ui.top(this, 4));
-            c.addView(center(Ui.text(this, "עד שמתאפס, בחצות · שיחות, הודעות ומוביט פתוחים", 12, R.color.on_night_muted, Ui.REGULAR)), Ui.top(this, 6));
+            c.addView(center(Ui.text(this, "מתאפס בחצות, בעוד " + Ui.words(end - now) + "\nעד אז פתוחים רק שיחות, הודעות ומוביט", 12, R.color.on_night_muted, Ui.REGULAR)), Ui.top(this, 6));
             return c;
         }
         LinearLayout c = Ui.col(this);
