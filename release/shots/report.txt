@@ -4,9 +4,19 @@ Performing Streamed Install
 Success
 shot 01-home-not-enabled
 shot 02-home
-after opening instagram stub:   mCurrentFocus=Window{45c9911 u0 com.ogen.app/com.ogen.app.BlockActivity}
+after opening instagram stub:   mCurrentFocus=Window{f26e649 u0 com.ogen.app/com.ogen.app.BlockActivity}
 PASS instagram blocked
 shot 03-instagram-blocked
+settings (no lock):   mCurrentFocus=Window{a6250ca u0 com.android.settings/com.android.settings.Settings}
+PASS settings usable without lock
+shot 03b-settings-open
+PASS wifi settings usable
+date settings:   mCurrentFocus=Window{fef23c8 u0 com.ogen.app/com.ogen.app.BlockActivity}
+PASS date settings blocked
+accessibility settings:   mCurrentFocus=Window{fef23c8 u0 com.ogen.app/com.ogen.app.BlockActivity}
+PASS accessibility settings blocked
+ogen app info:   mCurrentFocus=Window{fef23c8 u0 com.ogen.app/com.ogen.app.BlockActivity}
+PASS ogen app info blocked
 shot 04-limit
 shot 05-lock
 shot 06-social
@@ -21,10 +31,10 @@ tapped '5 דקות' (exact)
 shot 11-lock-confirm
 tapped 'נעל' (exact)
 shot 12-home-locked
-settings during lock:   mCurrentFocus=Window{45c9911 u0 com.ogen.app/com.ogen.app.BlockActivity}
+settings during lock:   mCurrentFocus=Window{fef23c8 u0 com.ogen.app/com.ogen.app.BlockActivity}
 PASS settings blocked in lock
 shot 13-settings-in-lock
-dialer during lock:   mCurrentFocus=Window{7b94653 u0 com.android.dialer/com.android.dialer.main.impl.MainActivity}
+dialer during lock:   mCurrentFocus=Window{bcb93a3 u0 com.android.dialer/com.android.dialer.main.impl.MainActivity}
 PASS dialer allowed
 shot 14-dialer-in-lock
 shot 15-block-locked
