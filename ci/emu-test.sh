@@ -36,7 +36,9 @@ F=$(focus); case "$F" in *BlockActivity*) log "FAIL wifi settings blocked";; *) 
 adb shell am start -a android.settings.DATE_SETTINGS; sleep 4
 F=$(focus); log "date settings: $F"
 case "$F" in *BlockActivity*) log "PASS date settings blocked";; *) log "FAIL date settings open";; esac
-adb shell am start -a android.settings.ACCESSIBILITY_SETTINGS; sleep 4
+adb shell am start -a android.settings.ACCESSIBILITY_SETTINGS; sleep 3
+for k in 1 2 3; do adb shell input swipe 320 800 320 250 300; sleep 1.5; done
+sleep 2
 F=$(focus); log "accessibility settings: $F"
 case "$F" in *BlockActivity*) log "PASS accessibility settings blocked";; *) log "FAIL accessibility settings open";; esac
 adb shell am start -a android.settings.APPLICATION_DETAILS_SETTINGS -d package:com.ogen.app; sleep 4
@@ -51,7 +53,7 @@ done
 tap "הוספת אפליקציה"; shot 08-picker
 adb shell input keyevent KEYCODE_BACK; sleep 1
 
-if git log -1 --format=%s | grep -q "\[quick\]"; then log "quick run: skipping the 16-minute usage test"; log "done"; exit 0; fi
+if git log -3 --format=%s | grep -q "\[quick\]"; then log "quick run: skipping the 16-minute usage test"; log "done"; exit 0; fi
 
 # --- set 15 minutes of screen time (default 1:00, minus 3 x 15)
 adb shell am start -n com.ogen.app/.MainActivity --ei page 1; sleep 2

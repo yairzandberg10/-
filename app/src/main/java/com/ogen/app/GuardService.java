@@ -106,7 +106,8 @@ public class GuardService extends AccessibilityService {
                     }, d);
                 }
             }
-        } else if (type == AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED) {
+        } else if (type == AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED
+                || type == AccessibilityEvent.TYPE_VIEW_SCROLLED) {
             long el = SystemClock.elapsedRealtime();
             if (el - lastScanEl < 700) return;
             lastScanEl = el;
