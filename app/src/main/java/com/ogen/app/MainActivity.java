@@ -39,7 +39,7 @@ public class MainActivity extends BaseActivity {
     static final int HOME = 0, LIMIT = 1, LOCK = 2, ALLOW = 3, SOCIAL = 4;
 
     // stable ids so keypad focus survives a re-render
-    private static final int ID_ROW_LIMIT = 201, ID_ROW_LOCK = 202, ID_ROW_ALLOW = 203, ID_ROW_SOCIAL = 204,
+    private static final int ID_ROW_LIMIT = 201, ID_ROW_ALLOW = 203, ID_ROW_SOCIAL = 204,
             ID_SETUP = 205, ID_BACK = 206, ID_MINUS = 207, ID_PLUS = 208, ID_SAVE = 209, ID_REMOVE = 210,
             ID_CANCEL = 211, ID_TOGGLE = 212, ID_ADD = 213, ID_BATTERY = 214;
 
@@ -102,7 +102,6 @@ public class MainActivity extends BaseActivity {
     private static int rowIdFor(int page) {
         switch (page) {
             case LIMIT: return ID_ROW_LIMIT;
-            case LOCK: return ID_ROW_LOCK;
             case ALLOW: return ID_ROW_ALLOW;
             case SOCIAL: return ID_ROW_SOCIAL;
             default: return ID_ROW_LIMIT;
@@ -123,8 +122,7 @@ public class MainActivity extends BaseActivity {
         LinearLayout root = Ui.col(this);
         switch (page) {
             case LIMIT: pageLimit(root, p, now); break;
-            case LOCK: pageLock(root, p, now); break;
-            case ALLOW: pageAllow(root, p, now); break;
+                        case ALLOW: pageAllow(root, p, now); break;
             case SOCIAL: pageSocial(root, p, now); break;
             default: pageHome(root, p, now); break;
         }
@@ -153,15 +151,12 @@ public class MainActivity extends BaseActivity {
 
         String limitVal = p.limitMs == Policy.NONE ? "לא נקבעה" : Ui.hm(p.limitMs);
         if (p.pendingLimit() != null) limitVal += " ·  שינוי ממתין";
-        menu.addView(menuRow(ID_ROW_LIMIT, "מגבלה יומית", limitVal, v -> go(LIMIT)));
-        menu.addView(Ui.hairline(this));
-        String lockVal = p.hardUntil > now ? "עד " + Ui.clock(Store.toWall(this, p.hardUntil)) : "";
-        menu.addView(menuRow(ID_ROW_LOCK, "נעילה עכשיו", lockVal, v -> go(LOCK)));
+        menu.addView(menuRow(ID_ROW_LIMIT, "זמן מסך ליום", limitVal, v -> go(LIMIT)));
         menu.addView(Ui.hairline(this));
         menu.addView(menuRow(ID_ROW_SOCIAL, "רשתות ויוטיוב", p.socialBlock ? "חסומים" : "פתוחים", v -> go(SOCIAL)));
         menu.addView(Ui.hairline(this));
         int n = 4 + p.extraAllowed.size();
-        menu.addView(menuRow(ID_ROW_ALLOW, "מותר בנעילה", n + " אפליקציות", v -> go(ALLOW)));
+        menu.addView(menuRow(ID_ROW_ALLOW, "תמיד פתוח", n + " אפליקציות", v -> go(ALLOW)));
         if (GuardService.isRunning() && !adminActive()) {
             menu.addView(Ui.hairline(this));
             menu.addView(alertRow(ID_BATTERY + 1, "הגנה מהסרת עוגן", "להפעיל", v ->
@@ -208,11 +203,11 @@ public class MainActivity extends BaseActivity {
             c.setGravity(Gravity.CENTER_HORIZONTAL);
             c.setPadding(Ui.dp(this, 16), Ui.dp(this, 16), Ui.dp(this, 16), Ui.dp(this, 16));
             long end = p.lockEnds(now);
-            c.addView(center(Ui.text(this, p.hardUntil > now ? "נעול" : "הזמן להיום נגמר", 13, R.color.on_night_muted, Ui.MEDIUM)));
+            c.addView(center(Ui.text(this, "זמן המסך להיום נגמר", 13, R.color.on_night_muted, Ui.MEDIUM)));
             TextView big = center(Ui.text(this, Ui.hm(end - now), 58, R.color.on_night, Ui.LIGHT));
             big.setIncludeFontPadding(false);
             c.addView(big, Ui.top(this, 4));
-            c.addView(center(Ui.text(this, "נפתח " + Ui.when(Store.toWall(this, end), nowWall), 13, R.color.on_night_muted, Ui.REGULAR)), Ui.top(this, 6));
+            c.addView(center(Ui.text(this, "עד שמתאפס, בחצות · שיחות, הודעות ומוביט פתוחים", 12, R.color.on_night_muted, Ui.REGULAR)), Ui.top(this, 6));
             return c;
         }
         LinearLayout c = Ui.col(this);
@@ -221,7 +216,7 @@ public class MainActivity extends BaseActivity {
         if (p.limitMs != Policy.NONE) {
             long left = p.remainingMs();
             boolean low = left < 10 * MIN;
-            c.addView(center(Ui.text(this, "נשאר לך היום", 13, R.color.muted, Ui.MEDIUM)));
+            c.addView(center(Ui.text(this, "נשאר לך להשתמש היום", 13, R.color.muted, Ui.MEDIUM)));
             TextView big = center(Ui.text(this, Ui.hm(left), 64, low ? R.color.brick : R.color.ink, Ui.LIGHT));
             big.setIncludeFontPadding(false);
             c.addView(big, Ui.top(this, 2));
@@ -230,9 +225,9 @@ public class MainActivity extends BaseActivity {
             LinearLayout.LayoutParams bl = Ui.top(this, 12);
             bl.setMargins(Ui.dp(this, 24), Ui.dp(this, 12), Ui.dp(this, 24), 0);
             c.addView(bar, bl);
-            c.addView(center(Ui.text(this, "מתוך " + Ui.hm(p.limitMs) + " · מתאפס בחצות", 12, R.color.muted, Ui.REGULAR)), Ui.top(this, 8));
+            c.addView(center(Ui.text(this, "השתמשת ב-" + Ui.hm(p.usedMs) + " מתוך " + Ui.hm(p.limitMs), 12, R.color.muted, Ui.REGULAR)), Ui.top(this, 8));
         } else {
-            c.addView(center(Ui.text(this, "אין מגבלה יומית", 13, R.color.muted, Ui.MEDIUM)));
+            c.addView(center(Ui.text(this, "לא נקבע זמן מסך", 13, R.color.muted, Ui.MEDIUM)));
             TextView big = center(Ui.text(this, "∞", 64, R.color.line, Ui.LIGHT));
             big.setIncludeFontPadding(false);
             c.addView(big, Ui.top(this, 0));
@@ -321,7 +316,7 @@ public class MainActivity extends BaseActivity {
     // ------------------------------------------------------------------ limit
 
     private void pageLimit(LinearLayout root, Policy p, long now) {
-        LinearLayout b = subPage(root, "מגבלה יומית");
+        LinearLayout b = subPage(root, "זמן מסך ליום");
         if (draft < 0) draft = p.limitMs == Policy.NONE ? 60 * MIN : p.limitMs;
 
         LinearLayout stepper = Ui.row(this);
@@ -338,7 +333,7 @@ public class MainActivity extends BaseActivity {
         TextView val = center(Ui.text(this, Ui.hm(draft), 44, R.color.ink, Ui.LIGHT));
         val.setIncludeFontPadding(false);
         mid.addView(val, Ui.wrap());
-        mid.addView(center(Ui.text(this, Ui.words(draft) + " ביום", 12, R.color.muted, Ui.REGULAR)), Ui.top(this, 2));
+        mid.addView(center(Ui.text(this, Ui.words(draft) + " של שימוש ביום", 12, R.color.muted, Ui.REGULAR)), Ui.top(this, 2));
         LinearLayout.LayoutParams sq = new LinearLayout.LayoutParams(Ui.dp(this, 52), Ui.dp(this, 52));
         stepper.addView(plus, sq);
         stepper.addView(mid, new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
@@ -347,8 +342,8 @@ public class MainActivity extends BaseActivity {
 
         boolean looser = p.limitMs != Policy.NONE && draft > p.limitMs && p.committed(now);
         boolean same = p.limitMs == draft;
-        Button save = looser ? Ui.ghost(this, "בקש הגדלה · בעוד 24 שעות")
-                : Ui.primary(this, p.limitMs == Policy.NONE ? "קבע מגבלה" : "עדכן מגבלה");
+        Button save = looser ? Ui.ghost(this, "הוסף זמן · נכנס בעוד 24 שעות")
+                : Ui.primary(this, p.limitMs == Policy.NONE ? "קבע זמן מסך" : "עדכן");
         save.setId(ID_SAVE);
         save.setEnabled(!same);
         save.setAlpha(same ? 0.4f : 1f);
@@ -357,60 +352,17 @@ public class MainActivity extends BaseActivity {
 
         Policy.Change pend = p.pendingLimit();
         if (pend != null) {
-            String what = pend.value == Policy.NONE ? "הסרת המגבלה" : "מגבלה של " + Ui.hm(pend.value);
+            String what = pend.value == Policy.NONE ? "ביטול זמן המסך" : Ui.hm(pend.value) + " ביום";
             b.addView(pendingNote(what + " תיכנס לתוקף " + whenTrusted(pend.at),
                     v -> { p.cancelPending(Policy.CH_LIMIT, null); Store.save(this); render(); }), Ui.top(this, 10));
         } else if (p.limitMs != Policy.NONE) {
-            Button rm = Ui.button(this, "הסרת המגבלה", R.drawable.row_bg, R.color.muted);
+            Button rm = Ui.button(this, "ביטול זמן המסך", R.drawable.row_bg, R.color.muted);
             rm.setId(ID_REMOVE);
             rm.setTextSize(13);
             rm.setOnClickListener(v -> confirmLimit(Policy.NONE));
             b.addView(rm, Ui.top(this, 4));
         }
-        b.addView(note("כשהזמן נגמר הטלפון ננעל עד חצות. הקטנה נכנסת מיד; הגדלה או הסרה – רק אחרי 24 שעות."), Ui.top(this, 12));
-    }
-
-    // ------------------------------------------------------------------ lock
-
-    private void pageLock(LinearLayout root, Policy p, long now) {
-        LinearLayout b = subPage(root, "נעילה עכשיו");
-        if (p.hardUntil > now) {
-            b.addView(Ui.text(this, "נעול עד " + whenTrusted(p.hardUntil) + ". אפשר רק להאריך.", 13, R.color.pine, Ui.MEDIUM), Ui.top(this, 2));
-        }
-        b.addView(note("רק שיחות, הודעות, מוביט והאפליקציות שאישרת. אין כפתור ביטול."), Ui.top(this, 2));
-
-        LinearLayout list = Ui.col(this);
-        int id = 400;
-        list.addView(lockRow(id++, "5 דקות", "ניסיון – כדאי להתחיל כאן", 5 * MIN, "ל-5 דקות"));
-        list.addView(Ui.hairline(this));
-        list.addView(lockRow(id++, "שעה", null, 60 * MIN, "לשעה"));
-        list.addView(Ui.hairline(this));
-        list.addView(lockRow(id++, "3 שעות", null, 180 * MIN, "ל-3 שעות"));
-        list.addView(Ui.hairline(this));
-        list.addView(lockRow(id, "עד חצות", "עד " + Ui.clock(Store.toWall(this, Policy.nextDayStart(now))), -1, "עד חצות"));
-        LinearLayout.LayoutParams ll = Ui.top(this, 10);
-        ll.setMargins(-Ui.dp(this, 12), Ui.dp(this, 10), -Ui.dp(this, 12), 0);
-        b.addView(list, ll);
-    }
-
-    private View lockRow(int id, String title, String sub, long dur, String label) {
-        LinearLayout r = Ui.row(this);
-        r.setId(id);
-        r.setBackgroundResource(R.drawable.row_bg);
-        r.setFocusable(true);
-        r.setClickable(true);
-        r.setMinimumHeight(Ui.dp(this, 50));
-        r.setPadding(Ui.dp(this, 12), Ui.dp(this, 6), Ui.dp(this, 12), Ui.dp(this, 6));
-        LinearLayout t = Ui.col(this);
-        t.addView(Ui.text(this, title, 15, R.color.ink, Ui.REGULAR), Ui.wrap());
-        if (sub != null) t.addView(Ui.text(this, sub, 12, R.color.muted, Ui.REGULAR), Ui.wrap());
-        r.addView(t, Ui.weight(this, 1, 0));
-        r.addView(Ui.text(this, "נעל", 13, R.color.pine, Ui.MEDIUM), Ui.wrap());
-        r.setOnClickListener(v -> {
-            long now = Store.now(this);
-            confirmLock(dur < 0 ? Policy.nextDayStart(now) : now + dur, label);
-        });
-        return r;
+        b.addView(note("הזמן יורד רק כשאתה משתמש באפליקציות. שיחות, הודעות ומוביט לא נספרים. כשהזמן נגמר – רק הם פתוחים, עד חצות.\n\nפחות זמן נכנס מיד. יותר זמן או ביטול – רק אחרי 24 שעות."), Ui.top(this, 12));
     }
 
     // ------------------------------------------------------------------ social
@@ -448,9 +400,9 @@ public class MainActivity extends BaseActivity {
     // ------------------------------------------------------------------ allow-list
 
     private void pageAllow(LinearLayout root, Policy p, long now) {
-        LinearLayout b = subPage(root, "מותר בנעילה");
-        b.addView(Ui.text(this, "שיחות · הודעות · אנשי קשר · מוביט", 14, R.color.ink, Ui.REGULAR), Ui.top(this, 2));
-        b.addView(note("תמיד מותרים, ואי אפשר להסיר אותם."), Ui.top(this, 2));
+        LinearLayout b = subPage(root, "תמיד פתוח");
+        b.addView(note("האפליקציות האלה לא נספרות בזמן המסך ונשארות פתוחות גם כשהזמן נגמר."), Ui.top(this, 2));
+        b.addView(Ui.text(this, "שיחות · הודעות · אנשי קשר · מוביט", 14, R.color.ink, Ui.REGULAR), Ui.top(this, 8));
 
         PackageManager pm = getPackageManager();
         List<String> extra = new ArrayList<>(p.extraAllowed);
@@ -537,14 +489,14 @@ public class MainActivity extends BaseActivity {
         boolean stricter = value != Policy.NONE && (p.limitMs == Policy.NONE || value <= p.limitMs);
         String title, msg;
         if (value == Policy.NONE) {
-            title = "להסיר את המגבלה?";
-            msg = "ההסרה תיכנס לתוקף רק בעוד 24 שעות. עד אז המגבלה הנוכחית ממשיכה.";
+            title = "לבטל את זמן המסך?";
+            msg = "הביטול ייכנס לתוקף רק בעוד 24 שעות. עד אז הזמן הנוכחי ממשיך.";
         } else if (stricter || !committed) {
-            title = Ui.words(value) + " ביום";
-            msg = "נכנס לתוקף מיד. אחרי האישור לא תוכל להגדיל או לבטל במשך 24 שעות.";
+            title = Ui.words(value) + " של שימוש ביום";
+            msg = "מתחיל מהיום. אחרי האישור לא תוכל להוסיף זמן או לבטל במשך 24 שעות.";
         } else {
-            title = "להגדיל ל-" + Ui.words(value) + "?";
-            msg = "ההגדלה תיכנס לתוקף רק בעוד 24 שעות. אפשר לבטל את הבקשה בכל רגע.";
+            title = "להעלות ל-" + Ui.words(value) + "?";
+            msg = "התוספת תיכנס לתוקף רק בעוד 24 שעות. אפשר לבטל את הבקשה בכל רגע.";
         }
         if (!GuardService.isRunning()) msg += "\n\nעוגן כבוי בהגדרות הנגישות – שום דבר לא ייחסם עד שתפעיל אותו.";
         new AlertDialog.Builder(this)
@@ -554,22 +506,6 @@ public class MainActivity extends BaseActivity {
                     boolean applied = Store.policy(this).requestLimit(value, Store.now(this));
                     Store.save(this);
                     Toast.makeText(this, applied ? "נקבע" : "נרשם – ייכנס לתוקף בעוד 24 שעות", Toast.LENGTH_SHORT).show();
-                    go(HOME);
-                })
-                .setNegativeButton("ביטול", null)
-                .show();
-    }
-
-    private void confirmLock(long until, String label) {
-        String msg = "עד " + Ui.when(Store.toWall(this, until), System.currentTimeMillis())
-                + " – רק שיחות, הודעות ומוביט. אין דרך לבטל.";
-        if (!GuardService.isRunning()) msg += "\n\nעוגן כבוי בהגדרות הנגישות – הנעילה לא תיאכף.";
-        new AlertDialog.Builder(this)
-                .setTitle("לנעול " + label + "?")
-                .setMessage(msg)
-                .setPositiveButton("נעל", (d, w) -> {
-                    Store.policy(this).lockUntil(until, Store.now(this));
-                    Store.save(this);
                     go(HOME);
                 })
                 .setNegativeButton("ביטול", null)

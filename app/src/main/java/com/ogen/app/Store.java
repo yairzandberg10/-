@@ -25,7 +25,14 @@ public final class Store {
     }
 
     public static synchronized Policy policy(Context c) {
-        if (cached == null) cached = Policy.parse(sp(c).getString("policy", null));
+        if (cached == null) {
+            cached = Policy.parse(sp(c).getString("policy", null));
+            // "lock now" was removed: clear any lock left by an older version
+            if (cached.hardUntil != 0) {
+                cached.hardUntil = 0;
+                sp(c).edit().putString("policy", cached.serialize()).apply();
+            }
+        }
         return cached;
     }
 

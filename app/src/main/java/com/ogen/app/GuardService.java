@@ -167,7 +167,10 @@ public class GuardService extends AccessibilityService {
 
         // 2. Installing / uninstalling apps is off while any commitment is active.
         String activity = stateChange ? cls : foregroundClass;
-        if (committed && Rules.isStore(pkg, activity)) { block(BlockActivity.R_STORE, true); return; }
+        if (committed && Rules.isStore(pkg, activity) && !isSelfUpdate(pkg, activity)) {
+            block(BlockActivity.R_STORE, true);
+            return;
+        }
 
         // 3. Full lockdown: only calls, messages, Moovit and approved apps.
         if (locked) {
@@ -180,6 +183,20 @@ public class GuardService extends AccessibilityService {
             if (Rules.isSocial(pkg)) { block(BlockActivity.R_SOCIAL, stateChange, pkg); return; }
             if (Rules.isBrowser(this, pkg) && browserOnBlockedSite()) block(BlockActivity.R_SITE, true);
         }
+    }
+
+    /** The system installer showing an update of Ogen itself (never an uninstall) is allowed. */
+    private boolean isSelfUpdate(String pkg, String activity) {
+        if (!pkg.contains("packageinstaller")) return false;
+        if (activity != null && activity.contains("Uninstall")) return false;
+        AccessibilityNodeInfo root;
+        try { root = getRootInActiveWindow(); } catch (RuntimeException e) { return false; }
+        if (root == null) return false;
+        StringBuilder sb = new StringBuilder();
+        collectText(root, sb, 0, new int[]{0});
+        String t = sb.toString().toLowerCase(Locale.ROOT);
+        if (t.contains("uninstall") || t.contains("להסיר") || t.contains("הסרת") || t.contains("卸载")) return false;
+        return t.contains("עוגן") || t.contains("ogen");
     }
 
     private boolean adminActive() {

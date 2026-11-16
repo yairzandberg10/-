@@ -113,17 +113,17 @@ public class BlockActivity extends BaseActivity {
             case R_STORE: return "התקנות סגורות";
             case R_SOCIAL: return "לא עכשיו";
             case R_SITE: return "האתר הזה חסום";
-            default: return "הטלפון נעול לשימוש חופשי";
+            default: return "זמן המסך להיום נגמר";
         }
     }
 
     private String body() {
         switch (reason) {
-            case R_TAMPER: return "בזמן מגבלה אי אפשר לשנות שעה, לכבות את עוגן או להסיר אותו. זה בדיוק מה שהבטחת לעצמך.";
-            case R_STORE: return "כל עוד יש מגבלה פעילה אי אפשר להתקין או להסיר אפליקציות.";
-            case R_SOCIAL: return "רשתות חברתיות ווידאו חסומים כל עוד יש מגבלה פעילה.";
-            case R_SITE: return "אתרים של רשתות חברתיות ווידאו חסומים בדפדפן כל עוד יש מגבלה פעילה.";
-            default: return "עד שהנעילה תיגמר אפשר רק להתקשר, לשלוח הודעות ולהשתמש במוביט.";
+            case R_TAMPER: return "אי אפשר לשנות שעה, לכבות את עוגן או להסיר אותו. זה בדיוק מה שהבטחת לעצמך.";
+            case R_STORE: return "כל עוד יש זמן מסך מוגדר, אי אפשר להתקין או להסיר אפליקציות. עדכונים לעוגן עצמו כן מותרים.";
+            case R_SOCIAL: return "רשתות חברתיות ווידאו חסומים תמיד.";
+            case R_SITE: return "אתרים של רשתות חברתיות ווידאו חסומים בדפדפן.";
+            default: return "עד חצות פתוחים רק שיחות, הודעות ומוביט. מחר מתחילים מחדש.";
         }
     }
 
@@ -134,12 +134,12 @@ public class BlockActivity extends BaseActivity {
         long end = p.lockEnds(now);
         if (end > now) {
             big.setText(Ui.hm(end - now));
-            sub.setText("נותרו · נפתח " + Ui.when(Store.toWall(this, end), System.currentTimeMillis()));
+            sub.setText("עד שהזמן מתאפס · " + Ui.when(Store.toWall(this, end), System.currentTimeMillis()));
             big.setVisibility(View.VISIBLE);
         } else if (p.committed(now)) {
             if (p.limitMs != Policy.NONE) {
                 big.setText(Ui.hm(p.remainingMs()));
-                sub.setText("זמן חופשי שנשאר להיום");
+                sub.setText("נשאר לך להשתמש היום");
             } else {
                 big.setVisibility(View.GONE);
                 sub.setText("");
