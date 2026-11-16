@@ -4,19 +4,19 @@ Performing Streamed Install
 Success
 shot 01-home-not-enabled
 shot 02-home
-after opening instagram stub:   mCurrentFocus=Window{427c94c u0 com.ogen.app/com.ogen.app.BlockActivity}
+after opening instagram stub:   mCurrentFocus=Window{6b4e5ad u0 com.ogen.app/com.ogen.app.BlockActivity}
 PASS instagram blocked
 shot 03-instagram-blocked
-settings (no lock):   mCurrentFocus=Window{64b8002 u0 com.android.settings/com.android.settings.Settings}
+settings (no lock):   mCurrentFocus=Window{853ca1c u0 com.android.settings/com.android.settings.Settings}
 PASS settings usable without lock
 shot 03b-settings-open
 PASS wifi settings usable
-date settings:   mCurrentFocus=Window{6f36799 u0 com.ogen.app/com.ogen.app.BlockActivity}
+date settings:   mCurrentFocus=Window{4e2f522 u0 com.ogen.app/com.ogen.app.BlockActivity}
 PASS date settings blocked
-accessibility settings:   mCurrentFocus=Window{6f36799 u0 com.ogen.app/com.ogen.app.BlockActivity}
+accessibility settings:   mCurrentFocus=Window{4e2f522 u0 com.ogen.app/com.ogen.app.BlockActivity}
 PASS accessibility settings blocked
-ogen app info:   mCurrentFocus=Window{5300591 u0 com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity}
-FAIL ogen app info open
+ogen app info:   mCurrentFocus=Window{4e2f522 u0 com.ogen.app/com.ogen.app.BlockActivity}
+PASS ogen app info blocked
 shot 04-limit
 shot 06-social
 shot 07-allow
