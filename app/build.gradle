@@ -1,0 +1,29 @@
+plugins { id 'com.android.application' }
+android {
+    namespace 'com.ogen.app'
+    compileSdk 34
+    defaultConfig {
+        applicationId 'com.ogen.app'
+        minSdk 21
+        targetSdk 34
+        versionCode 1
+        versionName '1.0'
+    }
+    signingConfigs {
+        release {
+            storeFile rootProject.file('signing/ogen.jks')
+            storePassword 'ogen-local'
+            keyAlias 'ogen'
+            keyPassword 'ogen-local'
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.release
+        }
+    }
+    compileOptions { sourceCompatibility JavaVersion.VERSION_1_8; targetCompatibility JavaVersion.VERSION_1_8 }
+    lint { abortOnError false; checkReleaseBuilds false }
+}
+dependencies { testImplementation 'junit:junit:4.13.2' }

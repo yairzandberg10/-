@@ -1,0 +1,26 @@
+Performing Streamed Install
+Success
+Performing Streamed Install
+Success
+shot 01-home-not-enabled
+shot 02-home
+after opening instagram stub:   mCurrentFocus=Window{39d590c u0 com.ogen.app/com.ogen.app.BlockActivity}
+PASS instagram blocked
+shot 03-instagram-blocked
+settings (no lock):   mCurrentFocus=Window{50a1462 u0 com.android.settings/com.android.settings.Settings}
+PASS settings usable without lock
+shot 03b-settings-open
+PASS wifi settings usable
+date settings:   mCurrentFocus=Window{4265d5c u0 com.ogen.app/com.ogen.app.BlockActivity}
+PASS date settings blocked
+accessibility settings:   mCurrentFocus=Window{4265d5c u0 com.ogen.app/com.ogen.app.BlockActivity}
+PASS accessibility settings blocked
+ogen app info:   mCurrentFocus=Window{4265d5c u0 com.ogen.app/com.ogen.app.BlockActivity}
+PASS ogen app info blocked
+shot 04-limit
+shot 06-social
+shot 07-allow
+tapped 'הוספת אפליקציה'
+shot 08-picker
+quick run: skipping the 16-minute usage test
+done

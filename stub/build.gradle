@@ -1,0 +1,7 @@
+// TEST-ONLY stub that pretends to be Instagram so CI can verify blocking. Never shipped.
+plugins { id 'com.android.application' }
+android {
+    namespace 'com.ogenstub'
+    compileSdk 34
+    defaultConfig { applicationId 'com.instagram.android'; minSdk 21; targetSdk 34; versionCode 1; versionName '0' }
+}
