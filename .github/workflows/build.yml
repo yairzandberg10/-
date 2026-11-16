@@ -18,7 +18,7 @@ jobs:
       - name: Unit tests (pure logic)
         run: gradle :app:testDebugUnitTest --no-daemon
       - name: Build release APK
-        run: gradle :app:assembleRelease --no-daemon
+        run: gradle :app:assembleRelease :stub:assembleDebug --no-daemon
       - name: Commit APK back to branch
         run: |
           mkdir -p release
@@ -27,4 +27,25 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add release/Ogen.apk
           git commit -m "Build APK for ${GITHUB_SHA::7} [skip ci]" || exit 0
+          git push
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Emulator screenshots + blocking test (Android 12, 640x960)
+        continue-on-error: true
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 31
+          target: google_apis
+          arch: x86_64
+          disable-animations: true
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          script: bash ci/emu-test.sh
+      - name: Commit screenshots
+        if: always()
+        run: |
+          git add release/shots || true
+          git commit -m "Emulator screenshots for ${GITHUB_SHA::7} [skip ci]" || exit 0
           git push

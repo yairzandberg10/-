@@ -150,8 +150,9 @@ public class GuardService extends AccessibilityService {
         Policy p = Store.policy(this);
         long now = Store.now(this);
         if (p.tick(now)) Store.save(this);
-        if (!p.committed(now)) return;
+        if (!p.guarding(now)) return;
 
+        boolean committed = p.committed(now);
         boolean locked = p.locked(now);
 
         // 1. Settings: fully closed during a lockdown; escape routes closed otherwise.
@@ -166,17 +167,17 @@ public class GuardService extends AccessibilityService {
 
         // 2. Installing / uninstalling apps is off while any commitment is active.
         String activity = stateChange ? cls : foregroundClass;
-        if (Rules.isStore(pkg, activity)) { block(BlockActivity.R_STORE, true); return; }
+        if (committed && Rules.isStore(pkg, activity)) { block(BlockActivity.R_STORE, true); return; }
 
         // 3. Full lockdown: only calls, messages, Moovit and approved apps.
         if (locked) {
-            if (!Rules.allowedInLock(this, p, pkg)) block(BlockActivity.R_LOCKED, stateChange);
+            if (!Rules.allowedInLock(this, p, pkg)) block(BlockActivity.R_LOCKED, stateChange, pkg);
             return;
         }
 
         // 4. Free time, but social / video stays off.
         if (p.socialBlock) {
-            if (Rules.isSocial(pkg)) { block(BlockActivity.R_SOCIAL, stateChange); return; }
+            if (Rules.isSocial(pkg)) { block(BlockActivity.R_SOCIAL, stateChange, pkg); return; }
             if (Rules.isBrowser(this, pkg) && browserOnBlockedSite()) block(BlockActivity.R_SITE, true);
         }
     }
@@ -247,6 +248,10 @@ public class GuardService extends AccessibilityService {
     }
 
     private void block(int reason, boolean force) {
+        block(reason, force, null);
+    }
+
+    private void block(int reason, boolean force, String blockedPkg) {
         long el = SystemClock.elapsedRealtime();
         if (!force && el - lastBlockEl < 1200) return;
         if (el - lastBlockEl < 400) return;
@@ -254,6 +259,21 @@ public class GuardService extends AccessibilityService {
         if (reason == BlockActivity.R_TAMPER || reason == BlockActivity.R_STORE || reason == BlockActivity.R_SITE) {
             performGlobalAction(GLOBAL_ACTION_BACK);
         }
+        showBlockScreen(reason);
+        if (blockedPkg != null) {
+            // Some ROMs silently refuse background activity starts: if the app is still in front, go Home.
+            handler.postDelayed(() -> {
+                try {
+                    if (blockedPkg.equals(currentPackage())) {
+                        performGlobalAction(GLOBAL_ACTION_HOME);
+                        handler.postDelayed(() -> showBlockScreen(reason), 300);
+                    }
+                } catch (RuntimeException ignored) { }
+            }, 600);
+        }
+    }
+
+    private void showBlockScreen(int reason) {
         Intent i = new Intent(this, BlockActivity.class)
                 .putExtra(BlockActivity.EXTRA_REASON, reason)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP

@@ -54,6 +54,11 @@ public final class Policy {
         return limitMs != NONE || hardUntil > now;
     }
 
+    /** The guard must run (and protect itself) — any active limit, lock, or the social block. */
+    public boolean guarding(long now) {
+        return committed(now) || socialBlock;
+    }
+
     public boolean budgetSpent() {
         return limitMs != NONE && usedMs >= limitMs;
     }
@@ -170,10 +175,7 @@ public final class Policy {
             return true;
         }
         if (!socialBlock || pendingSocialOff() != null) return false;
-        if (!committed(now)) {
-            socialBlock = false;
-            return true;
-        }
+        // turning the social block off is always delayed: it is the default protection
         pending.add(new Change(CH_SOCIAL_OFF, 0, null, now + DAY));
         return false;
     }

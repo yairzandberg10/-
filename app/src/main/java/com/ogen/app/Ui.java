@@ -116,6 +116,15 @@ final class Ui {
         return lp;
     }
 
+    static View hairline(Context c) {
+        View v = new View(c);
+        v.setBackgroundColor(color(c, R.color.line));
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, Math.max(1, dp(c, 0.7f)));
+        lp.setMargins(dp(c, 12), 0, dp(c, 12), 0);
+        v.setLayoutParams(lp);
+        return v;
+    }
+
     // ---- formatting ----
 
     /** 1:05 style (hours:minutes). */

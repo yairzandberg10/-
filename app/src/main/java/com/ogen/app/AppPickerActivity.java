@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Set;
 
 /** Pick one installed app to allow during a lockdown (social, browsers and stores are not offered). */
-public class AppPickerActivity extends Activity {
+public class AppPickerActivity extends BaseActivity {
     static final String EXTRA_PKG = "pkg";
 
     private static final class App {

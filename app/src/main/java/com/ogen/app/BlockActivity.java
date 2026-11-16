@@ -17,7 +17,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 /** Full-screen "not now" page shown whenever something is blocked. */
-public class BlockActivity extends Activity {
+public class BlockActivity extends BaseActivity {
     static final String EXTRA_REASON = "reason";
     static final int R_LOCKED = 1, R_TAMPER = 2, R_STORE = 3, R_SOCIAL = 4, R_SITE = 5;
 
@@ -144,8 +144,11 @@ public class BlockActivity extends Activity {
                 big.setVisibility(View.GONE);
                 sub.setText("");
             }
+        } else if (reason == R_LOCKED) {
+            goHome();   // the lock already ended
         } else {
-            goHome();
+            big.setVisibility(View.GONE);
+            sub.setText("");
         }
     }
 

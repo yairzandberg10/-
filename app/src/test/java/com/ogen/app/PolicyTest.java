@@ -93,6 +93,22 @@ public class PolicyTest {
         assertFalse(p.socialBlock);
     }
 
+    @Test public void socialBlockIsOnByDefault_andTurningOffAlwaysWaits24h() {
+        Policy p = new Policy();
+        long t = at(16, 10, 0);
+        assertTrue(p.socialBlock);
+        assertTrue(p.guarding(t));
+        assertFalse(p.committed(t));            // setup stays free: allow-list edits are immediate
+        assertTrue(p.requestAllow("com.whatsapp", t));
+        assertFalse(p.requestSocialBlock(false, t));
+        assertTrue(p.socialBlock);
+        p.tick(t + 24 * H - 1);
+        assertTrue(p.socialBlock);
+        p.tick(t + 24 * H);
+        assertFalse(p.socialBlock);
+        assertFalse(p.guarding(t + 24 * H));
+    }
+
     @Test public void serializationRoundTrip() {
         Policy p = new Policy();
         long t = at(16, 10, 0);
