@@ -287,6 +287,7 @@ public class MainActivity extends BaseActivity {
 
     private static TextView center(TextView t) {
         t.setGravity(Gravity.CENTER);
+        t.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         return t;
     }
 

@@ -13,6 +13,7 @@ public abstract class BaseActivity extends Activity {
     static final Locale HE = new Locale("iw");
 
     @Override protected void attachBaseContext(Context base) {
+        Locale.setDefault(HE);
         Configuration c = new Configuration(base.getResources().getConfiguration());
         c.setLocale(HE);
         c.setLayoutDirection(HE);

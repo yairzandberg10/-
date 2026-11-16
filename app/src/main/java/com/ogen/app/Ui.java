@@ -38,7 +38,9 @@ final class Ui {
         t.setTextColor(color(c, colorRes));
         t.setTypeface(tf);
         t.setLineSpacing(0, 1.12f);
-        t.setTextDirection(View.TEXT_DIRECTION_LOCALE);
+        // Hebrew paragraphs, aligned to the right edge, regardless of the phone's language
+        t.setTextDirection(View.TEXT_DIRECTION_RTL);
+        t.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
         t.setGravity(Gravity.START);
         return t;
     }
@@ -66,6 +68,7 @@ final class Ui {
         b.setStateListAnimator(null);
         b.setFocusable(true);
         b.setSingleLine(true);
+        b.setTextDirection(View.TEXT_DIRECTION_RTL);
         b.setEllipsize(TextUtils.TruncateAt.END);
         return b;
     }

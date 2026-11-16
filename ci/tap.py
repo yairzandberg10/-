@@ -12,6 +12,14 @@ def dump():
 
 want = sys.argv[1]
 xml = dump()
+nodes = re.findall(r'<node [^>]*>', xml)
+# exact matches first (so "אישור" hits the button, not a sentence containing it)
+exact = [n for n in nodes if f'text="{want}"' in n or f'content-desc="{want}"' in n]
+for node in exact:
+    x1, y1, x2, y2 = map(int, re.search(r'bounds="\[(\d+),(\d+)\]\[(\d+),(\d+)\]"', node).groups())
+    subprocess.run(["adb", "shell", "input", "tap", str((x1 + x2) // 2), str((y1 + y2) // 2)])
+    print(f"tapped '{want}' (exact)")
+    sys.exit(0)
 for m in re.finditer(r'<node [^>]*>', xml):
     node = m.group(0)
     text = (re.search(r'text="([^"]*)"', node) or [None, ""])[1]

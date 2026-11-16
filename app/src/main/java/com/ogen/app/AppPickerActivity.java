@@ -69,6 +69,7 @@ public class AppPickerActivity extends BaseActivity {
         lv.setClipToPadding(false);
         lv.setItemsCanFocus(false);
         lv.setSelector(R.drawable.row_bg);
+        lv.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         lv.setDrawSelectorOnTop(false);
         lv.setAdapter(new Adapter(pm));
         lv.setOnItemClickListener((parent, view, pos, id) -> {
