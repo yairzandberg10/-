@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Ogen" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@color/paper</item>
+        <item name="android:statusBarColor">@color/ink</item>
+        <item name="android:navigationBarColor">@color/paper</item>
+        <item name="android:colorAccent">@color/pine</item>
+        <item name="android:colorPrimary">@color/paper</item>
+        <item name="android:colorPrimaryDark">@color/ink</item>
+        <item name="android:textColorPrimary">@color/ink</item>
+        <item name="android:alertDialogTheme">@style/OgenDialog</item>
+    </style>
+    <style name="OgenNight" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/night</item>
+        <item name="android:statusBarColor">@color/night</item>
+        <item name="android:navigationBarColor">@color/night</item>
+        <item name="android:colorAccent">@color/on_night</item>
+    </style>
+    <style name="OgenDialog" parent="android:Theme.Material.Light.Dialog.Alert">
+        <item name="android:colorAccent">@color/pine</item>
+    </style>
+</resources>

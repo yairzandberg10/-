@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="paper">#F2EEE5</color>
+    <color name="card">#FBF9F4</color>
+    <color name="ink">#1E1C19</color>
+    <color name="ink2">#4A463F</color>
+    <color name="muted">#857E73</color>
+    <color name="line">#E2DCCF</color>
+    <color name="pine">#2D5B4C</color>
+    <color name="pine_dark">#1F4236</color>
+    <color name="pine_soft">#DDE8E2</color>
+    <color name="brick">#A4442C</color>
+    <color name="brick_soft">#F3E2DA</color>
+    <color name="night">#1E1C19</color>
+    <color name="night2">#2B2824</color>
+    <color name="on_night">#F2EEE5</color>
+    <color name="on_night_muted">#A9A195</color>
+</resources>

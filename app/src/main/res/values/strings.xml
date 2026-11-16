@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">עוגן</string>
+    <string name="a11y_desc">עוגן משתמש בשירות הנגישות כדי לראות איזו אפליקציה פתוחה, למדוד זמן מסך ולחסום אפליקציות, אתרים והתקנות בזמן מגבלה שהגדרת לעצמך. שום מידע לא נשלח לשום מקום.</string>
+    <string name="admin_desc">מונע הסרה של עוגן בזמן שמגבלה פעילה.</string>
+</resources>
