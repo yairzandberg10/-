@@ -282,6 +282,9 @@ public class GuardService extends AccessibilityService {
 
     private void block(int reason, boolean force, String blockedPkg) {
         long el = SystemClock.elapsedRealtime();
+        // our own block screen is already in front: pressing Back now would close it
+        String cur = currentPackage();
+        if (getPackageName().equals(cur)) return;
         if (!force && el - lastBlockEl < 1200) return;
         if (el - lastBlockEl < 400) return;
         lastBlockEl = el;
