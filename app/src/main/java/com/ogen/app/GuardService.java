@@ -95,6 +95,17 @@ public class GuardService extends AccessibilityService {
                 foregroundClass = cls;
             }
             evaluate(pkg, cls, true);
+            if (Rules.isSettings(pkg)) {
+                // Settings pages fill in their content after the window opens: look again shortly
+                for (long d : new long[]{300, 800, 1600, 3000}) {
+                    handler.postDelayed(() -> {
+                        try {
+                            String cur = currentPackage();
+                            if (cur != null && Rules.isSettings(cur)) evaluate(cur, foregroundClass, false);
+                        } catch (RuntimeException ignored) { }
+                    }, d);
+                }
+            }
         } else if (type == AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED) {
             long el = SystemClock.elapsedRealtime();
             if (el - lastScanEl < 700) return;

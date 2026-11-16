@@ -51,6 +51,8 @@ done
 tap "הוספת אפליקציה"; shot 08-picker
 adb shell input keyevent KEYCODE_BACK; sleep 1
 
+if git log -1 --format=%s | grep -q "\[quick\]"; then log "quick run: skipping the 16-minute usage test"; log "done"; exit 0; fi
+
 # --- set 15 minutes of screen time (default 1:00, minus 3 x 15)
 adb shell am start -n com.ogen.app/.MainActivity --ei page 1; sleep 2
 tap "−"; tap "−"; tap "−"
