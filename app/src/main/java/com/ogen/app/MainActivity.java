@@ -33,7 +33,7 @@ public class MainActivity extends Activity {
     // stable ids so keypad focus survives a re-render
     private static final int ID_MINUS = 101, ID_PLUS = 102, ID_SET = 103, ID_REMOVE = 104,
             ID_L1 = 105, ID_L3 = 106, ID_LMID = 107, ID_SOCIAL = 108, ID_ADD = 109,
-            ID_A11Y = 110, ID_ADMIN = 111, ID_CANCEL_LIMIT = 112, ID_CANCEL_SOCIAL = 113;
+            ID_A11Y = 110, ID_TRIAL = 114, ID_ADMIN = 111, ID_CANCEL_LIMIT = 112, ID_CANCEL_SOCIAL = 113;
 
     private final Handler handler = new Handler();
     private long draft = -1;
@@ -265,6 +265,11 @@ public class MainActivity extends Activity {
         r.addView(h3, Ui.weight(this, 1, 6));
         r.addView(mid, Ui.weight(this, 1.2f, 0));
         c.addView(r, Ui.top(this, 10));
+        Button trial = Ui.button(this, "נסה קודם: נעילה של 5 דקות", R.drawable.row_bg, R.color.pine);
+        trial.setId(ID_TRIAL);
+        trial.setTextSize(13);
+        trial.setOnClickListener(v -> confirmLock(Store.now(this) + 5 * MIN, "ל-5 דקות"));
+        c.addView(trial, Ui.top(this, 6));
         if (p.hardUntil > now) {
             c.addView(Ui.text(this, "נעול עד " + Ui.when(Store.toWall(this, p.hardUntil), System.currentTimeMillis()) + ". אפשר רק להאריך.", 12, R.color.muted, Ui.REGULAR), Ui.top(this, 8));
         }

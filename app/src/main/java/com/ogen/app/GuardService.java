@@ -39,7 +39,7 @@ public class GuardService extends AccessibilityService {
 
     private final Runnable ticker = new Runnable() {
         @Override public void run() {
-            tick();
+            try { tick(); } catch (RuntimeException ignored) { }
             handler.postDelayed(this, TICK);
         }
     };
@@ -76,6 +76,14 @@ public class GuardService extends AccessibilityService {
     @Override public void onInterrupt() { }
 
     @Override public void onAccessibilityEvent(AccessibilityEvent e) {
+        try {
+            handle(e);
+        } catch (RuntimeException ignored) {
+            // never let one odd event kill enforcement
+        }
+    }
+
+    private void handle(AccessibilityEvent e) {
         if (e == null || e.getPackageName() == null) return;
         String pkg = e.getPackageName().toString();
         String cls = e.getClassName() == null ? null : e.getClassName().toString();
@@ -157,7 +165,8 @@ public class GuardService extends AccessibilityService {
         }
 
         // 2. Installing / uninstalling apps is off while any commitment is active.
-        if (Rules.isStore(pkg, cls)) { block(BlockActivity.R_STORE, true); return; }
+        String activity = stateChange ? cls : foregroundClass;
+        if (Rules.isStore(pkg, activity)) { block(BlockActivity.R_STORE, true); return; }
 
         // 3. Full lockdown: only calls, messages, Moovit and approved apps.
         if (locked) {
@@ -242,10 +251,9 @@ public class GuardService extends AccessibilityService {
         if (!force && el - lastBlockEl < 1200) return;
         if (el - lastBlockEl < 400) return;
         lastBlockEl = el;
-        if (reason == BlockActivity.R_TAMPER || reason == BlockActivity.R_STORE) {
+        if (reason == BlockActivity.R_TAMPER || reason == BlockActivity.R_STORE || reason == BlockActivity.R_SITE) {
             performGlobalAction(GLOBAL_ACTION_BACK);
         }
-        performGlobalAction(GLOBAL_ACTION_HOME);
         Intent i = new Intent(this, BlockActivity.class)
                 .putExtra(BlockActivity.EXTRA_REASON, reason)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP

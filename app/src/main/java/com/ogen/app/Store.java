@@ -60,7 +60,10 @@ public final class Store {
             offset = 0;
             trusted = wall;
         }
-        s.edit().putLong("offset", offset).putLong("lastWall", wall).putLong("lastEl", el).apply();
+        // markers stay valid between writes, so only persist every 30s or when the offset moves
+        if (offset != s.getLong("offset", 0) || lastEl < 0 || el < lastEl || el - lastEl > 30_000) {
+            s.edit().putLong("offset", offset).putLong("lastWall", wall).putLong("lastEl", el).apply();
+        }
         return trusted;
     }
 
