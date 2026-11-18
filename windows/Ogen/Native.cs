@@ -15,6 +15,23 @@ internal static class Native
     [DllImport("user32.dll")] public static extern bool ShowWindowAsync(IntPtr hWnd, int cmd);
     [DllImport("user32.dll")] public static extern bool PostMessage(IntPtr hWnd, uint msg, IntPtr w, IntPtr l);
     [DllImport("user32.dll")] public static extern bool SetForegroundWindow(IntPtr hWnd);
+    [DllImport("user32.dll")] public static extern bool LockWorkStation();
+
+    /// <summary>
+    /// Windows only lets the app the user last touched take the foreground. A synthetic Alt
+    /// press counts as "touching" us, which is the documented-in-practice way past that.
+    /// </summary>
+    public static void ForceForeground(IntPtr h)
+    {
+        const ushort VK_MENU = 0x12;
+        var inputs = new[]
+        {
+            new INPUT { type = 1, u = new InputUnion { ki = new KEYBDINPUT { wVk = VK_MENU } } },
+            new INPUT { type = 1, u = new InputUnion { ki = new KEYBDINPUT { wVk = VK_MENU, dwFlags = 0x0002 } } },
+        };
+        SendInput((uint)inputs.Length, inputs, Marshal.SizeOf<INPUT>());
+        SetForegroundWindow(h);
+    }
     [DllImport("user32.dll")] public static extern bool IsWindowVisible(IntPtr hWnd);
 
     private delegate bool EnumProc(IntPtr hWnd, IntPtr l);

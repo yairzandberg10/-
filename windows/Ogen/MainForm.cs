@@ -42,7 +42,7 @@ internal sealed class CardBlock : Block
 
 internal sealed class MainForm : Form
 {
-    public enum Page { Home, Limit, Social, Allow }
+    public enum Page { Home, Limit, Social, Allow, CheckIn }
 
     private const long MIN = 60_000L, STEP = 15 * MIN;
 
@@ -96,7 +96,7 @@ internal sealed class MainForm : Form
     private void ApplyScale()
     {
         stack.S = Sc;
-        ClientSize = new Size((int)(420 * Sc), (int)(660 * Sc));
+        ClientSize = new Size((int)(460 * Sc), (int)(720 * Sc));
         MinimumSize = new Size((int)(360 * Sc), (int)(480 * Sc));
         toast.Font = Theme.F(14 * Sc);
     }
@@ -131,7 +131,7 @@ internal sealed class MainForm : Form
         var p = m.P;
         p.Tick(now);
         return $"{page}|{p.LimitMs}|{Fmt.Hm(p.UsedMs)}|{p.SocialBlock}|{string.Join(",", p.ExtraAllowed)}|{p.Pending.Count}|"
-               + $"{(p.Locked(now) ? Fmt.Words(p.LockEnds(now) - now) : "")}|{ProtectionOk}|{draft}";
+               + $"{(p.Locked(now) ? Fmt.Words(p.LockEnds(now) - now) : "")}|{ProtectionOk}|{draft}|{p.CheckIn}|{p.SessionEnd}|{Fmt.Hm(p.SessionRemaining(now))}";
     }
 
     public void Go(Page to)
@@ -169,6 +169,7 @@ internal sealed class MainForm : Form
             case Page.Limit: BuildLimit(now); break;
             case Page.Social: BuildSocial(now); break;
             case Page.Allow: BuildAllow(now); break;
+            case Page.CheckIn: BuildCheckIn(now); break;
             default: BuildHome(now); break;
         }
         stack.ResumeLayout(false);
@@ -186,7 +187,26 @@ internal sealed class MainForm : Form
         bool guarding = p.Guarding(now);
         stack.Add(new HeaderBlock(guarding ? "מגן" : "כבוי", guarding));
 
-        if (p.Locked(now))
+        if (p.SessionActive(now) && !p.Locked(now))
+        {
+            long rem = p.SessionRemaining(now);
+            long total = Math.Max(1, p.SessionEnd - p.SessionStart);
+            bool low = rem <= 5 * MIN;
+            stack.Add(new TextBlock("נשאר מהזמן שקבעת", 15, Theme.Muted, Theme.W.Medium, true), 20);
+            stack.Add(new TextBlock(Fmt.Hm(rem), 84, low ? Theme.Brick : Theme.Ink, Theme.W.Light, true), 0);
+            stack.Add(new BarBlock((float)(total - rem) / total, low ? Theme.Brick : Theme.Pine), 8);
+            stack.Add(new NoteBlock("מה: " + p.SessionWhat + "\nלמה: " + p.SessionWhy, Theme.PineSoft, Theme.PineDark), 12);
+            if (p.LimitMs != Policy.None)
+                stack.Add(new TextBlock("נשאר להיום: " + Fmt.Hm(p.RemainingMs()) + " מתוך " + Fmt.Hm(p.LimitMs), 14, Theme.Muted, Theme.W.Regular, true), 8);
+            stack.Add(new ButtonBlock("סיימתי – לנעול את המחשב", BtnStyle.Ghost, () =>
+            {
+                if (!ConfirmForm.Ask(this, "לסיים עכשיו?", "המחשב יינעל, ובכניסה הבאה עוגן ישאל שוב.")) return;
+                m.Mutate(t => { p.EndSession(t); return 0; });
+                Hide();
+                if (!m.Preview) Native.LockWorkStation();
+            }), 10);
+        }
+        else if (p.Locked(now))
         {
             long end = p.LockEnds(now);
             stack.Add(new CardBlock(Theme.Night,
@@ -213,12 +233,50 @@ internal sealed class MainForm : Form
 
         string limitVal = p.LimitMs == Policy.None ? "לא נקבע" : Fmt.Hm(p.LimitMs);
         if (p.PendingLimit() != null) limitVal += " · שינוי ממתין";
-        stack.Add(new RowBlock("זמן מסך ליום", limitVal, Theme.Muted, () => Go(Page.Limit)), 24);
+        stack.Add(new RowBlock("שאלה בכל כניסה", p.CheckIn ? (p.PendingCheckInOff() != null ? "פועלת · תכובה" : "פועלת") : "כבויה",
+            p.CheckIn ? Theme.Muted : Theme.Brick, () => Go(Page.CheckIn)), 24);
+        stack.Add(new RowBlock("זמן מסך ליום", limitVal, Theme.Muted, () => Go(Page.Limit)));
         stack.Add(new RowBlock("רשתות ויוטיוב", p.SocialBlock ? "חסומים" : "פתוחים", Theme.Muted, () => Go(Page.Social)));
         int n = p.ExtraAllowed.Count;
         stack.Add(new RowBlock("תמיד פתוח", n == 1 ? "אפליקציה אחת" : n + " אפליקציות", Theme.Muted, () => Go(Page.Allow)));
         if (!ProtectionOk && !m.Preview)
             stack.Add(new RowBlock("הפעלה עם Windows", "להפעיל", Theme.Brick, () => FixProtection?.Invoke()));
+
+        var today = m.Preview ? PreviewSessions : SessionLog.Today();
+        if (today.Count > 0)
+        {
+            stack.Add(new TextBlock("היום", 16, Theme.Ink, Theme.W.Medium), 22);
+            foreach (var (time, minutes, what, why) in today.TakeLast(6).Reverse())
+                stack.Add(new TextBlock($"{time} · {Fmt.Words(minutes * MIN)} · {what} – {why}", 14, Theme.Ink2), 6);
+        }
+    }
+
+    /// <summary>Sample diary for screenshots.</summary>
+    public System.Collections.Generic.List<(string, long, string, string)> PreviewSessions = new();
+
+    // ---------------- check-in ----------------
+
+    private void BuildCheckIn(long now)
+    {
+        var p = m.P;
+        stack.Add(new SubHeaderBlock("שאלה בכל כניסה", () => Go(Page.Home)));
+        stack.Add(new TextBlock(p.CheckIn ? "פועלת" : "כבויה", 26, p.CheckIn ? Theme.Pine : Theme.Brick, Theme.W.Medium), 4);
+        stack.Add(new TextBlock(
+            "בכל הדלקה של המחשב, ובכל חזרה אחרי 10 דקות ומעלה של מחשב נעול, עוגן שואל: מה אתה הולך לעשות, כמה זמן ולמה. עד שעונים – שום דבר לא פתוח. כשהזמן שקבעת נגמר המחשב ננעל, ובכניסה הבאה הוא שואל שוב.",
+            14, Theme.Ink2), 8);
+        var pend = p.PendingCheckInOff();
+        if (pend != null)
+            stack.Add(new NoteBlock("תכובה " + m.When(pend.At), Theme.PineSoft, Theme.PineDark, "בטל",
+                () => { m.Mutate(t => p.RequestCheckIn(true, t)); Toast("נשארת פועלת"); }), 16);
+        else if (p.CheckIn)
+            stack.Add(new ButtonBlock("לכבות (בעוד 24 שעות)", BtnStyle.Plain, () =>
+            {
+                if (!ConfirmForm.Ask(this, "לכבות את השאלה?", "הכיבוי ייכנס לתוקף רק בעוד 24 שעות, ואפשר לבטל את הבקשה עד אז.")) return;
+                m.Mutate(t => p.RequestCheckIn(false, t));
+                Toast("נרשם – תכובה בעוד 24 שעות");
+            }), 16);
+        else
+            stack.Add(new ButtonBlock("להפעיל – מיד", BtnStyle.Primary, () => { m.Mutate(t => p.RequestCheckIn(true, t)); Toast("פועלת"); }), 16);
     }
 
     // ---------------- limit ----------------

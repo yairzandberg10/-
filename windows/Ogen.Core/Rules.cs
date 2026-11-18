@@ -8,6 +8,7 @@ public enum Verdict
 {
     Ok,
     Tamper,     // a screen that could switch Ogen off (Task Manager, Task Scheduler...)
+    CheckIn,    // nothing can be used until you say what you are going to do
     Locked,     // daily time is up and this app is not "always open"
     SocialApp,  // a social / video app
     SocialSite, // a social / video site in a browser tab
@@ -68,6 +69,39 @@ public static class Rules
     {
         "task scheduler", "מתזמן המשימות", "computer management", "ניהול המחשב",
     };
+
+    /// <summary>Usable while the check-in is open: sign-in, UAC, keyboards / IME.</summary>
+    private static readonly HashSet<string> CheckInSystem = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "lockapp", "logonui", "consent", "credentialuibroker", "ctfmon", "textinputhost", "dwm",
+    };
+
+    private static readonly string[] SiteHosts =
+    {
+        "youtube.com", "youtu.be", "instagram.com", "tiktok.com", "facebook.com", "fb.com", "fb.watch",
+        "x.com", "twitter.com", "reddit.com", "redd.it", "netflix.com", "twitch.tv", "pinterest.com", "snapchat.com",
+        "9gag.com", "threads.net", "threads.com", "tumblr.com", "bilibili.com", "douyin.com", "kick.com", "vimeo.com",
+        "dailymotion.com", "linkedin.com", "disneyplus.com", "primevideo.com", "messenger.com",
+    };
+
+    /// <summary>Does an address-bar text point to a blocked site? (ported from Android)</summary>
+    public static bool BlockedUrl(string? text)
+    {
+        if (string.IsNullOrWhiteSpace(text)) return false;
+        string s = text.Trim().ToLowerInvariant();
+        if (s.Contains(' ')) return false;
+        int i = s.IndexOf("://", StringComparison.Ordinal);
+        if (i >= 0) s = s[(i + 3)..];
+        int end = s.Length;
+        foreach (char ch in "/?#:")
+        {
+            int j = s.IndexOf(ch);
+            if (j >= 0 && j < end) end = j;
+        }
+        string host = s[..end];
+        foreach (var d in SiteHosts) if (host == d || host.EndsWith("." + d, StringComparison.Ordinal)) return true;
+        return false;
+    }
 
     public static string Normalize(string? processName)
     {
@@ -148,7 +182,7 @@ public static class Rules
     }
 
     /// <summary>Decide whether the window in front must be blocked. Mirrors GuardService.evaluate on Android.</summary>
-    public static Verdict Classify(Policy p, long now, string proc, string? title)
+    public static Verdict Classify(Policy p, long now, string proc, string? title, string? url = null)
     {
         proc = Normalize(proc);
         if (proc == "ogen" || !p.Guarding(now)) return Verdict.Ok;
@@ -156,7 +190,10 @@ public static class Rules
         // 1. Escape routes are closed while anything is guarded.
         if (IsTamper(proc, title)) return Verdict.Tamper;
 
-        // 2. Time is up: only "always open" apps.
+        // 2. No session: only the check-in screen (and the bits of Windows needed to type into it).
+        if (p.NeedsCheckIn(now) && !CheckInSystem.Contains(proc)) return Verdict.CheckIn;
+
+        // 3. Time is up: only "always open" apps.
         if (p.Locked(now) && !Free(p, proc))
             return Verdict.Locked;
 
@@ -164,7 +201,7 @@ public static class Rules
         if (p.SocialBlock && !p.ExtraAllowed.Contains(proc))
         {
             if (IsSocialApp(proc, title)) return Verdict.SocialApp;
-            if (IsBrowser(proc) && BlockedTitle(title)) return Verdict.SocialSite;
+            if (IsBrowser(proc) && (BlockedTitle(title) || BlockedUrl(url))) return Verdict.SocialSite;
         }
         return Verdict.Ok;
     }

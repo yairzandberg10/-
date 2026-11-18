@@ -41,13 +41,18 @@ function Shot([string]$name) {
     $g.Dispose(); $bmp.Dispose()
 }
 
-# limit/used in minutes (-1 = no limit), social 1/0, allowed = comma list of process names
-function Set-State([long]$limit, [long]$used, [int]$social, [string]$allowed = '') {
+# limit/used in minutes (-1 = no limit), social 1/0, allowed = comma list of process names,
+# checkIn 1/0, session = minutes left in an active session (0 = none)
+function Set-State([long]$limit, [long]$used, [int]$social, [string]$allowed = '', [int]$checkIn = 0, [long]$session = 0) {
     Get-Process Ogen -ErrorAction SilentlyContinue | Stop-Process -Force
     Start-Sleep -Milliseconds 500
     $today = [DateTimeOffset]::new([DateTime]::Today).ToUnixTimeMilliseconds()
     $l = if ($limit -lt 0) { -1 } else { $limit * 60000 }
-    $text = "ogen-state 1`n1`n0`n0`n-1`nw1`n$l`n$($used * 60000)`n$today`n$social`n$allowed`n"
+    $now = [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()
+    $boot = $now - [Environment]::TickCount64
+    $end = if ($session -gt 0) { $now + $session * 60000 } else { 0 }
+    $b64 = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes('test'))
+    $text = "ogen-state 1`n1`n0`n0`n-1`nw2`n$l`n$($used * 60000)`n$today`n$social`n$allowed`n$checkIn`n$now`n$end`n$boot`n$b64`n$b64`n"
     [IO.File]::WriteAllText($state, $text)
     Start-Process $Exe -ArgumentList '--no-install', '--background'
     Start-Sleep -Seconds 3
@@ -112,7 +117,36 @@ $used = Used-Minutes
 Check 'Usage is counted while using an app' ($used -ge 0.4) ("used {0:N2} min" -f $used)
 $np | Stop-Process -Force
 
-# ---- 6. the window opens and shows the remaining time ----
+# ---- 6. check-in: nothing works until you answer ----
+Set-State -1 0 1 '' 1 0
+$np = Start-Process notepad -PassThru
+Start-Sleep -Seconds 4
+$np.Refresh()
+Shot 'e2e-04-checkin'
+Check 'Without a session, apps are put away behind the question' ([W]::IsIconic($np.MainWindowHandle))
+$np | Stop-Process -Force
+
+# ---- 7. ... and with a session running, they work ----
+Set-State -1 0 1 '' 1 30
+$np = Start-Process notepad -PassThru
+Start-Sleep -Seconds 4
+$np.Refresh()
+Check 'During a session, apps work' (-not [W]::IsIconic($np.MainWindowHandle))
+$np | Stop-Process -Force
+
+# ---- 8. a blocked site whose tab title doesn't name it: caught by the address bar ----
+if ($chrome) {
+    Set-State -1 0 1
+    $profileDir = Join-Path $env:RUNNER_TEMP 'chrome-profile2'
+    Start-Process $chrome -ArgumentList "--user-data-dir=$profileDir", '--no-first-run', '--no-default-browser-check', '--new-window',
+        '--host-resolver-rules="MAP www.reddit.com 127.0.0.1:9"', 'https://www.reddit.com/'
+    Start-Sleep -Seconds 10
+    $open = Get-Process chrome -ErrorAction SilentlyContinue | Where-Object { $_.MainWindowTitle -match 'reddit' }
+    Check 'Address-bar check closes a reddit tab with a plain title' (-not $open) ($open | ForEach-Object MainWindowTitle | Out-String).Trim()
+    Get-Process chrome -ErrorAction SilentlyContinue | Stop-Process -Force
+}
+
+# ---- 9. the window opens and shows the remaining time ----
 Start-Process $Exe -ArgumentList '--no-install'
 Start-Sleep -Seconds 3
 Shot 'e2e-03-window'
@@ -120,5 +154,6 @@ $win = Get-Process Ogen | Where-Object { $_.MainWindowHandle -ne 0 }
 Check 'Main window opens' ([bool]$win)
 
 Get-Process Ogen -ErrorAction SilentlyContinue | Stop-Process -Force
+if (Test-Path (Join-Path $data 'log.txt')) { Copy-Item (Join-Path $data 'log.txt') (Join-Path $Out 'e2e-log.txt') }
 $report | Set-Content (Join-Path $Out 'e2e-report.txt')
 if ($failed -gt 0) { Write-Host "$failed check(s) failed"; exit 1 }

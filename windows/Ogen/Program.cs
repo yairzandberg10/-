@@ -56,6 +56,7 @@ internal sealed class Tray : ApplicationContext
     private readonly NotifyIcon icon = new();
     private readonly MainForm form;
     private readonly BlockForm cover;
+    private readonly CheckInForm checkIn;
     private readonly Guard guard;
     private readonly ToolStripMenuItem exitItem, removeItem;
     private readonly System.Windows.Forms.Timer protect = new() { Interval = 5 * 60_000 };
@@ -79,7 +80,11 @@ internal sealed class Tray : ApplicationContext
         _ = form.Handle;       // a UI-thread handle for BeginInvoke even while hidden
 
         cover = new BlockForm(m) { OpenApp = ShowWindow };
-        guard = new Guard(m, cover);
+        checkIn = new CheckInForm(m);
+        _ = checkIn.Handle;
+        // a restart (new boot) always asks again
+        m.Mutate(now => { m.P.ForgetSessionIfOtherBoot(now - Environment.TickCount64, now); return 0; });
+        guard = new Guard(m, cover, checkIn);
         guard.Warn += text => icon.ShowBalloonTip(5000, "עוגן", text, ToolTipIcon.Info);
         guard.Ticked += UpdateIcon;
 
@@ -116,7 +121,7 @@ internal sealed class Tray : ApplicationContext
         protect.Start();
         RegisterAsync(false);
 
-        if (!background) ShowWindow();
+        if (!background && !m.P.NeedsCheckIn(m.Now())) ShowWindow();
     }
 
     private void Ui(Action a)
@@ -156,6 +161,8 @@ internal sealed class Tray : ApplicationContext
         var p = m.P;
         string tip;
         if (p.Locked(now)) { icon.Icon = brickIcon; tip = "עוגן · זמן המסך להיום נגמר"; }
+        else if (p.SessionActive(now)) { icon.Icon = pineIcon; tip = "עוגן · נשאר " + Fmt.Hm(p.SessionRemaining(now)) + " · " + p.SessionWhat; }
+        else if (p.NeedsCheckIn(now)) { icon.Icon = brickIcon; tip = "עוגן · מחכה לתשובה"; }
         else if (p.LimitMs != Policy.None) { icon.Icon = pineIcon; tip = "עוגן · נשאר " + Fmt.Hm(p.RemainingMs()); }
         else { icon.Icon = p.Guarding(now) ? pineIcon : mutedIcon; tip = p.SocialBlock ? "עוגן · רשתות ויוטיוב חסומים" : "עוגן · כבוי"; }
         if (icon.Text != tip) icon.Text = tip.Length > 63 ? tip[..63] : tip;
@@ -184,6 +191,7 @@ internal sealed class Tray : ApplicationContext
         icon.Visible = false;
         icon.Dispose();
         cover.Dispose();
+        checkIn.Dispose();
         form.Close();
         ExitThread();
     }

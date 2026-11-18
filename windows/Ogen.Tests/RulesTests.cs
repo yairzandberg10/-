@@ -38,7 +38,7 @@ public class RulesTests
     [Fact]
     public void SocialBlockedEvenWithoutLimit()
     {
-        var p = new Policy();
+        var p = new Policy { CheckIn = false };
         Assert.Equal(Verdict.SocialSite, Rules.Classify(p, T, "chrome.exe", "Funny cats - YouTube - Google Chrome"));
         Assert.Equal(Verdict.SocialApp, Rules.Classify(p, T, "TikTok", "TikTok"));
         Assert.Equal(Verdict.SocialApp, Rules.Classify(p, T, "ApplicationFrameHost", "Netflix"));
@@ -50,7 +50,7 @@ public class RulesTests
     [Fact]
     public void TamperScreensClosedWhileGuarding()
     {
-        var p = new Policy();
+        var p = new Policy { CheckIn = false };
         Assert.Equal(Verdict.Tamper, Rules.Classify(p, T, "Taskmgr", "Task Manager"));
         Assert.Equal(Verdict.Tamper, Rules.Classify(p, T, "mmc", "Task Scheduler"));
         Assert.Equal(Verdict.Ok, Rules.Classify(p, T, "mmc", "Device Manager"));
@@ -62,7 +62,7 @@ public class RulesTests
     [Fact]
     public void TimeUpLeavesOnlyFreeApps()
     {
-        var p = new Policy();
+        var p = new Policy { CheckIn = false };
         p.RequestAllow("spotify", T);
         p.RequestLimit(30 * MIN, T);
         p.AddUsage(30 * MIN, T);

@@ -92,7 +92,7 @@ public class PolicyTests
     [Fact]
     public void SocialBlockIsOnByDefault_AndTurningOffAlwaysWaits24h()
     {
-        var p = new Policy();
+        var p = new Policy { CheckIn = false };
         long t = At(16, 10, 0);
         Assert.True(p.SocialBlock);
         Assert.True(p.Guarding(t));

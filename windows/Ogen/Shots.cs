@@ -34,6 +34,21 @@ internal static class Shots
             return m;
         }
 
+        var ci = Model(p => p.RequestLimit(3 * H, now - 3 * H));
+        ci.P.UsedMs = 70 * MIN;
+        using (var f = new CheckInForm(ci))
+        {
+            f.ShowNow(ci.P, null);
+            Capture(f, Path.Combine(dir, "00-checkin.png"));
+            f.Hide();
+        }
+        Window(dir, "00b-home-session", Model(p =>
+        {
+            p.RequestLimit(3 * H, now - 3 * H);
+            p.UsedMs = 70 * MIN;
+            p.StartSession(H, "שיעורי בית במתמטיקה", "יש לי מבחן ביום ראשון", 0, now - 22 * MIN);
+        }), MainForm.Page.Home, f => f.PreviewSessions = new() { ("09:10", 45, "מצגת לעבודה", "להגיש עד הצהריים"), ("15:00", 60, "שיעורי בית במתמטיקה", "יש לי מבחן ביום ראשון") });
+        Window(dir, "00c-checkin-page", Model(_ => { }), MainForm.Page.CheckIn);
         Window(dir, "01-home", Model(_ => { }), MainForm.Page.Home);
         Window(dir, "02-home-limit", Model(p => { p.RequestLimit(2 * H, now - 3 * H); p.UsedMs = 75 * MIN; }), MainForm.Page.Home);
         Window(dir, "03-home-low", Model(p => { p.RequestLimit(H, now - 3 * H); p.UsedMs = 56 * MIN; }), MainForm.Page.Home);
@@ -66,9 +81,10 @@ internal static class Shots
         return 0;
     }
 
-    private static void Window(string dir, string name, AppModel m, MainForm.Page page)
+    private static void Window(string dir, string name, AppModel m, MainForm.Page page, Action<MainForm>? setup = null)
     {
-        using var f = new MainForm(m) { StartPosition = FormStartPosition.Manual, Location = new Point(40, 40) };
+        using var f = new MainForm(m) { StartPosition = FormStartPosition.Manual, Location = new Point(40, 20) };
+        setup?.Invoke(f);
         f.Show();
         f.Go(page);
         Capture(f, Path.Combine(dir, name + ".png"));

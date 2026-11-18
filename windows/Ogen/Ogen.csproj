@@ -11,7 +11,7 @@
     <RootNamespace>Ogen</RootNamespace>
     <ApplicationIcon>ogen.ico</ApplicationIcon>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <Version>1.0.1</Version>
+    <Version>1.1.0</Version>
     <Product>עוגן</Product>
     <AssemblyTitle>עוגן</AssemblyTitle>
     <Description>עוגן – זמן מסך יומי וחסימת רשתות</Description>
@@ -29,6 +29,7 @@
   <ItemGroup>
     <FrameworkReference Include="Microsoft.WindowsDesktop.App" />
     <ProjectReference Include="../Ogen.Core/Ogen.Core.csproj" />
+    <PackageReference Include="Interop.UIAutomationClient" Version="10.19041.0" />
   </ItemGroup>
   <!-- WinForms only: leave WPF out of the single-file bundle to keep the download small. -->
   <Target Name="DropWpf" AfterTargets="ComputeResolvedFilesToPublishList">

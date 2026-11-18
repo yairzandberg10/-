@@ -16,6 +16,11 @@ internal sealed class Guard : IDisposable
 
     private readonly AppModel m;
     private readonly BlockForm cover;
+    private readonly CheckInForm checkIn;
+    private long lockedAt;           // when the Windows session was locked (TickCount64), 0 if not
+    private bool lockPending;        // the session just ran out: lock Windows after a short countdown
+    private long lockAt;
+    private bool sessionWarned5, sessionWarned1;
     private readonly Timer timer = new() { Interval = 1000 };
     private readonly Native.WinEventProc hookProc;  // keep the delegate alive
     private readonly IntPtr hookFg, hookName;
@@ -36,16 +41,38 @@ internal sealed class Guard : IDisposable
 
     public readonly record struct Fg(IntPtr Hwnd, uint Pid, string Proc, string Title);
 
-    public Guard(AppModel model, BlockForm cover)
+    public Guard(AppModel model, BlockForm cover, CheckInForm checkIn)
     {
         m = model;
         this.cover = cover;
+        this.checkIn = checkIn;
+        Microsoft.Win32.SystemEvents.SessionSwitch += OnSessionSwitch;
         timer.Tick += (_, _) => Safe(Tick);
         hookProc = OnWinEvent;
         hookFg = Native.SetWinEventHook(Native.EVENT_SYSTEM_FOREGROUND, Native.EVENT_SYSTEM_FOREGROUND, IntPtr.Zero, hookProc, 0, 0, Native.WINEVENT_OUTOFCONTEXT);
         hookName = Native.SetWinEventHook(Native.EVENT_OBJECT_NAMECHANGE, Native.EVENT_OBJECT_NAMECHANGE, IntPtr.Zero, hookProc, 0, 0, Native.WINEVENT_OUTOFCONTEXT);
         timer.Start();
-        Log.Write($"guard on: hooks fg={hookFg != IntPtr.Zero} name={hookName != IntPtr.Zero} limit={m.P.LimitMs} used={m.P.UsedMs} social={m.P.SocialBlock}");
+        Log.Write($"guard on: hooks fg={hookFg != IntPtr.Zero} name={hookName != IntPtr.Zero} limit={m.P.LimitMs} used={m.P.UsedMs} social={m.P.SocialBlock} checkin={m.P.CheckIn}");
+    }
+
+    /// <summary>Away for 10 minutes or more (screen locked): a new session, so ask again.</summary>
+    private void OnSessionSwitch(object? sender, Microsoft.Win32.SessionSwitchEventArgs e)
+    {
+        if (e.Reason == Microsoft.Win32.SessionSwitchReason.SessionLock)
+        {
+            lockedAt = Environment.TickCount64;
+        }
+        else if (e.Reason == Microsoft.Win32.SessionSwitchReason.SessionUnlock)
+        {
+            long away = lockedAt == 0 ? 0 : Environment.TickCount64 - lockedAt;
+            lockedAt = 0;
+            Log.Write($"unlocked after {away / 1000}s");
+            if (away >= 10 * MIN && m.P.SessionActive(m.Now()))
+            {
+                m.Mutate(now => { m.P.EndSession(now); return 0; });
+            }
+            Safe(Tick);
+        }
     }
 
     /// <summary>Never let one odd window kill enforcement.</summary>
@@ -110,6 +137,36 @@ internal sealed class Guard : IDisposable
             if (!warned1 && rem <= MIN) { warned1 = warned5 = true; Warn?.Invoke("נשארה דקה אחת. שמור את מה שאתה עושה"); }
         }
 
+        // the session the user asked for
+        long srem = p.SessionRemaining(now);
+        if (p.CheckIn && p.SessionEnd != 0)
+        {
+            if (srem > 5 * MIN) sessionWarned5 = sessionWarned1 = false;
+            else if (srem > 0)
+            {
+                if (!sessionWarned5 && srem > MIN) { sessionWarned5 = true; Warn?.Invoke("נשארו 5 דקות מהזמן שקבעת: " + p.SessionWhat); }
+                if (!sessionWarned1 && srem <= MIN) { sessionWarned1 = sessionWarned5 = true; Warn?.Invoke("נשארה דקה. בעוד דקה המחשב יינעל"); }
+            }
+            else if (sessionWarned1 || sessionWarned5)
+            {
+                // it ran out while we were watching: lock Windows in a few seconds
+                sessionWarned1 = sessionWarned5 = false;
+                lockPending = true;
+                lockAt = t + 8_000;
+                changed = true;
+                Log.Write("session over: " + p.SessionWhat);
+                checkIn.ShowNow(m.P, "הזמן שקבעת נגמר. המחשב יינעל עוד רגע");
+            }
+        }
+        if (lockPending && t >= lockAt)
+        {
+            lockPending = false;
+            if (p.NeedsCheckIn(now)) { Log.Write("locking Windows"); Native.LockWorkStation(); }
+        }
+
+        if (p.NeedsCheckIn(now) && lockedAt == 0 && !checkIn.Visible) checkIn.ShowNow(m.P, null);
+        else if (!p.NeedsCheckIn(now) && checkIn.Visible) checkIn.Hide();
+
         Evaluate(fg, now);
 
         if (changed || m.ClockDirty || (usageDirty && t - lastSave > 30_000))
@@ -126,12 +183,22 @@ internal sealed class Guard : IDisposable
     private void Evaluate(Fg fg, long now)
     {
         if (fg.Hwnd == IntPtr.Zero || fg.Pid == selfPid || fg.Proc.Length == 0) return;
-        var v = Rules.Classify(m.P, now, fg.Proc, fg.Title);
+        string? url = null;
+        if (m.P.SocialBlock && Rules.IsBrowser(fg.Proc))
+        {
+            var target = fg;
+            url = UrlReader.Get(fg.Hwnd, fg.Title, () => cover.BeginInvoke(() => Safe(() =>
+            {
+                var now2 = Current();
+                if (now2.Hwnd == target.Hwnd) Evaluate(now2, m.Now());
+            })));
+        }
+        var v = Rules.Classify(m.P, now, fg.Proc, fg.Title, url);
         if (fg.Hwnd != lastLogged || fg.Title != lastTitle)
         {
             lastLogged = fg.Hwnd;
             lastTitle = fg.Title;
-            Log.Write($"front: {fg.Proc} \"{Short(fg.Title)}\" -> {v}");
+            Log.Write($"front: {fg.Proc} \"{Short(fg.Title)}\" url={url ?? "?"} -> {v}");
         }
         if (v == Verdict.Ok) return;
 
@@ -153,6 +220,10 @@ internal sealed class Guard : IDisposable
                 }
                 break;
             }
+            case Verdict.CheckIn:
+                Native.ShowWindowAsync(fg.Hwnd, Native.SW_MINIMIZE);
+                checkIn.ShowNow(m.P, null);
+                return;
             default: // Locked, SocialApp: nothing is closed, the window is put away
                 Native.ShowWindowAsync(fg.Hwnd, Native.SW_MINIMIZE);
                 break;
@@ -167,6 +238,7 @@ internal sealed class Guard : IDisposable
     public void Dispose()
     {
         timer.Dispose();
+        Microsoft.Win32.SystemEvents.SessionSwitch -= OnSessionSwitch;
         if (hookFg != IntPtr.Zero) Native.UnhookWinEvent(hookFg);
         if (hookName != IntPtr.Zero) Native.UnhookWinEvent(hookName);
         if (usageDirty) m.Save();
