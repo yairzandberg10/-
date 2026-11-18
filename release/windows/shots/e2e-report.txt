@@ -2,5 +2,8 @@ PASS  YouTube tab is closed in Chrome
 PASS  Notepad stays open with no limit  
 PASS  Notepad is minimized when time is up  
 PASS  An always-open app keeps working when time is up  
-PASS  Usage is counted while using an app  used 0.45 min
+PASS  Usage is counted while using an app  used 0.47 min
+PASS  Without a session, apps are put away behind the question  
+PASS  During a session, apps work  
+FAIL  Address-bar check closes a reddit tab with a plain title  www.reddit.com - Google Chrome
 PASS  Main window opens  
