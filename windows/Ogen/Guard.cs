@@ -33,6 +33,9 @@ internal sealed class Guard : IDisposable
     private bool warned5, warned1;
     private IntPtr closedTab;
     private long closedAt;
+    private int closeTries;
+    private Screen? closedScreen;
+    private readonly Timer recheck = new() { Interval = 500 };
 
     /// <summary>A heads-up for the tray ("5 minutes left").</summary>
     public event Action<string>? Warn;
@@ -48,6 +51,17 @@ internal sealed class Guard : IDisposable
         this.checkIn = checkIn;
         Microsoft.Win32.SystemEvents.SessionSwitch += OnSessionSwitch;
         timer.Tick += (_, _) => Safe(Tick);
+        recheck.Tick += (_, _) => Safe(() =>
+        {
+            recheck.Stop();
+            var now = Current();
+            if (now.Hwnd == closedTab)
+            {
+                var v = Rules.Classify(m.P, m.Now(), now.Proc, now.Title, UrlReader.Get(now.Hwnd, now.Title, () => { }));
+                if (v == Verdict.SocialSite) { Evaluate(now, m.Now()); return; }
+            }
+            cover.ShowFor(Verdict.SocialSite, closedScreen ?? Screen.PrimaryScreen!);
+        });
         hookProc = OnWinEvent;
         hookFg = Native.SetWinEventHook(Native.EVENT_SYSTEM_FOREGROUND, Native.EVENT_SYSTEM_FOREGROUND, IntPtr.Zero, hookProc, 0, 0, Native.WINEVENT_OUTOFCONTEXT);
         hookName = Native.SetWinEventHook(Native.EVENT_OBJECT_NAMECHANGE, Native.EVENT_OBJECT_NAMECHANGE, IntPtr.Zero, hookProc, 0, 0, Native.WINEVENT_OUTOFCONTEXT);
@@ -210,14 +224,24 @@ internal sealed class Guard : IDisposable
                 break;
             case Verdict.SocialSite:
             {
-                // close just that tab (Ctrl+W), once per window per moment
+                // Close just that tab (Ctrl+W). A browser busy loading can drop the keystroke, so it is
+                // checked again shortly and retried; the cover only comes up once the tab is gone.
                 long t = Environment.TickCount64;
-                if ((fg.Hwnd != closedTab || t - closedAt > 1500) && Native.GetForegroundWindow() == fg.Hwnd)
+                if (fg.Hwnd == closedTab && t - closedAt < 450) return;
+                if (fg.Hwnd != closedTab || t - closedAt > 5000) closeTries = 0;
+                if (closeTries < 3 && Native.GetForegroundWindow() == fg.Hwnd)
                 {
                     Native.SendCtrlW();
+                    closeTries++;
                     closedTab = fg.Hwnd;
                     closedAt = t;
+                    closedScreen = Screen.FromHandle(fg.Hwnd);
+                    Log.Write($"closing tab (try {closeTries})");
+                    recheck.Start();
+                    return;
                 }
+                // the tab will not close: put the browser away
+                Native.ShowWindowAsync(fg.Hwnd, Native.SW_MINIMIZE);
                 break;
             }
             case Verdict.CheckIn:
@@ -238,6 +262,7 @@ internal sealed class Guard : IDisposable
     public void Dispose()
     {
         timer.Dispose();
+        recheck.Dispose();
         Microsoft.Win32.SystemEvents.SessionSwitch -= OnSessionSwitch;
         if (hookFg != IntPtr.Zero) Native.UnhookWinEvent(hookFg);
         if (hookName != IntPtr.Zero) Native.UnhookWinEvent(hookName);
