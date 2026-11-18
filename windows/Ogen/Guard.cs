@@ -45,14 +45,14 @@ internal sealed class Guard : IDisposable
         hookFg = Native.SetWinEventHook(Native.EVENT_SYSTEM_FOREGROUND, Native.EVENT_SYSTEM_FOREGROUND, IntPtr.Zero, hookProc, 0, 0, Native.WINEVENT_OUTOFCONTEXT);
         hookName = Native.SetWinEventHook(Native.EVENT_OBJECT_NAMECHANGE, Native.EVENT_OBJECT_NAMECHANGE, IntPtr.Zero, hookProc, 0, 0, Native.WINEVENT_OUTOFCONTEXT);
         timer.Start();
+        Log.Write($"guard on: hooks fg={hookFg != IntPtr.Zero} name={hookName != IntPtr.Zero} limit={m.P.LimitMs} used={m.P.UsedMs} social={m.P.SocialBlock}");
     }
 
     /// <summary>Never let one odd window kill enforcement.</summary>
     private static void Safe(Action a)
     {
         try { a(); }
-        catch (Exception e) when (e is InvalidOperationException or ArgumentException or IOException
-                                      or System.ComponentModel.Win32Exception or ObjectDisposedException) { }
+        catch (Exception e) { Log.Write("guard error: " + e); }
     }
 
     private void OnWinEvent(IntPtr hook, uint ev, IntPtr hwnd, int obj, int child, uint thread, uint time)
@@ -127,6 +127,12 @@ internal sealed class Guard : IDisposable
     {
         if (fg.Hwnd == IntPtr.Zero || fg.Pid == selfPid || fg.Proc.Length == 0) return;
         var v = Rules.Classify(m.P, now, fg.Proc, fg.Title);
+        if (fg.Hwnd != lastLogged || fg.Title != lastTitle)
+        {
+            lastLogged = fg.Hwnd;
+            lastTitle = fg.Title;
+            Log.Write($"front: {fg.Proc} \"{Short(fg.Title)}\" -> {v}");
+        }
         if (v == Verdict.Ok) return;
 
         switch (v)
@@ -153,6 +159,10 @@ internal sealed class Guard : IDisposable
         }
         cover.ShowFor(v, Screen.FromHandle(fg.Hwnd));
     }
+
+    private IntPtr lastLogged;
+    private string lastTitle = "";
+    private static string Short(string s) => s.Length > 80 ? s[..80] : s;
 
     public void Dispose()
     {

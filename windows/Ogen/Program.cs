@@ -21,14 +21,19 @@ internal static class Program
         int shots = Array.IndexOf(args, "--shots");
         if (shots >= 0) return Shots.Run(shots + 1 < args.Length ? args[shots + 1] : "shots");
 
+        Log.Startup(args);
+        Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
+        Application.ThreadException += (_, e) => Log.Write("ui error: " + e.Exception);
+        AppDomain.CurrentDomain.UnhandledException += (_, e) => Log.Write("fatal: " + e.ExceptionObject);
         bool background = args.Contains("--background");
         bool noInstall = args.Contains("--no-install");
-        if (!noInstall && Install.RelaunchFromInstallDir(args)) return 0;
+        if (!noInstall && Install.RelaunchFromInstallDir(args)) { Log.Write("handed over to " + Install.Exe); return 0; }
 
         using var mutex = new Mutex(true, Install.MutexName, out bool first);
         if (!first)
         {
             if (!background) Install.Signal(Install.ShowEventName);
+            Log.Write("already running");
             return 0;
         }
         try
@@ -85,6 +90,12 @@ internal sealed class Tray : ApplicationContext
         removeItem = new ToolStripMenuItem("הסרה מהמחשב", null, (_, _) => Quit(true));
         menu.Items.Add(exitItem);
         menu.Items.Add(removeItem);
+        menu.Items.Add(new ToolStripSeparator());
+        menu.Items.Add("פתיחת יומן תקלות", null, (_, _) =>
+        {
+            try { System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo("notepad.exe", "\"" + Log.File + "\"") { UseShellExecute = false }); }
+            catch (System.ComponentModel.Win32Exception) { }
+        });
         menu.Opening += (_, _) =>
         {
             bool free = !m.P.Guarding(m.Now());
@@ -130,6 +141,7 @@ internal sealed class Tray : ApplicationContext
         Task.Run(Install.Register).ContinueWith(t =>
         {
             bool ok = t.Status == TaskStatus.RanToCompletion && t.Result;
+            Log.Write("register autostart+watchdog: " + (ok ? "ok" : "FAILED " + t.Exception?.GetBaseException().Message));
             Ui(() =>
             {
                 if (form.ProtectionOk != ok) { form.ProtectionOk = ok; form.Render(); }
