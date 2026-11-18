@@ -1,0 +1,6 @@
+PASS  YouTube tab is closed in Chrome  
+PASS  Notepad stays open with no limit  
+PASS  Notepad is minimized when time is up  
+PASS  An always-open app keeps working when time is up  
+PASS  Usage is counted while using an app  used 0.47 min
+PASS  Main window opens  
