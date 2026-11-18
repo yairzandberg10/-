@@ -105,7 +105,7 @@ internal sealed class Stack : Panel
         int w = ClientSize.Width - 2 * pad;
         foreach (Control c in Controls)
         {
-            if (c is not Block b || !b.Visible) continue;
+            if (c is not Block b) continue;   // not .Visible: false until the form itself is shown
             y += (int)(b.Gap * S);
             int h = b.Measure(w);
             b.SetBounds(pad + sx, y + sy, w, h);
@@ -208,7 +208,7 @@ internal abstract class Clickable : Block
     }
 }
 
-internal enum BtnStyle { Primary, Ghost, Danger, Night, Plain }
+internal enum BtnStyle { Primary, Ghost, Danger, Night, NightGhost, Plain }
 
 internal sealed class ButtonBlock : Clickable
 {
@@ -237,6 +237,7 @@ internal sealed class ButtonBlock : Clickable
             BtnStyle.Ghost => (Hot ? Theme.Hover : Theme.Card, Theme.Pine, Theme.Line),
             BtnStyle.Danger => (Hot ? Theme.BrickSoft : Theme.Card, Theme.Brick, Theme.Line),
             BtnStyle.Night => (Hot ? Color.FromArgb(0x3A, 0x36, 0x30) : Theme.Night2, Theme.OnNight, null),
+            BtnStyle.NightGhost => (Hot ? Theme.Night2 : Theme.Night, Theme.OnNightMuted, (Color?)Theme.Night2),
             _ => (Hot ? Theme.Hover : Theme.Paper, Theme.Muted, null),
         };
         using (var b = new SolidBrush(bg)) using (var p = Theme.Round(r, rad)) g.FillPath(b, p);

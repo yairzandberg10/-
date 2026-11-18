@@ -95,8 +95,7 @@ internal sealed class BlockForm : Form
         }
         stack.Add(new TextBlock(Body(reason), 16, Theme.OnNightMuted, Theme.W.Regular, true), 16);
         var ok = stack.Add(new ButtonBlock("הבנתי", BtnStyle.Night, Hide), 28);
-        stack.Add(new ButtonBlock("פתיחת עוגן", BtnStyle.Plain, () => { Hide(); OpenApp?.Invoke(); }), 8);
-        foreach (Control c in stack.Controls) if (c is ButtonBlock b && b.Style == BtnStyle.Plain) b.BackColor = Color.Transparent;
+        stack.Add(new ButtonBlock("פתיחת עוגן", BtnStyle.NightGhost, () => { Hide(); OpenApp?.Invoke(); }), 8);
 
         int w = Math.Min((int)(460 * s), ClientSize.Width - (int)(32 * s));
         int h = 0;
