@@ -1,0 +1,51 @@
+name: Build Windows app
+on:
+  push:
+    branches-ignore: [main]
+    paths: ['windows/**', '.github/workflows/windows.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: windows-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with: { dotnet-version: '8.0.x' }
+      - name: Unit tests (pure logic)
+        run: dotnet test windows/Ogen.Tests -c Release
+      - name: Build Ogen.exe (single file, no .NET install needed)
+        run: dotnet publish windows/Ogen/Ogen.csproj -c Release -o out
+      - name: Screenshots of every screen
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force release/windows/shots | Out-Null
+          $p = Start-Process out/Ogen.exe -ArgumentList '--shots', 'release/windows/shots' -PassThru -Wait
+          if ($p.ExitCode -ne 0) { exit 1 }
+      - name: End-to-end blocking test
+        id: e2e
+        continue-on-error: true
+        shell: pwsh
+        run: ./windows/ci/e2e.ps1 -Exe out/Ogen.exe
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Ogen-windows
+          path: |
+            out/Ogen.exe
+            release/windows/shots
+      - name: Commit exe and screenshots back to branch
+        if: always()
+        shell: bash
+        run: |
+          mkdir -p release/windows
+          cp out/Ogen.exe release/windows/Ogen.exe
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add release/windows
+          git commit -m "Build Ogen.exe for ${GITHUB_SHA::7} (e2e: ${{ steps.e2e.outcome }}) [skip ci]" || exit 0
+          git pull --rebase origin "${GITHUB_REF_NAME}" || true
+          git push
