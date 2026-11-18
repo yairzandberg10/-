@@ -1,32 +1,37 @@
-2026-11-18 17:51:38 [4256] start v1.1.0.0 exe=D:\a\-\-\out\Ogen.exe args=[--no-install --background] os=Microsoft Windows 10.0.26100 arch=X64/X64
-2026-11-18 17:51:38 [4256] guard on: hooks fg=True name=True limit=-1 used=0 social=True checkin=False
-2026-11-18 17:51:45 [4256] front: chrome "Untitled - Google Chrome" url=? -> Ok
-2026-11-18 17:51:46 [4256] address bar: "D:/a/_temp/yt.html" after 1 tries
-2026-11-18 17:51:46 [4256] front: chrome "Funny cats - YouTube - Google Chrome" url=? -> SocialSite
-2026-11-18 17:51:46 [4256] address bar: "D:/a/_temp/yt.html" after 1 tries
-2026-11-18 17:51:48 [4256] front: notepad "Untitled - Notepad" url=? -> Ok
-2026-11-18 17:51:51 [2508] start v1.1.0.0 exe=D:\a\-\-\out\Ogen.exe args=[--no-install --background] os=Microsoft Windows 10.0.26100 arch=X64/X64
-2026-11-18 17:51:51 [2508] guard on: hooks fg=True name=True limit=1800000 used=1800000 social=True checkin=False
-2026-11-18 17:51:54 [2508] front: notepad "Untitled - Notepad" url=? -> Locked
-2026-11-18 17:51:54 [2508] front: windowsterminal "C:\ProgramData\GitHub\HostedComputeAgent\hosted-compute-agent" url=? -> Locked
-2026-11-18 17:51:59 [8960] start v1.1.0.0 exe=D:\a\-\-\out\Ogen.exe args=[--no-install --background] os=Microsoft Windows 10.0.26100 arch=X64/X64
-2026-11-18 17:51:59 [8960] guard on: hooks fg=True name=True limit=1800000 used=1800000 social=True checkin=False
-2026-11-18 17:52:02 [8960] front: notepad "Untitled - Notepad" url=? -> Ok
-2026-11-18 17:52:06 [8960] front: explorer "Program Manager" url=? -> Ok
-2026-11-18 17:52:06 [6844] start v1.1.0.0 exe=D:\a\-\-\out\Ogen.exe args=[--no-install --background] os=Microsoft Windows 10.0.26100 arch=X64/X64
-2026-11-18 17:52:07 [6844] guard on: hooks fg=True name=True limit=3600000 used=0 social=True checkin=False
-2026-11-18 17:52:09 [6844] front: notepad "Untitled - Notepad" url=? -> Ok
-2026-11-18 17:52:46 [6844] front: explorer "Program Manager" url=? -> Ok
-2026-11-18 17:52:47 [7360] start v1.1.0.0 exe=D:\a\-\-\out\Ogen.exe args=[--no-install --background] os=Microsoft Windows 10.0.26100 arch=X64/X64
-2026-11-18 17:52:47 [7360] guard on: hooks fg=True name=True limit=-1 used=0 social=True checkin=True
-2026-11-18 17:52:50 [7360] front: notepad "Untitled - Notepad" url=? -> CheckIn
-2026-11-18 17:52:55 [6812] start v1.1.0.0 exe=D:\a\-\-\out\Ogen.exe args=[--no-install --background] os=Microsoft Windows 10.0.26100 arch=X64/X64
-2026-11-18 17:52:55 [6812] guard on: hooks fg=True name=True limit=-1 used=0 social=True checkin=True
-2026-11-18 17:52:57 [6812] front: notepad "Untitled - Notepad" url=? -> Ok
-2026-11-18 17:53:01 [6812] front: explorer "Program Manager" url=? -> Ok
-2026-11-18 17:53:02 [4012] start v1.1.0.0 exe=D:\a\-\-\out\Ogen.exe args=[--no-install --background] os=Microsoft Windows 10.0.26100 arch=X64/X64
-2026-11-18 17:53:02 [4012] guard on: hooks fg=True name=True limit=-1 used=0 social=True checkin=False
-2026-11-18 17:53:06 [4012] front: chrome "Untitled - Google Chrome" url=? -> Ok
-2026-11-18 17:53:06 [4012] address bar: "reddit.com" after 1 tries
-2026-11-18 17:53:15 [7540] start v1.1.0.0 exe=D:\a\-\-\out\Ogen.exe args=[--no-install] os=Microsoft Windows 10.0.26100 arch=X64/X64
-2026-11-18 17:53:15 [7540] already running
+2026-11-18 17:56:26 [3720] start v1.1.0.0 exe=D:\a\-\-\out\Ogen.exe args=[--no-install --background] os=Microsoft Windows 10.0.26100 arch=X64/X64
+2026-11-18 17:56:26 [3720] guard on: hooks fg=True name=True limit=-1 used=0 social=True checkin=False
+2026-11-18 17:56:33 [3720] front: chrome "Untitled - Google Chrome" url=? -> Ok
+2026-11-18 17:56:34 [3720] address bar: "D:/a/_temp/yt.html" after 1 tries
+2026-11-18 17:56:34 [3720] front: chrome "Funny cats - YouTube - Google Chrome" url=? -> SocialSite
+2026-11-18 17:56:34 [3720] closing tab (try 1)
+2026-11-18 17:56:34 [3720] front: windowsterminal "C:\ProgramData\GitHub\HostedComputeAgent\hosted-compute-agent" url=? -> Ok
+2026-11-18 17:56:35 [3720] front: notepad "Untitled - Notepad" url=? -> Ok
+2026-11-18 17:56:39 [8804] start v1.1.0.0 exe=D:\a\-\-\out\Ogen.exe args=[--no-install --background] os=Microsoft Windows 10.0.26100 arch=X64/X64
+2026-11-18 17:56:39 [8804] guard on: hooks fg=True name=True limit=1800000 used=1800000 social=True checkin=False
+2026-11-18 17:56:42 [8804] front: notepad "Untitled - Notepad" url=? -> Locked
+2026-11-18 17:56:42 [8804] front: windowsterminal "C:\ProgramData\GitHub\HostedComputeAgent\hosted-compute-agent" url=? -> Locked
+2026-11-18 17:56:47 [5968] start v1.1.0.0 exe=D:\a\-\-\out\Ogen.exe args=[--no-install --background] os=Microsoft Windows 10.0.26100 arch=X64/X64
+2026-11-18 17:56:47 [5968] guard on: hooks fg=True name=True limit=1800000 used=1800000 social=True checkin=False
+2026-11-18 17:56:50 [5968] front: notepad "Untitled - Notepad" url=? -> Ok
+2026-11-18 17:56:54 [5968] front: explorer "Program Manager" url=? -> Ok
+2026-11-18 17:56:54 [9204] start v1.1.0.0 exe=D:\a\-\-\out\Ogen.exe args=[--no-install --background] os=Microsoft Windows 10.0.26100 arch=X64/X64
+2026-11-18 17:56:54 [9204] guard on: hooks fg=True name=True limit=3600000 used=0 social=True checkin=False
+2026-11-18 17:56:57 [9204] front: notepad "Untitled - Notepad" url=? -> Ok
+2026-11-18 17:57:34 [9204] front: explorer "Program Manager" url=? -> Ok
+2026-11-18 17:57:35 [9880] start v1.1.0.0 exe=D:\a\-\-\out\Ogen.exe args=[--no-install --background] os=Microsoft Windows 10.0.26100 arch=X64/X64
+2026-11-18 17:57:35 [9880] guard on: hooks fg=True name=True limit=-1 used=0 social=True checkin=True
+2026-11-18 17:57:38 [9880] front: notepad "Untitled - Notepad" url=? -> CheckIn
+2026-11-18 17:57:43 [9380] start v1.1.0.0 exe=D:\a\-\-\out\Ogen.exe args=[--no-install --background] os=Microsoft Windows 10.0.26100 arch=X64/X64
+2026-11-18 17:57:43 [9380] guard on: hooks fg=True name=True limit=-1 used=0 social=True checkin=True
+2026-11-18 17:57:45 [9380] front: notepad "Untitled - Notepad" url=? -> Ok
+2026-11-18 17:57:49 [9380] front: explorer "Program Manager" url=? -> Ok
+2026-11-18 17:57:50 [1732] start v1.1.0.0 exe=D:\a\-\-\out\Ogen.exe args=[--no-install --background] os=Microsoft Windows 10.0.26100 arch=X64/X64
+2026-11-18 17:57:50 [1732] guard on: hooks fg=True name=True limit=-1 used=0 social=True checkin=False
+2026-11-18 17:57:53 [1732] front: chrome "Untitled - Google Chrome" url=? -> Ok
+2026-11-18 17:57:53 [1732] address bar: "reddit.com" after 1 tries
+2026-11-18 17:57:54 [1732] front: chrome "www.reddit.com - Google Chrome" url=? -> Ok
+2026-11-18 17:57:54 [1732] address bar: "reddit.com" after 1 tries
+2026-11-18 17:57:54 [1732] closing tab (try 1)
+2026-11-18 17:57:54 [1732] front: explorer "Program Manager" url=? -> Ok
+2026-11-18 17:58:03 [10136] start v1.1.0.0 exe=D:\a\-\-\out\Ogen.exe args=[--no-install] os=Microsoft Windows 10.0.26100 arch=X64/X64
+2026-11-18 17:58:03 [10136] already running
